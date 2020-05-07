@@ -60,4 +60,15 @@ requestController.getByIdRequest = function(req, res, next, id) {
     });
 };
 
+requestController.getForUserRequest = function(req, res, next, userUsername) {
+    Request.findOne({userUsername: userUsername}, function(err, request) {
+        if(err) {
+            next(err);
+        } else {
+            req.request = request;
+            next();
+        }
+    });
+};
+
 module.exports = requestController;
