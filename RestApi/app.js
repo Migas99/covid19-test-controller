@@ -3,6 +3,8 @@ require('dotenv/config');
 var express = require('express');
 var app = express();
 var mongoose = require('mongoose');
+var swaggerUi = require('swagger-ui-express');
+var swaggerDocument = require('./swagger.json')
 
 //Import Routes
 const apiRouter = require('./routes');
@@ -18,7 +20,7 @@ app.get("/", function(req, res){
 
 //Routes
 app.use('/api', apiRouter);
-
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 //Middlewares
 //app.use(auth);
