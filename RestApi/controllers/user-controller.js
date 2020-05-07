@@ -60,4 +60,18 @@ userController.getByIdUser = function(req, res, next, id) {
     });
 };
 
+userController.verifyLogin = function(req, res){
+    const user = User.find (user => user.username = req.params.username);
+    
+    if(user == null){
+        res.send("User not found");
+    }else{
+        if(user.password == req.params.password){
+            res.send("Sucess");
+        }else{
+            res.send("Password Incorrect");
+        }
+    }
+};
+
 module.exports = userController;

@@ -60,4 +60,18 @@ technicianController.getByIdTechnician = function(req, res, next, id) {
     });
 };
 
+technicianController.verifyLogin = function(req, res){
+    const technician = technician.find (technician => technician.username = req.params.username);
+    
+    if(technician == null){
+        res.send("technician not found");
+    }else{
+        if(technician.password == req.params.password){
+            res.send("Sucess");
+        }else{
+            res.send("Password Incorrect");
+        }
+    }
+};
+
 module.exports = technicianController;

@@ -71,4 +71,15 @@ requestController.getForUserRequest = function(req, res, next, userUsername) {
     });
 };
 
+requestController.getUserRequests = function(req, res, next, requesterUsername) {
+    Request.find({requesterUsername: requesterUsername}, function(err, request) {
+        if(err) {
+            next(err);
+        } else {
+            res.json(request);
+            next();
+        }
+    });
+};
+
 module.exports = requestController;
