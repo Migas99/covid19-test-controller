@@ -1,14 +1,15 @@
 const mongoose = require("mongoose");
+var Schema = mongoose.Schema;
 
-const productSchema = mongoose.Schema({
-    username: String,
-    password: String,
-    fullName: String,
-    civilNumber: Number,
-    registerDate: Date,
-    address: String,
-    phoneNumber: Number,
-    email: String
+const TechnicianSchema = new Schema({
+    username: { type: String, required: true },
+    password: { type: String, required: true },
+    fullName: { type: String, required: true },
+    civilNumber: { type: String, required: true },
+    registerDate: { type: Date, required: true },
+    address: { type: String, required: true },
+    phoneNumber: { type: Number, required: true },
+    email: { type: String, required: true }
 });
 
-module.exports = mongoose.model("Technician", productSchema);
+module.exports = mongoose.model("Technician", TechnicianSchema);
