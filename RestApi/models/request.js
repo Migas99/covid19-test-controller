@@ -4,7 +4,7 @@ var Schema = mongoose.Schema;
 const RequestSchema = new Schema({
     requesterUsername: { type: String , required: true },
     description: { type: String , required: true },
-    submitDate: { type: Date , required: true },
+    submitDate: { type: Date , default: Date.now },
     testDate: { type: Date , default: null },
     filePath: { type: String , default: null }
 });

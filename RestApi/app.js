@@ -26,5 +26,3 @@ app.use('/api', apiRouter);
 //Initialize the server
 app.listen(process.env.DEFAULT_PORT);
 console.log("http://localhost:3000");
-
-//module.exports = app;

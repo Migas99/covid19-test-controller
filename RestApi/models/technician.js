@@ -6,7 +6,7 @@ const TechnicianSchema = new Schema({
     password: { type: String, required: true },
     fullName: { type: String, required: true },
     civilNumber: { type: String, required: true },
-    registerDate: { type: Date, required: true },
+    registerDate: { type: Date, default: Date.now },
     address: { type: String, required: true },
     phoneNumber: { type: Number, required: true },
     email: { type: String, required: true }
