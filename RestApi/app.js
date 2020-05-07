@@ -4,8 +4,15 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+var usersRouter = require('./routes/user-router');
+var technicianRouter = require('./routes/technician-router');
+var requestRouter = require('./routes/request-router');
+
+var mongoose = require('mongoose');
+mongoose.Promise = global.Promise;
+mongoose.connect('mongodb://localhost:27017/CovidDB')
+.then(() => console.log('Connection sucessful!'))
+.catch((err) => console.error(err));
 
 var app = express();
 
@@ -19,8 +26,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/api/', usersRouter);
+app.use('/api/', technicianRouter);
+app.use('/api/', requestRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
