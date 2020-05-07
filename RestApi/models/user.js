@@ -7,7 +7,7 @@ const UserSchema = new Schema({
     fullName: { type: String, required: true },
     birthDate: { type: Date, required: true },
     civilNumber: { type: String, required: true },
-    registerDate: { type: Date }
+    registerDate: { type: Date, default: Date.now }
 });
 
 module.exports = mongoose.model("User", UserSchema);
