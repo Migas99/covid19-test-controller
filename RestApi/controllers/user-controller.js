@@ -1,5 +1,5 @@
 var mongoose = require("mongoose");
-var User = require("../models/user");
+var User = require('../models/user');
 
 var userController = {};
 
@@ -10,7 +10,8 @@ userController.createUser = function (req, res, next) {
         fullName: req.body.fullName,
         birthDate: Date(req.body.birthDate),
         civilNumber: req.body.civilNumber,
-        registerDate: Date().now
+        registerDate: Date(Date.now()),
+        isInfected: false
     });
 
     user.save(function(err) {

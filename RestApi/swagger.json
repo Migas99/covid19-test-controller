@@ -41,7 +41,7 @@
                     "200": {
                         "description": "Sucess!",
                         "schema": {
-                            "$ref": "#definitions/Users"
+                            "$ref": "#definitions/UserResponse"
                         }
                     },
                     "404": {
@@ -60,7 +60,7 @@
                         "in": "body",
                         "description": "User that we want to create",
                         "schema": {
-                            "$ref": "#/definitions/User"
+                            "$ref": "#/definitions/UserRequest"
                         }
                     }
                 ],
@@ -71,7 +71,7 @@
                     "200": {
                         "description": "New user is created",
                         "schema": {
-                            "$ref": "#/definitions/User"
+                            "$ref": "#/definitions/UserResponse"
                         }
                     },
                     "400": {
@@ -102,7 +102,7 @@
                     "200": {
                         "description": "The user was found!",
                         "schema": {
-                            "$ref": "#/definitions/User"
+                            "$ref": "#/definitions/UserResponse"
                         }
                     },
                     "404": {
@@ -121,7 +121,7 @@
                         "in": "body",
                         "description": "User with new values of properties",
                         "schema": {
-                            "$ref": "#/definitions/User"
+                            "$ref": "#/definitions/UserResponse"
                         }
                     }
                 ],
@@ -129,7 +129,7 @@
                     "200": {
                         "description": "The user is updated!",
                         "schema": {
-                            "$ref": "#/definitions/User"
+                            "$ref": "#/definitions/UserResponse"
                         }
                     },
                     "400": {
@@ -149,7 +149,7 @@
                     "200": {
                         "description": "The user is deleted!",
                         "schema": {
-                            "$ref": "#/definitions/User"
+                            "$ref": "#/definitions/UserResponse"
                         }
                     },
                     "404": {
@@ -157,10 +157,264 @@
                     }
                 }
             }
+        },
+        "/technicians": {
+            "get": {
+                "tags": [
+                    "Technicians"
+                ],
+                "summary": "Get all the technicians in the system",
+                "responses": {
+                    "200": {
+                        "description": "Sucess!",
+                        "schema": {
+                            "$ref": "#/definitions/TechnicianResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Error! Problems with database connection, probably."
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Technicians"
+                ],
+                "description": "Create a new technician in the system",
+                "parameters": [
+                    {
+                        "name": "technician",
+                        "in": "body",
+                        "description": "Technician we want to create",
+                        "schema": {
+                            "$ref": "#/definitions/TechnicianRequest"
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "New technician is created",
+                        "schema": {
+                            "$ref": "#/definitions/TechnicianResponse"
+                        }
+                    }
+                },
+                "400": {
+                    "description": "Bad request! Wrong parameters, probably."
+                },
+                "404": {
+                    "description": "Error! Problems with database connection, probably."
+                }
+            }
+        },
+        "/technicians/{technicianId}": {
+            "parameters": [
+                {
+                    "name": "technicianId",
+                    "in": "path",
+                    "required": true,
+                    "description": "ID of the target technician",
+                    "type": "string"
+                }
+            ],
+            "get": {
+                "tags": [
+                    "Technicians"
+                ],
+                "summary": "Get the technician with the given ID",
+                "responses": {
+                    "200": {
+                        "description": "The technician is found!",
+                        "schema": {
+                            "$ref": "#/definitions/TechnicianResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Error! Problems with database connection or the user was not found!"
+                    }
+                }
+            },
+            "put": {
+                "summary": "Update technician with the given ID",
+                "tags": [
+                    "Technicians"
+                ],
+                "parameters": [
+                    {
+                        "name": "technician",
+                        "in": "body",
+                        "description": "Technician with new values of properties",
+                        "schema": {
+                            "$ref": "#/definitions/TechnicianResponse"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The technician is updated!",
+                        "schema": {
+                            "$ref": "#/definitions/TechnicianResponse"
+                        }
+                    },
+                    "400": {
+                        "description":"Bad request! Wrong parameters, probably."
+                    },
+                    "404": {
+                        "description": "Error! Problems with database connection or the technician was not found!"
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete the technician with given ID",
+                "tags": [
+                    "Technicians"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The technician is deleted!",
+                        "schema": {
+                            "$ref": "#/definitions/TechnicianResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Error! Problems with database connection or the technician was not found!"
+                    }
+                }
+            }
+        },
+        "/requests": {
+            "get": {
+                "tags": [
+                    "Requests"
+                ],
+                "summary": "Get all the requests in the system",
+                "responses": {
+                    "200": {
+                        "description": "Sucess!",
+                        "schema": {
+                            "$ref": "#/definitions/RequestResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Error! Problems with database connection, probably."
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Requests"
+                ],
+                "description": "Create a new request in the system",
+                "parameters": [
+                    {
+                        "name": "request",
+                        "in": "body",
+                        "description": "Request we want to create",
+                        "schema": {
+                            "$ref": "#/definitions/RequestRequest"
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "New request is created",
+                        "schema": {
+                            "$ref": "#/definitions/RequestResponse"
+                        }
+                    }
+                },
+                "400": {
+                    "description": "Bad request! Wrong parameters, probably."
+                },
+                "404": {
+                    "description": "Error! Problems with database connection, probably."
+                }
+            }
+        },
+        "/requests/{requestId}": {
+            "parameters": [
+                {
+                    "name": "requestId",
+                    "in": "path",
+                    "required": true,
+                    "description": "ID of the target request",
+                    "type": "string"
+                }
+            ],
+            "get": {
+                "tags": [
+                    "Requests"
+                ],
+                "summary": "Get the request with the given ID",
+                "responses": {
+                    "200": {
+                        "description": "The request is found!",
+                        "schema": {
+                            "$ref": "#/definitions/RequestResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Error! Problems with database connection or the request was not found!"
+                    }
+                }
+            },
+            "put": {
+                "summary": "Update request with the given ID",
+                "tags": [
+                    "Requests"
+                ],
+                "parameters": [
+                    {
+                        "name": "request",
+                        "in": "body",
+                        "description": "Request with new values of properties",
+                        "schema": {
+                            "$ref": "#/definitions/RequestResponse"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The request is updated!",
+                        "schema": {
+                            "$ref": "#/definitions/RequestResponse"
+                        }
+                    },
+                    "400": {
+                        "description":"Bad request! Wrong parameters, probably."
+                    },
+                    "404": {
+                        "description": "Error! Problems with database connection or the request was not found!"
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete the request with given ID",
+                "tags": [
+                    "Requests"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The request is deleted!",
+                        "schema": {
+                            "$ref": "#/definitions/RequestResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Error! Problems with database connection or the request was not found!"
+                    }
+                }
+            }
         }
     },
     "definitions": {
-        "User": {
+        "UserRequest": {
             "required": [
                 "username",
                 "password",
@@ -185,17 +439,39 @@
                 "civilNumber": {
                     "type": "string",
                     "uniqueItems": true
+                }
+            }
+        },
+        "UserResponse": {
+            "properties": {
+                "username": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "fullName": {
+                    "type": "string"
+                },
+                "birthDate": {
+                    "type": "string"
+                },
+                "civilNumber": {
+                    "type": "string"
                 },
                 "registerDate": {
                     "type": "string"
+                },
+                "isInfected": {
+                    "type": "boolean"
                 }
             }
         },
         "Users": {
             "type": "array",
-            "$ref": "#/definitions/User"
+            "$ref": "#/definitions/UserResponse"
         },
-        "Technician": {
+        "TechnicianRequest": {
             "required": [
                 "username",
                 "password",
@@ -219,9 +495,6 @@
                     "type": "string",
                     "uniqueItems": true
                 },
-                "registerDate": {
-                    "type": "string"
-                },
                 "address": {
                     "type": "string"
                 },
@@ -235,11 +508,53 @@
                 }
             }
         },
+        "TechnicianResponse": {
+            "properties": {
+                "username": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "fullName": {
+                    "type": "string"
+                },
+                "civilNumber": {
+                    "type": "string"
+                },
+                "registerDate": {
+                    "type": "string"
+                },
+                "address": {
+                    "type": "string"
+                },
+                "phoneNumber": {
+                    "type": "Number"
+                },
+                "email": {
+                    "type": "string"
+                }
+            }
+        },
         "Technicians": {
             "type": "array",
-            "$ref": "#/definitions/Technician"
+            "$ref": "#/definitions/TechnicianResponse"
         },
-        "Request": {
+        "RequestRequest": {
+            "required": [
+                "requesterUsername",
+                "description"
+            ],
+            "properties": {
+                "requesterUsername": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                }
+            }
+        },
+        "RequestResponse": {
             "required": [
                 "requesterUsername",
                 "description"
@@ -254,17 +569,32 @@
                 "submitDate": {
                     "type": "string"
                 },
-                "testDate": {
+                "firstTestDate": {
                     "type": "string"
                 },
-                "filePath": {
+                "firstTestFilePath": {
+                    "type": "string"
+                },
+                "firstResult": {
+                    "type": "string"
+                },
+                "secondTestDate": {
+                    "type": "string"
+                },
+                "secondTestFilePath": {
+                    "type": "string"
+                },
+                "secondResult": {
+                    "type": "string"
+                },
+                "finalResult": {
                     "type": "string"
                 }
             }
         },
         "Requests": {
             "type": "array",
-            "$ref": "#/definitions/Request"
+            "$ref": "#/definitions/RequestResponse"
         }
     }
 }

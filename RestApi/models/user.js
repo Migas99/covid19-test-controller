@@ -7,7 +7,8 @@ const UserSchema = new Schema({
     fullName: { type: String, required: true },
     birthDate: { type: Date, required: true },
     civilNumber: { type: String, required: true },
-    registerDate: { type: Date, default: Date.now }
+    registerDate: { type: Date, default: Date.now() },
+    isInfected: { type: Boolean, default: false }
 });
 
 module.exports = mongoose.model("User", UserSchema);
