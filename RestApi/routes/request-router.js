@@ -6,10 +6,6 @@ var requestController = require('../controllers/request-controller');
 router.get('/', requestController.getAllRequests);
 router.post('/', requestController.createRequest);
 
-//NAO FAZ SENTIDO
-//router.get('/:requestId', requestController.getOneRequest);
-
-
 router.put('/:requestId', requestController.updateRequest);
 router.delete('/:requestId', requestController.deleteRequest);
 

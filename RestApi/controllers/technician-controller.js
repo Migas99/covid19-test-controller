@@ -3,65 +3,65 @@ var Technician = require("../models/technician");
 
 var technicianController = {};
 
-technicianController.createTechnician = function(req, res, next) {
-    var technician = new Technician(req.body);
-
-    technician.save(function(err) {
-        if(err){
-            next(err);
-        } else {
-            res.json(technician);
-        }
+//CRIAR TECNICO
+technicianController.createTechnician = async (req, res) => {
+    const technician = new Technician({
+        username:req.body.username,
+        password:req.body.password,
+        fullName:req.body.fullName,
+        civilNumber:req.body.civilNumber,
+        address:req.body.address,
+        phoneNumber:req.body.phoneNumber,
+        email:req.body.username
     });
+    
+    technician.save()
+    .exec()
+    .then(result => {console.log(result)})
+        .catch(err => console.log(err));
 };
 
-technicianController.updateTechnician = function(req, res, next) {
-    Technician.findByIdAndUpdate(req.body._id, req.body, {new: true}, function(err, technician) {
-        if(err) {
-            next(err);
-        } else {
-            res.json(technician);
-        }
-    });
+//ATUALIZAR TECNICO
+technicianController.updateTechnician = async (req, res) => {
+    try{
+        const updatedTechnician = await Technician.updateOne({_id: req.params.technicianId}, req.body);
+    }catch(err){
+        res.json(err);
+    }
 };
 
-technicianController.deleteTechnician = function(req, res, next) {
-    req.technician.remove(function(err) {
-        if(err) {
-            next(err);
-        } else {
-            res.json(req.technician);
-        }
-    });
+//APAGAR UM TECNICO
+technicianController.deleteTechnician = async (req, res) => {
+    try{
+        const deletetedTechnician = await Technician.remove({_id: req.params.technicianId});
+    }catch(err){
+        res.json(err);
+    }
 };
 
-technicianController.getAllTechnicians = function(req, res, next) {
-    Technician.find(function(err, technicians) {
-        if(err){
-            next(err);
-        } else {
-            res.json(technicians);
-        }
-    });
+//RECEBER TODOS OS TECNICOS
+technicianController.getAllTechnicians = async (req, res) => {
+    try {
+        const technicians = await Technician.find();
+        res.json(technicians);
+    } catch (error) {
+        res.json(err);
+    }
 };
 
-technicianController.getOneTechnician = function(req, res) {
-    res.json(req.technician);
+//RECEBER TECNICO COM DETERMINADO ID
+technitianController.getByIdTechnician = async (req, res) => {
+    try{
+        const technician = await Technician.findById(req.params.technicianId);
+        res.json(technician);
+    }catch(err){
+        res.json(err)
+    }
 };
 
-technicianController.getByIdTechnician = function(req, res, next, id) {
-    Technician.findOne({_id: id}, function(err, technician) {
-        if(err) {
-            next(err);
-        } else {
-            req.technician = technician;
-            next();
-        }
-    });
-};
-
-technicianController.verifyLogin = function(req, res){
-    const technician = technician.find (technician => technician.username = req.params.username);
+//VERIFICAR LOGIN DO TECNICO
+technicianController.verifyLogin = async (req, res) =>{
+    const technician = await technician.find (technician => technician.username = req.params.username);
     
     if(technician == null){
         res.send("technician not found");

@@ -41,11 +41,6 @@ requestController.getAllRequests = async (req, res) => {
     }
 };
 
-//NAO FAZ SENTIDO
-requestController.getOneRequest = function(req, res) {
-    res.json(res.request);
-};
-
 //RECEBER REQUEST COM DETERMINADO ID
 requestController.getByIdRequest = async (req, res) => {
     try{

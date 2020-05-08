@@ -5,10 +5,11 @@ var technicianController = require('../controllers/technician-controller');
 router.get('/', technicianController.getAllTechnicians);
 router.post('/', technicianController.createTechnician);
 
-router.get('/:technicianId', technicianController.getOneTechnician);
 router.put('/:technicianId', technicianController.updateTechnician);
 router.delete('/:technicianId', technicianController.deleteTechnician);
 
-router.param('technicianId', technicianController.getByIdTechnician);
+router.get('/:technicianId', technicianController.getByIdTechnician);
+
+//router.get("/login", technicianController.verifyLogin);
 
 module.exports = router;
