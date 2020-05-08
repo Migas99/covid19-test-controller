@@ -4,7 +4,14 @@ var User = require("../models/user");
 var userController = {};
 
 userController.createUser = function (req, res, next) {
-    var user = new User(req.body);
+    var user = new User({
+        username: req.body.username,
+        password: req.body.password,
+        fullName: req.body.fullName,
+        birthDate: Date(req.body.birthDate),
+        civilNumber: req.body.civilNumber,
+        registerDate: Date().now
+    });
 
     user.save(function(err) {
         if(err) {

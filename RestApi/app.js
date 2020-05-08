@@ -20,12 +20,8 @@ mongoose.connect(process.env.DB_CONNECTION, { useNewUrlParser: true })
 .then(() => console.log('Connection sucessful!'))
 .catch((err) => console.error(err));
 
-app.get("/", function(req, res){
-    res.send("ATUM");
-});
-
 //Routes
-app.use('/api', apiRouter);
+app.use('/', apiRouter);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 //Initialize the server
