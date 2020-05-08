@@ -18,7 +18,7 @@ requestController.updateRequest = async (req, res) => {
     try{
         const updatedRequest = await Request.updateOne({_id: req.params.requestId}, req.body);
     }catch(err){
-        res.err(err);
+        res.json(err);
     }
 };
 
@@ -27,7 +27,7 @@ requestController.deleteRequest = async (req, res) => {
     try{
         const deletetedRequest = await Request.remove({_id: req.params.requestId});
     }catch(err){
-        res.err(err);
+        res.json(err);
     }
 };
 
@@ -37,7 +37,7 @@ requestController.getAllRequests = async (req, res) => {
         const requests = await Request.find();
         res.json(requests);
     } catch (error) {
-        res.err(err);
+        res.json(err);
     }
 };
 
@@ -52,7 +52,7 @@ requestController.getByIdRequest = async (req, res) => {
         const request = await Request.findById(req.params.requestId);
         res.json(request);
     }catch(err){
-        res.err(err)
+        res.json(err)
     }
 };
 
@@ -62,7 +62,7 @@ requestController.getUserRequests = async (req, res) => {
         const requests = await Request.find({requesterUsername: req.params.username});
         res.json(requests);
     } catch (error) {
-        res.err(err);
+        res.json(err);
     }
 };
 

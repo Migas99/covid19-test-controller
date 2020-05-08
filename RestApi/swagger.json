@@ -411,6 +411,34 @@
                     }
                 }
             }
+        },
+        "/requests/user/{username}": {
+            "parameters": [
+                {
+                    "name": "username",
+                    "in": "path",
+                    "required": true,
+                    "description": "Username of the target requests",
+                    "type": "string"
+                }
+            ],
+            "get": {
+                "tags": [
+                    "Requests"
+                ],
+                "summary": "Get the requests with the given username",
+                "responses": {
+                    "200": {
+                        "description": "The request is found!",
+                        "schema": {
+                            "$ref": "#/definitions/RequestResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Error! Problems with database connection or the request was not found!"
+                    }
+                }
+            }
         }
     },
     "definitions": {

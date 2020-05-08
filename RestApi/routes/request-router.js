@@ -15,6 +15,6 @@ router.delete('/:requestId', requestController.deleteRequest);
 
 router.get('/:requestId', requestController.getByIdRequest);
 
-//router.get('/:username', requestController.getAllRequestsFromUser);
+router.get('/user/:username', requestController.getUserRequests);
 
 module.exports = router;
