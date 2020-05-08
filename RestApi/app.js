@@ -16,7 +16,7 @@ app.use(bodyParser.json());
 const apiRouter = require('./routes');
 
 //Connect to MongoDB
-mongoose.connect(process.env.DB_CONNECTION, { useNewUrlParser: true })
+mongoose.connect(process.env.DB_CONNECTION, { useNewUrlParser: true , useUnifiedTopology: true })
 .then(() => console.log('Connection sucessful!'))
 .catch((err) => console.error(err));
 

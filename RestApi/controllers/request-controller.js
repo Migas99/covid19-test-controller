@@ -3,83 +3,67 @@ var Request = require("../models/request");
 
 var requestController = {};
 
-requestController.createRequest = function(req, res, next) {
-    var request = new Request(req.body);
-
-    request.save(function(err) {
-        if(err){
-            next(err);
-        } else {
-            res.json(request);
-        }
-    });
+//CRIAR UM REQUEST
+requestController.createRequest = async (req, res) => {
+    const request = new Request({requesterUsername: req.body.requesterUsername,
+                                 description: req.body.description});
+    request.save()
+    .exec()
+    .then(result => {console.log(result)})
+        .catch(err => console.log(err));
 };
 
-requestController.updateRequest = function(req, res, next) {
-    Request.findByIdAndUpdate(req.body._id, req.body, {new: true}, function(err, request) {
-        if(err) {
-            next(err);
-        } else {
-            res.json(request);
-        }
-    });
+//ATUALIZAR UM REQUEST
+requestController.updateRequest = async (req, res) => {
+    try{
+        const updatedRequest = await Request.updateOne({_id: req.params.requestId}, req.body);
+    }catch(err){
+        res.err(err);
+    }
 };
 
-requestController.deleteRequest = function(req, res, next) {
-    req.request.remove(function (err) {
-        if(err) {
-            next(err);
-        } else {
-            res.json(req.request);
-        }
-    });
+//APAGAR UM REQUEST
+requestController.deleteRequest = async (req, res) => {
+    try{
+        const deletetedRequest = await Request.remove({_id: req.params.requestId});
+    }catch(err){
+        res.err(err);
+    }
 };
 
-requestController.getAllRequests = function(req, res, next) {
-    Request.find(function(err, requests) {
-        if(err) {
-            next(err);
-        } else {
-            res.json(requests);
-        }
-    });
+//RECEBER TODOS OS REQUESTS
+requestController.getAllRequests = async (req, res) => {
+    try {
+        const requests = await Request.find();
+        res.json(requests);
+    } catch (error) {
+        res.err(err);
+    }
 };
 
+//NAO FAZ SENTIDO
 requestController.getOneRequest = function(req, res) {
     res.json(res.request);
 };
 
-requestController.getByIdRequest = function(req, res, next, id) {
-    Request.findOne({_id: id}, function(err, request) {
-        if(err) {
-            next(err);
-        } else {
-            req.request = request;
-            next();
-        }
-    });
+//RECEBER REQUEST COM DETERMINADO ID
+requestController.getByIdRequest = async (req, res) => {
+    try{
+        const request = await Request.findById(req.params.requestId);
+        res.json(request);
+    }catch(err){
+        res.err(err)
+    }
 };
 
-requestController.getForUserRequest = function(req, res, next, userUsername) {
-    Request.findOne({userUsername: userUsername}, function(err, request) {
-        if(err) {
-            next(err);
-        } else {
-            req.request = request;
-            next();
-        }
-    });
-};
-
-requestController.getUserRequests = function(req, res, next, requesterUsername) {
-    Request.find({requesterUsername: requesterUsername}, function(err, request) {
-        if(err) {
-            next(err);
-        } else {
-            res.json(request);
-            next();
-        }
-    });
+//RECEBER REQUESTS DE UM UTILIZADOR
+requestController.getUserRequests = async (req, res) => {
+    try {
+        const requests = await Request.find({requesterUsername: req.params.username});
+        res.json(requests);
+    } catch (error) {
+        res.err(err);
+    }
 };
 
 module.exports = requestController;

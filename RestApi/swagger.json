@@ -9,11 +9,11 @@
     "basePath": "/",
     "tags": [
         {
-            "name": "User",
+            "name": "Users",
             "description": "Normal user"
         },
         {
-            "name": "Technician",
+            "name": "Technicians",
             "description": "Responsible for the tests"
         },
         {
