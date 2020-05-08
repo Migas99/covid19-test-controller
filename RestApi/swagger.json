@@ -9,15 +9,15 @@
     "basePath": "/",
     "tags": [
         {
-            "name": "user",
+            "name": "User",
             "description": "Normal user"
         },
         {
-            "name": "technician",
+            "name": "Technician",
             "description": "Responsible for the tests"
         },
         {
-            "name": "requests",
+            "name": "Requests",
             "description": "Requests made by the users and handled by the technicians"
         }
     ],
@@ -43,6 +43,9 @@
                         "schema": {
                             "$ref": "#definitions/Users"
                         }
+                    },
+                    "404": {
+                        "description": "Error! Problems with database connection, probably."
                     }
                 }
             },
@@ -70,6 +73,12 @@
                         "schema": {
                             "$ref": "#/definitions/User"
                         }
+                    },
+                    "400": {
+                        "description": "Bad request! Wrong parameters, probably."
+                    },
+                    "404": {
+                        "description": "Error! Problems with database connection, probably."
                     }
                 }
             }
@@ -95,6 +104,9 @@
                         "schema": {
                             "$ref": "#/definitions/User"
                         }
+                    },
+                    "404": {
+                        "description": "Error! Problems with database connection or the user was not found!"
                     }
                 }
             },
@@ -119,6 +131,12 @@
                         "schema": {
                             "$ref": "#/definitions/User"
                         }
+                    },
+                    "400": {
+                        "description":"Bad request! Wrong parameters, probably."
+                    },
+                    "404": {
+                        "description": "Error! Problems with database connection or the user was not found!"
                     }
                 }
             },
@@ -133,6 +151,9 @@
                         "schema": {
                             "$ref": "#/definitions/User"
                         }
+                    },
+                    "404": {
+                        "description": "Error! Problems with database connection or the user was not found!"
                     }
                 }
             }
@@ -162,7 +183,8 @@
                     "type": "string"
                 },
                 "civilNumber": {
-                    "type": "string"
+                    "type": "string",
+                    "uniqueItems": true
                 },
                 "registerDate": {
                     "type": "string"
@@ -172,6 +194,77 @@
         "Users": {
             "type": "array",
             "$ref": "#/definitions/User"
+        },
+        "Technician": {
+            "required": [
+                "username",
+                "password",
+                "fullName",
+                "civilNumber",
+                "address",
+                "phoneNumber",
+                "email"
+            ],
+            "properties": {
+                "username": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "fullName": {
+                    "type": "string"
+                },
+                "civilNumber": {
+                    "type": "string",
+                    "uniqueItems": true
+                },
+                "registerDate": {
+                    "type": "string"
+                },
+                "address": {
+                    "type": "string"
+                },
+                "phoneNumber": {
+                    "type": "Number",
+                    "uniqueItems": true
+                },
+                "email": {
+                    "type": "string",
+                    "uniqueItems": true
+                }
+            }
+        },
+        "Technicians": {
+            "type": "array",
+            "$ref": "#/definitions/Technician"
+        },
+        "Request": {
+            "required": [
+                "requesterUsername",
+                "description"
+            ],
+            "properties": {
+                "requesterUsername": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "submitDate": {
+                    "type": "string"
+                },
+                "testDate": {
+                    "type": "string"
+                },
+                "filePath": {
+                    "type": "string"
+                }
+            }
+        },
+        "Requests": {
+            "type": "array",
+            "$ref": "#/definitions/Request"
         }
     }
 }
