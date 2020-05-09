@@ -28,8 +28,9 @@ userController.login = async(req, res) =>{
     }
 
     //Criar e devolver o token
-    const token = jwt.sign({_id: user.id, role: 'user'}, process.env.TOKEN_SECRET);
-    res.header('auth-token', token).send(token);
+    const token = jwt.sign({_id: user.id, role: 'USER'}, process.env.TOKEN_SECRET);
+    res.cookie('authToken', token, {expires: new Date(Date.now() + 60000), httpOnly: true});
+    res.send(token);
 };
 
 //Registo de um user
@@ -119,6 +120,12 @@ userController.getByIdUser = async (req, res) => {
     }catch(err){
         res.json(err)
     }
+};
+
+//Logout do user
+userController.logout = async (req, res) => {
+    res.clearCookie('authToken');
+	res.status(200).send('Sucess!');
 };
 
 module.exports = userController;

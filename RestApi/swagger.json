@@ -24,6 +24,19 @@
     "schemes": [
         "http"
     ],
+    "securityDefinitions": {
+        "Cookies": {
+            "type": "apiKey",
+            "name": "authToken",
+            "in": "header"
+        },
+        "JWT": {
+            "type": "apiKey",
+            "name": "auth-token",
+            "description": "JWT authorization of an API",
+            "in": "header"
+        }
+    },
     "consumes": [
         "application/json"
     ],
@@ -102,6 +115,15 @@
             "get": {
                 "tags": [
                     "Users"
+                ],
+                "parameters": [
+                    {
+                        "name": "authToken",
+                        "in": "header",
+                        "description": "token",
+                        "required": true,
+                        "type": "string"
+                    }
                 ],
                 "summary": "Gets the list of users in the database",
                 "responses": {
@@ -483,7 +505,8 @@
             ],
             "properties": {
                 "username": {
-                    "type": "string"
+                    "type": "string",
+                    "uniqueItems": true
                 },
                 "password": {
                     "type": "string"
@@ -502,7 +525,6 @@
             "properties": {
                 "username": {
                     "type": "string",
-                    "required": true,
                     "uniqueItems": true
                 },
                 "password": {
@@ -521,7 +543,6 @@
                 },
                 "civilNumber": {
                     "type": "string",
-                    "required": true,
                     "uniqueItems": true
                 }
             }
