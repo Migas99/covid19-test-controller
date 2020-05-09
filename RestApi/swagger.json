@@ -31,6 +31,73 @@
         "application/json"
     ],
     "paths": {
+        "/users/login": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "description": "Login the user in the system",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "body",
+                        "description": "Username and password of the user that wants to login",
+                        "schema": {
+                            "$ref": "#/definitions/UserLogin"
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Sucess!"
+                    },
+                    "400": {
+                        "description": "Bad request! Wrong parameters, probably."
+                    },
+                    "404": {
+                        "description": "Error! Problems with database connection, probably."
+                    }
+                }
+            }
+        },
+        "/users/register": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "description": "Create a new user in the system",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "body",
+                        "description": "User that we want to create",
+                        "schema": {
+                            "$ref": "#/definitions/UserRegister"
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Sucess!",
+                        "schema": {
+                            "$ref": "#/definitions/UserResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request! Wrong parameters, probably."
+                    },
+                    "404": {
+                        "description": "Error! Problems with database connection, probably."
+                    }
+                }
+            }
+        },
         "/users": {
             "get": {
                 "tags": [
@@ -43,39 +110,6 @@
                         "schema": {
                             "$ref": "#definitions/UserResponse"
                         }
-                    },
-                    "404": {
-                        "description": "Error! Problems with database connection, probably."
-                    }
-                }
-            },
-            "post": {
-                "tags": [
-                    "Users"
-                ],
-                "description": "Create a new user in the system",
-                "parameters": [
-                    {
-                        "name": "user",
-                        "in": "body",
-                        "description": "User that we want to create",
-                        "schema": {
-                            "$ref": "#/definitions/UserRequest"
-                        }
-                    }
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "responses": {
-                    "200": {
-                        "description": "New user is created",
-                        "schema": {
-                            "$ref": "#/definitions/UserResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad request! Wrong parameters, probably."
                     },
                     "404": {
                         "description": "Error! Problems with database connection, probably."
@@ -442,17 +476,33 @@
         }
     },
     "definitions": {
-        "UserRequest": {
+        "UserLogin": {
+            "required": [
+                "username",
+                "password"
+            ],
+            "properties": {
+                "username": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "UserRegister": {
             "required": [
                 "username",
                 "password",
                 "fullName",
+                "email",
                 "birthDate",
                 "civilNumber"
             ],
             "properties": {
                 "username": {
                     "type": "string",
+                    "required": true,
                     "uniqueItems": true
                 },
                 "password": {
@@ -461,11 +511,17 @@
                 "fullName": {
                     "type": "string"
                 },
+                "email": {
+                    "type": "string",
+                    "required": true,
+                    "uniqueItems": true
+                },
                 "birthDate": {
                     "type": "string"
                 },
                 "civilNumber": {
                     "type": "string",
+                    "required": true,
                     "uniqueItems": true
                 }
             }

@@ -5,12 +5,16 @@ var requestController = {};
 
 //CRIAR UM REQUEST
 requestController.createRequest = async (req, res) => {
-    const request = new Request({requesterUsername: req.body.requesterUsername,
-                                 description: req.body.description});
-    request.save()
-    .exec()
-    .then(result => {console.log(result)})
-        .catch(err => console.log(err));
+    var request = new Request({
+        requesterUsername: req.body.requesterUsername,
+        description: req.body.description});
+    
+    try{
+        await request.save();
+        res.json(request);
+    }catch(err){
+        res.json(err)
+    }
 };
 
 //ATUALIZAR UM REQUEST

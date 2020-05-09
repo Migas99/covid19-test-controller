@@ -5,20 +5,14 @@ var technicianController = {};
 
 //CRIAR TECNICO
 technicianController.createTechnician = async (req, res) => {
-    const technician = new Technician({
-        username:req.body.username,
-        password:req.body.password,
-        fullName:req.body.fullName,
-        civilNumber:req.body.civilNumber,
-        address:req.body.address,
-        phoneNumber:req.body.phoneNumber,
-        email:req.body.username
-    });
+    var technician = new Technician(req.body);
     
-    technician.save()
-    .exec()
-    .then(result => {console.log(result)})
-        .catch(err => console.log(err));
+    try{
+        await technician.save();
+        res.json(technician);
+    }catch(err){
+        res.json(err)
+    }
 };
 
 //ATUALIZAR TECNICO
@@ -50,7 +44,7 @@ technicianController.getAllTechnicians = async (req, res) => {
 };
 
 //RECEBER TECNICO COM DETERMINADO ID
-technitianController.getByIdTechnician = async (req, res) => {
+technicianController.getByIdTechnician = async (req, res) => {
     try{
         const technician = await Technician.findById(req.params.technicianId);
         res.json(technician);
