@@ -1,15 +1,16 @@
 var express = require('express');
 var router = express.Router();
 var technicianController = require('../controllers/technician-controller');
+var { authorizeBasedOnRoles, authorizeBasedOnRolesAndTechnicianId } = require('../middlewares/authorize');
 
-router.get('/', technicianController.getAllTechnicians);
-router.post('/', technicianController.createTechnician);
+router.post('/login', technicianController.login);
+router.post('/register', technicianController.createTechnician);
 
-router.put('/:technicianId', technicianController.updateTechnician);
-router.delete('/:technicianId', technicianController.deleteTechnician);
+router.get('/', authorizeBasedOnRoles(['ADMIN']), technicianController.getAllTechnicians);
+router.put('/:technicianId', authorizeBasedOnRolesAndTechnicianId(['ADMIN']), technicianController.updateTechnician);
+router.delete('/:technicianId', authorizeBasedOnRolesAndTechnicianId(['ADMIN']), technicianController.deleteTechnician);
 
-router.get('/:technicianId', technicianController.getByIdTechnician);
-
-//router.get("/login", technicianController.verifyLogin);
+router.get('/:technicianId', authorizeBasedOnRolesAndTechnicianId(['ADMIN']), technicianController.getByIdTechnician);
+router.post('/logout', technicianController.logout);
 
 module.exports = router;

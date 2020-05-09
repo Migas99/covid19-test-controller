@@ -6,7 +6,7 @@ var mongoose = require('mongoose');
 var cors = require('cors');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var session = require('./middleware/session');
+var session = require('./middlewares/session');
 var swaggerUi = require('swagger-ui-express');
 var swaggerDocument = require('./swagger.json')
 

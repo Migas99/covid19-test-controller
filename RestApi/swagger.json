@@ -25,16 +25,11 @@
         "http"
     ],
     "securityDefinitions": {
-        "Cookies": {
-            "type": "apiKey",
-            "name": "authToken",
-            "in": "header"
-        },
         "JWT": {
             "type": "apiKey",
             "name": "auth-token",
             "description": "JWT authorization of an API",
-            "in": "header"
+            "in": "cookies"
         }
     },
     "consumes": [
@@ -56,7 +51,7 @@
                         "in": "body",
                         "description": "Username and password of the user that wants to login",
                         "schema": {
-                            "$ref": "#/definitions/UserLogin"
+                            "$ref": "#/definitions/UserLoginRequest"
                         }
                     }
                 ],
@@ -65,13 +60,29 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Sucess!"
+                        "description": "Sucess!",
+                        "schema": {
+                            "$ref": "#/definitions/UserLoginResponse"
+                        }
                     },
                     "400": {
                         "description": "Bad request! Wrong parameters, probably."
                     },
                     "404": {
                         "description": "Error! Problems with database connection, probably."
+                    }
+                }
+            }
+        },
+        "/users/logout": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "description": "Logout the user in the system",
+                "responses": {
+                    "200": {
+                        "description": "Sucess!"
                     }
                 }
             }
@@ -97,10 +108,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Sucess!",
-                        "schema": {
-                            "$ref": "#/definitions/UserResponse"
-                        }
+                        "description": "Sucess!"
                     },
                     "400": {
                         "description": "Bad request! Wrong parameters, probably."
@@ -116,15 +124,6 @@
                 "tags": [
                     "Users"
                 ],
-                "parameters": [
-                    {
-                        "name": "authToken",
-                        "in": "header",
-                        "description": "token",
-                        "required": true,
-                        "type": "string"
-                    }
-                ],
                 "summary": "Gets the list of users in the database",
                 "responses": {
                     "200": {
@@ -136,7 +135,10 @@
                     "404": {
                         "description": "Error! Problems with database connection, probably."
                     }
-                }
+                },
+                "security": [
+                    "JWT"
+                ]
             }
         },
         "/users/{userId}": {
@@ -164,7 +166,10 @@
                     "404": {
                         "description": "Error! Problems with database connection or the user was not found!"
                     }
-                }
+                },
+                "security": [
+                    "JWT"
+                ]
             },
             "put": {
                 "summary": "Update user with given ID",
@@ -189,12 +194,15 @@
                         }
                     },
                     "400": {
-                        "description":"Bad request! Wrong parameters, probably."
+                        "description": "Bad request! Wrong parameters, probably."
                     },
                     "404": {
                         "description": "Error! Problems with database connection or the user was not found!"
                     }
-                }
+                },
+                "security": [
+                    "JWT"
+                ]
             },
             "delete": {
                 "summary": "Delete the user with given ID",
@@ -211,6 +219,89 @@
                     "404": {
                         "description": "Error! Problems with database connection or the user was not found!"
                     }
+                },
+                "security": [
+                    "JWT"
+                ]
+            }
+        },
+        "/technicians/login": {
+            "post": {
+                "tags": [
+                    "Technicians"
+                ],
+                "description": "Login the technician in the system",
+                "parameters": [
+                    {
+                        "name": "technician",
+                        "in": "body",
+                        "description": "Username and password of the technician that wants to login",
+                        "schema": {
+                            "$ref": "#/definitions/TechnicianLoginRequest"
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Sucess!",
+                        "schema": {
+                            "$ref": "#/definitions/TechnicianLoginResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request! Wrong parameters, probably."
+                    },
+                    "404": {
+                        "description": "Error! Problems with database connection, probably."
+                    }
+                }
+            }
+        },
+        "/technicians/logout": {
+            "post": {
+                "tags": [
+                    "Technicians"
+                ],
+                "description": "Logout the technician in the system",
+                "responses": {
+                    "200": {
+                        "description": "Sucess!"
+                    }
+                }
+            }
+        },
+        "/technicians/register": {
+            "post": {
+                "tags": [
+                    "Technicians"
+                ],
+                "description": "Create a new technician in the system",
+                "parameters": [
+                    {
+                        "name": "technician",
+                        "in": "body",
+                        "description": "Technician we want to create",
+                        "schema": {
+                            "$ref": "#/definitions/TechnicianRegister"
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Sucess!"
+                    }
+                },
+                "400": {
+                    "description": "Bad request! Wrong parameters, probably."
+                },
+                "404": {
+                    "description": "Error! Problems with database connection, probably."
                 }
             }
         },
@@ -230,40 +321,10 @@
                     "404": {
                         "description": "Error! Problems with database connection, probably."
                     }
-                }
-            },
-            "post": {
-                "tags": [
-                    "Technicians"
-                ],
-                "description": "Create a new technician in the system",
-                "parameters": [
-                    {
-                        "name": "technician",
-                        "in": "body",
-                        "description": "Technician we want to create",
-                        "schema": {
-                            "$ref": "#/definitions/TechnicianRequest"
-                        }
-                    }
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "responses": {
-                    "200": {
-                        "description": "New technician is created",
-                        "schema": {
-                            "$ref": "#/definitions/TechnicianResponse"
-                        }
-                    }
                 },
-                "400": {
-                    "description": "Bad request! Wrong parameters, probably."
-                },
-                "404": {
-                    "description": "Error! Problems with database connection, probably."
-                }
+                "security": [
+                    "JWT"
+                ]
             }
         },
         "/technicians/{technicianId}": {
@@ -291,7 +352,10 @@
                     "404": {
                         "description": "Error! Problems with database connection or the user was not found!"
                     }
-                }
+                },
+                "security": [
+                    "JWT"
+                ]
             },
             "put": {
                 "summary": "Update technician with the given ID",
@@ -316,12 +380,15 @@
                         }
                     },
                     "400": {
-                        "description":"Bad request! Wrong parameters, probably."
+                        "description": "Bad request! Wrong parameters, probably."
                     },
                     "404": {
                         "description": "Error! Problems with database connection or the technician was not found!"
                     }
-                }
+                },
+                "security": [
+                    "JWT"
+                ]
             },
             "delete": {
                 "summary": "Delete the technician with given ID",
@@ -338,7 +405,10 @@
                     "404": {
                         "description": "Error! Problems with database connection or the technician was not found!"
                     }
-                }
+                },
+                "security": [
+                    "JWT"
+                ]
             }
         },
         "/requests": {
@@ -357,7 +427,10 @@
                     "404": {
                         "description": "Error! Problems with database connection, probably."
                     }
-                }
+                },
+                "security": [
+                    "JWT"
+                ]
             },
             "post": {
                 "tags": [
@@ -383,14 +456,17 @@
                         "schema": {
                             "$ref": "#/definitions/RequestResponse"
                         }
+                    },
+                    "400": {
+                        "description": "Bad request! Wrong parameters, probably."
+                    },
+                    "404": {
+                        "description": "Error! Problems with database connection, probably."
                     }
                 },
-                "400": {
-                    "description": "Bad request! Wrong parameters, probably."
-                },
-                "404": {
-                    "description": "Error! Problems with database connection, probably."
-                }
+                "security": [
+                    "JWT"
+                ]
             }
         },
         "/requests/{requestId}": {
@@ -418,7 +494,10 @@
                     "404": {
                         "description": "Error! Problems with database connection or the request was not found!"
                     }
-                }
+                },
+                "security": [
+                    "JWT"
+                ]
             },
             "put": {
                 "summary": "Update request with the given ID",
@@ -443,12 +522,15 @@
                         }
                     },
                     "400": {
-                        "description":"Bad request! Wrong parameters, probably."
+                        "description": "Bad request! Wrong parameters, probably."
                     },
                     "404": {
                         "description": "Error! Problems with database connection or the request was not found!"
                     }
-                }
+                },
+                "security": [
+                    "JWT"
+                ]
             },
             "delete": {
                 "summary": "Delete the request with given ID",
@@ -465,7 +547,10 @@
                     "404": {
                         "description": "Error! Problems with database connection or the request was not found!"
                     }
-                }
+                },
+                "security": [
+                    "JWT"
+                ]
             }
         },
         "/requests/user/{username}": {
@@ -493,12 +578,15 @@
                     "404": {
                         "description": "Error! Problems with database connection or the request was not found!"
                     }
-                }
+                },
+                "security": [
+                    "JWT"
+                ]
             }
         }
     },
     "definitions": {
-        "UserLogin": {
+        "UserLoginRequest": {
             "required": [
                 "username",
                 "password"
@@ -509,6 +597,16 @@
                     "uniqueItems": true
                 },
                 "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "UserLoginResponse": {
+            "required": [
+                "AuthToken"
+            ],
+            "properties": {
+                "AuthToken": {
                     "type": "string"
                 }
             }
@@ -576,7 +674,32 @@
             "type": "array",
             "$ref": "#/definitions/UserResponse"
         },
-        "TechnicianRequest": {
+        "TechnicianLoginRequest": {
+            "required": [
+                "username",
+                "password"
+            ],
+            "properties": {
+                "username": {
+                    "type": "string",
+                    "uniqueItems": true
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "TechnicianLoginResponse": {
+            "required": [
+                "AuthToken"
+            ],
+            "properties": {
+                "AuthToken": {
+                    "type": "string"
+                }
+            }
+        },
+        "TechnicianRegister": {
             "required": [
                 "username",
                 "password",

@@ -2,7 +2,7 @@ var mongoose = require("mongoose");
 var User = require('../models/user');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const { registerValidation, loginValidation } = require('../validations/userValidations');
+const { loginValidation, userRegisterValidation } = require('../validations/validations');
 
 var userController = {};
 
@@ -28,16 +28,16 @@ userController.login = async(req, res) =>{
     }
 
     //Criar e devolver o token
-    const token = jwt.sign({_id: user.id, role: 'USER'}, process.env.TOKEN_SECRET);
+    const token = jwt.sign({id: user.id, role: 'USER'}, process.env.TOKEN_SECRET);
     res.cookie('authToken', token, {expires: new Date(Date.now() + 60000), httpOnly: true});
-    res.send(token);
+    res.send({AuthToken: token});
 };
 
 //Registo de um user
 userController.createUser = async (req, res) => {
     
     //Validamos se a estrutura é válida
-    const { error } = registerValidation(req.body);
+    const { error } = userRegisterValidation(req.body);
     
     if(error){
         res.status(400).send(error.details[0].message);

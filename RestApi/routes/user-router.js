@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var userController = require("../controllers/user-controller");
-var { authorizeBasedOnRoles, authorizeBasedOnRolesAndUserId } = require('../middleware/authorize');
+var { authorizeBasedOnRoles, authorizeBasedOnRolesAndUserId } = require('../middlewares/authorize');
 
 router.post('/login', userController.login);
 router.post('/register', userController.createUser);

@@ -33,7 +33,7 @@ const authorizeBasedOnRolesAndUserId = (opts) => {
 			next()
 		} else {
 
-			if(req.params.userId == req.auth._id){
+			if(req.params.userId == req.auth.id){
 				next();
 			} else {
 				return res.status(403).send('Not authorized!');
@@ -57,7 +57,7 @@ const authorizeBasedOnRolesAndTechnicianId = (opts) => {
 			next()
 		} else {
 
-			if(req.params.technicianId == req.auth._id){
+			if(req.params.technicianId == req.auth.id){
 				next();
 			} else {
 				return res.status(403).send('Not authorized!');
