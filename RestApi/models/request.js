@@ -11,6 +11,7 @@ const RequestSchema = new Schema({
     secondTestDate: { type: Date , default: null },
     secondTestFilePath: { type: String , default: null },
     secondResult: { type: Boolean, default: null },
+    finalResultDate: { type: Date, default: null },
     finalResult: { type: Boolean, default: null }
 });
 

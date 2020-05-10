@@ -26,12 +26,12 @@ requestController.createRequest = async (req, res) => {
 //ATUALIZAR UM REQUEST
 requestController.updateRequest = async (req, res) => {
     try {
-        const request = await Request.updateOne({ _id: req.params.requestId }, req.body);
+        await Request.updateOne({ _id: req.params.requestId }, req.body);
         res.status(200).send('Sucess!');
 
-        console.log(request.finalResult);
-        if(request.finalResult == true){
-            await User.updateOne({ username: request.requesterUsername }, { isInfected: request.finalResult });
+        const request = await Request.findOne({ _id: req.params.requestId });
+        if(request.finalResult){
+            await User.updateOne({ username: request.requesterUsername }, { $set: { isInfected: request.finalResult }});
         }
 
     } catch (err) {
