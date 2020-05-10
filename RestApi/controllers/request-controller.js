@@ -1,12 +1,17 @@
 var mongoose = require("mongoose");
 var Request = require("../models/request");
+var User = require('../models/user');
 
 var requestController = {};
 
 //CRIAR UM REQUEST
 requestController.createRequest = async (req, res) => {
+    if(req.auth.role != 'USER'){
+        res.status(403).send('You are not an user!');
+    }
+
     var request = new Request({
-        requesterUsername: req.body.requesterUsername,
+        requesterUsername: req.auth.username,
         description: req.body.description
     });
 
@@ -21,8 +26,14 @@ requestController.createRequest = async (req, res) => {
 //ATUALIZAR UM REQUEST
 requestController.updateRequest = async (req, res) => {
     try {
-        await Request.updateOne({ _id: req.params.requestId }, req.body);
+        const request = await Request.updateOne({ _id: req.params.requestId }, req.body);
         res.status(200).send('Sucess!');
+
+        console.log(request.finalResult);
+        if(request.finalResult == true){
+            await User.updateOne({ username: request.requesterUsername }, { isInfected: request.finalResult });
+        }
+
     } catch (err) {
         res.json(err);
     }

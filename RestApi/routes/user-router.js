@@ -8,6 +8,8 @@ router.post('/register', userController.createUser);
 router.post('/technician/register', authorizeBasedOnRoles(['ADMIN']), userController.createTechnician);
 
 router.get('/', authorizeBasedOnRoles(['TECHNICIAN', 'ADMIN']), userController.getAllUsers);
+router.get('/infected', authorizeBasedOnRoles(['TECHNICIAN', 'ADMIN']), userController.getAllInfectedUsers);
+router.get('/technicians', authorizeBasedOnRoles(['ADMIN']), userController.getAllTechnicians);
 router.put('/:userId', authorizeBasedOnRolesAndUserId(['ADMIN']), userController.updateUser);
 router.delete('/:userId', authorizeBasedOnRolesAndUserId(['ADMIN']), userController.deleteUser);
 

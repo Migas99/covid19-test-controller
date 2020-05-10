@@ -135,7 +135,7 @@ userController.createTechnician = async (req, res) => {
         email: req.body.email,
         address: req.body.address,
         role: 'TECHNICIAN',
-        registerDate: Date(Date.now()),
+        registerDate: Date(Date.now())
     });
 
     try {
@@ -169,12 +169,30 @@ userController.deleteUser = async (req, res) => {
 //RECEBER TODOS OS UTILIZADORES
 userController.getAllUsers = async (req, res) => {
     try {
-        const users = await User.find({}, { username: 1, fullName: 1, birthDate: 1, civilNumber: 1, phoneNumber: 1, email: 1 });
+        const users = await User.find({ role: 'USER' }, { username: 1, fullName: 1, birthDate: 1, civilNumber: 1, phoneNumber: 1, email: 1, isInfected: 1 });
         res.json(users);
     } catch (error) {
         res.json(err);
     }
 };
+
+userController.getAllInfectedUsers = async (req, res) => {
+    try {
+        const users = await User.find({ role: 'USER', isInfected: true }, { username: 1, fullName: 1, birthDate: 1, civilNumber: 1, phoneNumber: 1, email: 1 });
+        res.json(users);
+    } catch (error) {
+        res.json(err);
+    }
+};
+
+userController.getAllTechnicians = async (req, res) => {
+    try {
+        const technicians = await User.find({ role: 'TECHNICIAN' }, { username: 1, fullName: 1, birthDate: 1, civilNumber: 1, phoneNumber: 1, email: 1 });
+        res.json(technicians);
+    } catch (error) {
+        res.json(err);
+    }
+}
 
 //RECEBER UTILIZADOR COM DETERMINADO ID
 userController.getByIdUser = async (req, res) => {

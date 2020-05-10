@@ -172,6 +172,50 @@
                 ]
             }
         },
+        "/users/infected": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Gets the list of infected users in the database",
+                "responses": {
+                    "200": {
+                        "description": "Sucess!",
+                        "schema": {
+                            "$ref": "#definitions/UserResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Error! Problems with database connection, probably."
+                    }
+                },
+                "security": [
+                    "JWT"
+                ]
+            }
+        },
+        "/users/technicians": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Gets the list of technicians in the database",
+                "responses": {
+                    "200": {
+                        "description": "Sucess!",
+                        "schema": {
+                            "$ref": "#definitions/UserResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Error! Problems with database connection, probably."
+                    }
+                },
+                "security": [
+                    "JWT"
+                ]
+            }
+        },
         "/users/{userId}": {
             "parameters": [
                 {
@@ -522,13 +566,9 @@
         },
         "RequestRequest": {
             "required": [
-                "requesterUsername",
                 "description"
             ],
             "properties": {
-                "requesterUsername": {
-                    "type": "string"
-                },
                 "description": {
                     "type": "string"
                 }

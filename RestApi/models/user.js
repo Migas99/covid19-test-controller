@@ -12,6 +12,7 @@ const UserSchema = new Schema({
     address: { type: String, required: true },
     role: { type: String, default: 'USER' },
     registerDate: { type: Date, default: Date.now() },
+    isInfected: { type: Boolean }
 });
 
 module.exports = mongoose.model("User", UserSchema);
