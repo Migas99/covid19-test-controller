@@ -12,34 +12,20 @@ const loginValidation = data => {
 }
 
 //Validar o registo de um user
-const userRegisterValidation = data => {
+const registerValidation = data => {
     const schema = Joi.object({
         username: Joi.string().min(6).required(),
         password: Joi.string().min(6).required(),
         fullName: Joi.string(),
-        email: Joi.string().min(4).required().email(),
         birthDate: Joi.date(),
-        civilNumber: Joi.string()
-    });
-
-    return schema.validate(data);
-};
-
-//Validar o registo de um técnico
-const technicianRegisterValidation = data => {
-    const schema = Joi.object({
-        username: Joi.string().min(6).required(),
-        password: Joi.string().min(6).required(),
-        fullName: Joi.string(),
         civilNumber: Joi.string(),
-        address: Joi.string(),
-        phoneNumber: Joi.number(),
+        phoneNumber: Joi.number().min(9).required(),
         email: Joi.string().min(4).required().email(),
+        address: Joi.string().required()
     });
 
     return schema.validate(data);
 };
 
 module.exports.loginValidation = loginValidation;
-module.exports.userRegisterValidation = userRegisterValidation;
-module.exports.technicianRegisterValidation = technicianRegisterValidation;
+module.exports.registerValidation = registerValidation;

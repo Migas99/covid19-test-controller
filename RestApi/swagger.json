@@ -10,11 +10,7 @@
     "tags": [
         {
             "name": "Users",
-            "description": "Normal user"
-        },
-        {
-            "name": "Technicians",
-            "description": "Responsible for the tests"
+            "description": "Normal user and technicians"
         },
         {
             "name": "Requests",
@@ -27,9 +23,9 @@
     "securityDefinitions": {
         "JWT": {
             "type": "apiKey",
-            "name": "auth-token",
+            "name": "authToken",
             "description": "JWT authorization of an API",
-            "in": "cookies"
+            "in": "header"
         }
     },
     "consumes": [
@@ -117,6 +113,41 @@
                         "description": "Error! Problems with database connection, probably."
                     }
                 }
+            }
+        },
+        "/users/technician/register": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "description": "Create a new technician in the system",
+                "parameters": [
+                    {
+                        "name": "technician",
+                        "in": "body",
+                        "description": "Technician that we want to create",
+                        "schema": {
+                            "$ref": "#/definitions/UserRegister"
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Sucess!"
+                    },
+                    "400": {
+                        "description": "Bad request! Wrong parameters, probably."
+                    },
+                    "404": {
+                        "description": "Error! Problems with database connection, probably."
+                    }
+                },
+                "security": [
+                    "JWT"
+                ]
             }
         },
         "/users": {
@@ -218,192 +249,6 @@
                     },
                     "404": {
                         "description": "Error! Problems with database connection or the user was not found!"
-                    }
-                },
-                "security": [
-                    "JWT"
-                ]
-            }
-        },
-        "/technicians/login": {
-            "post": {
-                "tags": [
-                    "Technicians"
-                ],
-                "description": "Login the technician in the system",
-                "parameters": [
-                    {
-                        "name": "technician",
-                        "in": "body",
-                        "description": "Username and password of the technician that wants to login",
-                        "schema": {
-                            "$ref": "#/definitions/TechnicianLoginRequest"
-                        }
-                    }
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Sucess!",
-                        "schema": {
-                            "$ref": "#/definitions/TechnicianLoginResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad request! Wrong parameters, probably."
-                    },
-                    "404": {
-                        "description": "Error! Problems with database connection, probably."
-                    }
-                }
-            }
-        },
-        "/technicians/logout": {
-            "post": {
-                "tags": [
-                    "Technicians"
-                ],
-                "description": "Logout the technician in the system",
-                "responses": {
-                    "200": {
-                        "description": "Sucess!"
-                    }
-                }
-            }
-        },
-        "/technicians/register": {
-            "post": {
-                "tags": [
-                    "Technicians"
-                ],
-                "description": "Create a new technician in the system",
-                "parameters": [
-                    {
-                        "name": "technician",
-                        "in": "body",
-                        "description": "Technician we want to create",
-                        "schema": {
-                            "$ref": "#/definitions/TechnicianRegister"
-                        }
-                    }
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Sucess!"
-                    }
-                },
-                "400": {
-                    "description": "Bad request! Wrong parameters, probably."
-                },
-                "404": {
-                    "description": "Error! Problems with database connection, probably."
-                }
-            }
-        },
-        "/technicians": {
-            "get": {
-                "tags": [
-                    "Technicians"
-                ],
-                "summary": "Get all the technicians in the system",
-                "responses": {
-                    "200": {
-                        "description": "Sucess!",
-                        "schema": {
-                            "$ref": "#/definitions/TechnicianResponse"
-                        }
-                    },
-                    "404": {
-                        "description": "Error! Problems with database connection, probably."
-                    }
-                },
-                "security": [
-                    "JWT"
-                ]
-            }
-        },
-        "/technicians/{technicianId}": {
-            "parameters": [
-                {
-                    "name": "technicianId",
-                    "in": "path",
-                    "required": true,
-                    "description": "ID of the target technician",
-                    "type": "string"
-                }
-            ],
-            "get": {
-                "tags": [
-                    "Technicians"
-                ],
-                "summary": "Get the technician with the given ID",
-                "responses": {
-                    "200": {
-                        "description": "The technician is found!",
-                        "schema": {
-                            "$ref": "#/definitions/TechnicianResponse"
-                        }
-                    },
-                    "404": {
-                        "description": "Error! Problems with database connection or the user was not found!"
-                    }
-                },
-                "security": [
-                    "JWT"
-                ]
-            },
-            "put": {
-                "summary": "Update technician with the given ID",
-                "tags": [
-                    "Technicians"
-                ],
-                "parameters": [
-                    {
-                        "name": "technician",
-                        "in": "body",
-                        "description": "Technician with new values of properties",
-                        "schema": {
-                            "$ref": "#/definitions/TechnicianResponse"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "The technician is updated!",
-                        "schema": {
-                            "$ref": "#/definitions/TechnicianResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad request! Wrong parameters, probably."
-                    },
-                    "404": {
-                        "description": "Error! Problems with database connection or the technician was not found!"
-                    }
-                },
-                "security": [
-                    "JWT"
-                ]
-            },
-            "delete": {
-                "summary": "Delete the technician with given ID",
-                "tags": [
-                    "Technicians"
-                ],
-                "responses": {
-                    "200": {
-                        "description": "The technician is deleted!",
-                        "schema": {
-                            "$ref": "#/definitions/TechnicianResponse"
-                        }
-                    },
-                    "404": {
-                        "description": "Error! Problems with database connection or the technician was not found!"
                     }
                 },
                 "security": [
@@ -673,100 +518,6 @@
         "Users": {
             "type": "array",
             "$ref": "#/definitions/UserResponse"
-        },
-        "TechnicianLoginRequest": {
-            "required": [
-                "username",
-                "password"
-            ],
-            "properties": {
-                "username": {
-                    "type": "string",
-                    "uniqueItems": true
-                },
-                "password": {
-                    "type": "string"
-                }
-            }
-        },
-        "TechnicianLoginResponse": {
-            "required": [
-                "AuthToken"
-            ],
-            "properties": {
-                "AuthToken": {
-                    "type": "string"
-                }
-            }
-        },
-        "TechnicianRegister": {
-            "required": [
-                "username",
-                "password",
-                "fullName",
-                "civilNumber",
-                "address",
-                "phoneNumber",
-                "email"
-            ],
-            "properties": {
-                "username": {
-                    "type": "string"
-                },
-                "password": {
-                    "type": "string"
-                },
-                "fullName": {
-                    "type": "string"
-                },
-                "civilNumber": {
-                    "type": "string",
-                    "uniqueItems": true
-                },
-                "address": {
-                    "type": "string"
-                },
-                "phoneNumber": {
-                    "type": "Number",
-                    "uniqueItems": true
-                },
-                "email": {
-                    "type": "string",
-                    "uniqueItems": true
-                }
-            }
-        },
-        "TechnicianResponse": {
-            "properties": {
-                "username": {
-                    "type": "string"
-                },
-                "password": {
-                    "type": "string"
-                },
-                "fullName": {
-                    "type": "string"
-                },
-                "civilNumber": {
-                    "type": "string"
-                },
-                "registerDate": {
-                    "type": "string"
-                },
-                "address": {
-                    "type": "string"
-                },
-                "phoneNumber": {
-                    "type": "Number"
-                },
-                "email": {
-                    "type": "string"
-                }
-            }
-        },
-        "Technicians": {
-            "type": "array",
-            "$ref": "#/definitions/TechnicianResponse"
         },
         "RequestRequest": {
             "required": [

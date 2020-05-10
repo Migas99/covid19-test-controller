@@ -5,6 +5,7 @@ var { authorizeBasedOnRoles, authorizeBasedOnRolesAndUserId } = require('../midd
 
 router.post('/login', userController.login);
 router.post('/register', userController.createUser);
+router.post('/technician/register', authorizeBasedOnRoles(['ADMIN']), userController.createTechnician);
 
 router.get('/', authorizeBasedOnRoles(['TECHNICIAN'], ['ADMIN']), userController.getAllUsers);
 router.put('/:userId', authorizeBasedOnRolesAndUserId(['ADMIN']), userController.updateUser);

@@ -42,30 +42,5 @@ const authorizeBasedOnRolesAndUserId = (opts) => {
 	}
 };
 
-const authorizeBasedOnRolesAndTechnicianId = (opts) => {
-	opts = opts || []
-
-	return (req, res, next) => {
-
-		if (!req.auth) {
-			return res.status(401).send('Not authenticated!');
-        }
-        
-		const hasAuthorization = opts.includes(req.auth.role);
-		
-		if (hasAuthorization) {
-			next()
-		} else {
-
-			if(req.params.technicianId == req.auth.id){
-				next();
-			} else {
-				return res.status(403).send('Not authorized!');
-			}
-		}
-	}
-};
-
 module.exports.authorizeBasedOnRoles = authorizeBasedOnRoles;
 module.exports.authorizeBasedOnRolesAndUserId = authorizeBasedOnRolesAndUserId;
-module.exports.authorizeBasedOnRolesAndTechnicianId = authorizeBasedOnRolesAndTechnicianId;
