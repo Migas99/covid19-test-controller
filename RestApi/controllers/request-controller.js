@@ -7,30 +7,33 @@ var requestController = {};
 requestController.createRequest = async (req, res) => {
     var request = new Request({
         requesterUsername: req.body.requesterUsername,
-        description: req.body.description});
-    
-    try{
+        description: req.body.description
+    });
+
+    try {
         await request.save();
-        res.json(request);
-    }catch(err){
+        res.status(200).send('Sucess!');
+    } catch (err) {
         res.json(err)
     }
 };
 
 //ATUALIZAR UM REQUEST
 requestController.updateRequest = async (req, res) => {
-    try{
-        const updatedRequest = await Request.updateOne({_id: req.params.requestId}, req.body);
-    }catch(err){
+    try {
+        await Request.updateOne({ _id: req.params.requestId }, req.body);
+        res.status(200).send('Sucess!');
+    } catch (err) {
         res.json(err);
     }
 };
 
 //APAGAR UM REQUEST
 requestController.deleteRequest = async (req, res) => {
-    try{
-        const deletetedRequest = await Request.remove({_id: req.params.requestId});
-    }catch(err){
+    try {
+        await Request.remove({ _id: req.params.requestId });
+        res.status(200).send('Sucess!');
+    } catch (err) {
         res.json(err);
     }
 };
@@ -47,10 +50,20 @@ requestController.getAllRequests = async (req, res) => {
 
 //RECEBER REQUEST COM DETERMINADO ID
 requestController.getByIdRequest = async (req, res) => {
-    try{
+    try {
         const request = await Request.findById(req.params.requestId);
-        res.json(request);
-    }catch(err){
+
+        if (req.auth.role != 'USER') {
+            res.json(request);
+        } else {
+            if (request.requesterUsername == req.auth.username) {
+                res.json(request)
+            } else {
+                res.status(403).send('You dont have permissions to acess other users information!');
+            }
+        }
+
+    } catch (err) {
         res.json(err)
     }
 };
@@ -58,7 +71,7 @@ requestController.getByIdRequest = async (req, res) => {
 //RECEBER REQUESTS DE UM UTILIZADOR
 requestController.getUserRequests = async (req, res) => {
     try {
-        const requests = await Request.find({requesterUsername: req.params.username});
+        const requests = await Request.find({ requesterUsername: req.params.username });
         res.json(requests);
     } catch (error) {
         res.json(err);

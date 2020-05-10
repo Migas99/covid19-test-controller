@@ -28,13 +28,13 @@ userController.login = async (req, res) => {
             return res.status(400).send('Invalid password!');
         }
     } else {
-        if(req.body.password != user.password){
+        if (req.body.password != user.password) {
             return res.status(400).send('Invalid password!');
         }
     }
 
     //Criar e devolver o token
-    const token = jwt.sign({ id: user.id, role: user.role }, process.env.TOKEN_SECRET);
+    const token = jwt.sign({ id: user.id, username: user.username, role: user.role }, process.env.TOKEN_SECRET);
     res.cookie('authToken', token, { expires: new Date(Date.now() + 60000), httpOnly: true });
     res.send({ AuthToken: token });
 };
@@ -169,7 +169,7 @@ userController.deleteUser = async (req, res) => {
 //RECEBER TODOS OS UTILIZADORES
 userController.getAllUsers = async (req, res) => {
     try {
-        const users = await User.find();
+        const users = await User.find({}, { username: 1, fullName: 1, birthDate: 1, civilNumber: 1, phoneNumber: 1, email: 1 });
         res.json(users);
     } catch (error) {
         res.json(err);
@@ -179,7 +179,7 @@ userController.getAllUsers = async (req, res) => {
 //RECEBER UTILIZADOR COM DETERMINADO ID
 userController.getByIdUser = async (req, res) => {
     try {
-        const user = await User.findById(req.params.userId);
+        const user = await User.findById(req.params.requestId, { username: 1, fullName: 1, birthDate: 1, civilNumber: 1, phoneNumber: 1, email: 1 });
         res.json(user);
     } catch (err) {
         res.json(err)

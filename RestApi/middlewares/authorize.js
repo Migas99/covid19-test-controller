@@ -8,8 +8,6 @@ const authorizeBasedOnRoles = (opts) => {
 			return res.status(401).send('Not authenticated!');
         }
 		
-		console.log(req.auth.role);
-		console.log(opts);
 		const hasAuthorization = opts.includes(req.auth.role);
 		
 		if (hasAuthorization) {

@@ -1,16 +1,17 @@
 var express = require('express');
 var router = express.Router();
 var requestController = require('../controllers/request-controller');
+var { authorizeBasedOnRoles, authorizeBasedOnRolesAndUserId } = require('../middlewares/authorize');
 
 
-router.get('/', requestController.getAllRequests);
-router.post('/', requestController.createRequest);
+router.get('/', authorizeBasedOnRoles(['TECHNICIAN', 'ADMIN']), requestController.getAllRequests);
+router.post('/', authorizeBasedOnRoles(['USER', 'TECHNICIAN', 'ADMIN']), requestController.createRequest);
 
-router.put('/:requestId', requestController.updateRequest);
-router.delete('/:requestId', requestController.deleteRequest);
+router.put('/:requestId', authorizeBasedOnRoles(['TECHNICIAN', 'ADMIN']), requestController.updateRequest);
+router.delete('/:requestId', authorizeBasedOnRoles(['ADMIN']), requestController.deleteRequest);
 
-router.get('/:requestId', requestController.getByIdRequest);
+router.get('/:requestId', authorizeBasedOnRoles(['USER', 'TECHNICIAN', 'ADMIN']), requestController.getByIdRequest);
 
-router.get('/user/:username', requestController.getUserRequests);
+router.get('/user/:userId', authorizeBasedOnRolesAndUserId(['TECHNICIAN', 'ADMIN']), requestController.getUserRequests);
 
 module.exports = router;
