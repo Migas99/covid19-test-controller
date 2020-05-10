@@ -4,8 +4,8 @@ const Joi = require('@hapi/joi');
 //Validar o login
 const loginValidation = data => {
     const schema = Joi.object({
-        username: Joi.string().min(6).required(),
-        password: Joi.string().min(6).required(),
+        username: Joi.string().required(),
+        password: Joi.string().required()
     });
 
     return schema.validate(data);
@@ -19,7 +19,7 @@ const registerValidation = data => {
         fullName: Joi.string(),
         birthDate: Joi.date(),
         civilNumber: Joi.string(),
-        phoneNumber: Joi.number().min(9).required(),
+        phoneNumber: Joi.number().required(),
         email: Joi.string().min(4).required().email(),
         address: Joi.string().required()
     });

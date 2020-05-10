@@ -461,14 +461,15 @@
                 "username",
                 "password",
                 "fullName",
-                "email",
                 "birthDate",
-                "civilNumber"
+                "civilNumber",
+                "phoneNumber",
+                "email",
+                "address"
             ],
             "properties": {
                 "username": {
-                    "type": "string",
-                    "uniqueItems": true
+                    "type": "string"
                 },
                 "password": {
                     "type": "string"
@@ -476,17 +477,20 @@
                 "fullName": {
                     "type": "string"
                 },
-                "email": {
-                    "type": "string",
-                    "required": true,
-                    "uniqueItems": true
-                },
                 "birthDate": {
                     "type": "string"
                 },
                 "civilNumber": {
-                    "type": "string",
-                    "uniqueItems": true
+                    "type": "string"
+                },
+                "phoneNumber": {
+                    "type": "number"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "address": {
+                    "type": "string"
                 }
             }
         },
@@ -495,9 +499,6 @@
                 "username": {
                     "type": "string"
                 },
-                "password": {
-                    "type": "string"
-                },
                 "fullName": {
                     "type": "string"
                 },
@@ -507,11 +508,11 @@
                 "civilNumber": {
                     "type": "string"
                 },
-                "registerDate": {
-                    "type": "string"
+                "phoneNumber": {
+                    "type": "number"
                 },
-                "isInfected": {
-                    "type": "boolean"
+                "email": {
+                    "type": "string"
                 }
             }
         },

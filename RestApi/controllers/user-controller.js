@@ -7,57 +7,63 @@ const { loginValidation, registerValidation } = require('../validations/validati
 var userController = {};
 
 //Login de um user
-userController.login = async(req, res) =>{
+userController.login = async (req, res) => {
     //Validamos se a estrutura é válida
     const { error } = loginValidation(req.body);
-    
-    if(error){
+
+    if (error) {
         res.status(400).send(error.details[0].message);
     }
 
     //Verificamos se a conta existe
-    const user = await User.findOne({username: req.body.username});
-    if(!user){
+    const user = await User.findOne({ username: req.body.username });
+    if (!user) {
         return res.status(400).send('The username must be wrong!');
     }
 
     //Verificamos se a password é válida
-    const validPassword = await bcrypt.compare(req.body.password, user.password);
-    if(!validPassword){
-        return res.status(400).send('Invalid password!');
+    if (user.role != 'ADMIN') {
+        const validPassword = await bcrypt.compare(req.body.password, user.password);
+        if (!validPassword) {
+            return res.status(400).send('Invalid password!');
+        }
+    } else {
+        if(req.body.password != user.password){
+            return res.status(400).send('Invalid password!');
+        }
     }
 
     //Criar e devolver o token
-    const token = jwt.sign({id: user.id, role: user.role}, process.env.TOKEN_SECRET);
-    res.cookie('authToken', token, {expires: new Date(Date.now() + 60000), httpOnly: true});
-    res.send({AuthToken: token});
+    const token = jwt.sign({ id: user.id, role: user.role }, process.env.TOKEN_SECRET);
+    res.cookie('authToken', token, { expires: new Date(Date.now() + 60000), httpOnly: true });
+    res.send({ AuthToken: token });
 };
 
 //Registo de um user
 userController.createUser = async (req, res) => {
-    
+
     //Validamos se a estrutura é válida
     const { error } = registerValidation(req.body);
-    
-    if(error){
+
+    if (error) {
         res.status(400).send(error.details[0].message);
     }
 
     //Verificamos se o username encontra-se disponível
-    const usernameExist = await User.findOne({username: req.body.username});
-    if(usernameExist){
+    const usernameExist = await User.findOne({ username: req.body.username });
+    if (usernameExist) {
         return res.status(400).send('Username is already in use!');
     }
 
     //Verificamos se o email encontra-se disponível
-    const emailExist = await User.findOne({email: req.body.email});
-    if(emailExist){
+    const emailExist = await User.findOne({ email: req.body.email });
+    if (emailExist) {
         return res.status(400).send('Email is already in use!');
     }
 
     //Verificamos se o número civil encontra-se disponível
-    const civilExist = await User.findOne({civilNumber: req.body.civilNumber});
-    if(civilExist){
+    const civilExist = await User.findOne({ civilNumber: req.body.civilNumber });
+    if (civilExist) {
         return res.status(400).send('That civil number is already in use!');
     }
 
@@ -79,10 +85,10 @@ userController.createUser = async (req, res) => {
         isInfected: false
     });
 
-    try{
+    try {
         await user.save();
         res.status(200).send('Sucess!');
-    }catch(err){
+    } catch (err) {
         res.json(err)
     }
 };
@@ -142,20 +148,20 @@ userController.createTechnician = async (req, res) => {
 
 //Atualizar um user
 userController.updateUser = async (req, res) => {
-    try{
-        await User.updateOne({_id: req.params.userId}, req.body);
+    try {
+        await User.updateOne({ _id: req.params.userId }, req.body);
         res.status(200).send('Sucess!');
-    }catch(err){
+    } catch (err) {
         res.json(err);
     }
 };
 
 //APAGAR UM UTILIZADOR
 userController.deleteUser = async (req, res) => {
-    try{
-        await User.remove({_id: req.params.UserId});
+    try {
+        await User.remove({ _id: req.params.UserId });
         res.status(200).send('Sucess!');
-    }catch(err){
+    } catch (err) {
         res.json(err);
     }
 };
@@ -172,10 +178,10 @@ userController.getAllUsers = async (req, res) => {
 
 //RECEBER UTILIZADOR COM DETERMINADO ID
 userController.getByIdUser = async (req, res) => {
-    try{
+    try {
         const user = await User.findById(req.params.userId);
         res.json(user);
-    }catch(err){
+    } catch (err) {
         res.json(err)
     }
 };
@@ -183,7 +189,7 @@ userController.getByIdUser = async (req, res) => {
 //Logout do user
 userController.logout = async (req, res) => {
     res.clearCookie('authToken');
-	res.status(200).send('Sucess!');
+    res.status(200).send('Sucess!');
 };
 
 module.exports = userController;

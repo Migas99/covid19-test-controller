@@ -7,11 +7,11 @@ router.post('/login', userController.login);
 router.post('/register', userController.createUser);
 router.post('/technician/register', authorizeBasedOnRoles(['ADMIN']), userController.createTechnician);
 
-router.get('/', authorizeBasedOnRoles(['TECHNICIAN'], ['ADMIN']), userController.getAllUsers);
+router.get('/', authorizeBasedOnRoles(['TECHNICIAN', 'ADMIN']), userController.getAllUsers);
 router.put('/:userId', authorizeBasedOnRolesAndUserId(['ADMIN']), userController.updateUser);
 router.delete('/:userId', authorizeBasedOnRolesAndUserId(['ADMIN']), userController.deleteUser);
 
-router.get('/:userId', authorizeBasedOnRolesAndUserId(['TECHNICIAN'], ['ADMIN']), userController.getByIdUser);
+router.get('/:userId', authorizeBasedOnRolesAndUserId(['TECHNICIAN', 'ADMIN']), userController.getByIdUser);
 router.post('/logout', userController.logout);
 
 module.exports = router;

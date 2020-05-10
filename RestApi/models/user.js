@@ -10,6 +10,7 @@ const UserSchema = new Schema({
     phoneNumber: { type: Number, required: true },
     email: { type: String, required: true },
     address: { type: String, required: true },
+    role: { type: String, default: 'USER' },
     registerDate: { type: Date, default: Date.now() },
 });
 
