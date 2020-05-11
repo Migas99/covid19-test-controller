@@ -12,6 +12,7 @@ const RequestSchema = new Schema({
     requesterUsername: { type: String, required: true },
     description: { type: String, required: true },
     priority: { type: String, required: true },
+    userState: { type: String, default: 'Suspect' },
     submitDate: { type: Date, default: Date(Date.now()) },
     firstTest: { type: TestSchema, default: null },
     secondTest: { type: TestSchema, default: null },

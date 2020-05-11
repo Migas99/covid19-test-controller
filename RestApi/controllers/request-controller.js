@@ -40,7 +40,7 @@ requestController.updateRequest = async (req, res) => {
         res.status(200).send('Sucess!');
 
         const request = await Request.findOne({ _id: req.params.requestId });
-        if (request.finalResult) {
+        if (request.result) {
             await User.updateOne({ username: request.requesterUsername }, { $set: { isInfected: request.finalResult } });
         }
 
@@ -96,9 +96,20 @@ requestController.updateRequestTestInfo = async (req, res) => {
         } else {
             if (request.firstTest.testDate != null && request.firstTest.result == null) {
                 await Request.updateOne({ _id: req.params.requestId }, { $set: { firstTest: { pdfFilePath: req.body.pdfFilePath, result: req.body.result } } });
+                
+                if (req.body.result) {
+                    await Request.updateOne({ _id: req.params.requestId }, { $set: { resultDate: Date(Date.now()), isInfected: true } });
+                    await User.updateOne({ username: request.requesterUsername }, { $set: { state: 'Infected' } });
+                }
             } else {
                 if (request.secondTest.testDate != null && request.secondTest.result == null) {
-                    await Request.updateOne({ _id: req.params.requestId }, { $set: { secondTest: { pdfFilePath: req.body.pdfFilePath, result: req.body.result } } });
+                    await Request.updateOne({ _id: req.params.requestId }, { $set: { secondTest: { pdfFilePath: req.body.pdfFilePath, result: req.body.result }, resultDate: Date(Date.now()), isInfected: req.body.result } });
+        
+                    if (req.body.result) {
+                        await User.updateOne({ username: request.requesterUsername }, { $set: { state: 'Infected' } });
+                    } else {
+                        await User.updateOne({ username: request.requesterUsername }, { $set: { state: 'Safe' } });
+                    }
                 } else {
                     res.status(400).send('You cant update the test info because the test probably doesnt have a defined date!');
                 }
@@ -106,12 +117,6 @@ requestController.updateRequestTestInfo = async (req, res) => {
         }
 
         res.status(200).send('Sucess!');
-
-        if (req.body.result) {
-            await Request.updateOne({ _id: req.params.requestId }, { $set: { resultDate: Date(Date.now()), isInfected: true } });
-            await User.updateOne({ username: request.requesterUsername }, { $set: { isInfected: true } });
-        }
-
     } catch (err) {
         res.json(err);
     }
