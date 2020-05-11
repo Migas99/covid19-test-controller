@@ -1,12 +1,7 @@
 var mongoose = require("mongoose");
 var Request = require("../models/request");
 var User = require('../models/user');
-const { createRequestValidation,
-    updateRequestFirstTestDateValidation,
-    updateRequestFirstTestResultValidation,
-    updateRequestSecondTestDateValidation,
-    updateRequestSecondTestResultValidation }
-    = require('../validations/requestValidations');
+const { createRequestValidation, updateTestDateValidation, updateTestInfoValidation } = require('../validations/requestValidations');
 
 var requestController = {};
 
@@ -25,7 +20,9 @@ requestController.createRequest = async (req, res) => {
 
     var request = new Request({
         requesterUsername: req.auth.username,
-        description: req.body.description
+        description: req.body.description,
+        priority: req.body.priority,
+        submitDate: Date(Date.now())
     });
 
     try {
@@ -52,127 +49,67 @@ requestController.updateRequest = async (req, res) => {
     }
 };
 
-requestController.updateRequestFirstTestDate = async (req, res) => {
+requestController.updateRequestTestDate = async (req, res) => {
     //Verificamos se a estrutura é válida
-    const { error } = updateRequestFirstTestDateValidation(req.body);
+    const { error } = updateTestDateValidation(req.body);
 
     if (error) {
         res.status(400).send(error.details[0].message);
     }
-    
+
     try {
         const request = await Request.findOne({ _id: req.params.requestId });
 
-        if(request.finalResult != null){
-            res.status(400).send('This test has already been handled!');
+        if (request.isInfected != null) {
+            res.status(400).send('This request has already been handled!');
+        } else {
+            if (request.firstTest == null) {
+                await Request.updateOne({ _id: req.params.requestId }, { $set: { firstTest: { testDate: req.body.testDate, responsibleTechnicianId: req.auth.id } } });
+            } else {
+                if (request.secondTest == null) {
+                    await Request.updateOne({ _id: req.params.requestId }, { $set: { secondTest: { testDate: req.body.testDate, responsibleTechnicianId: req.auth.id } } });
+                } else {
+                    res.status(400).send('This request hasnt been handled correctly!');
+                }
+            }
         }
 
-        if(request.firstTestDate != null){
-            res.status(400).send('This test first date has already been defined!');
-        }
-
-        await Request.updateOne({ _id: req.params.requestId }, { $set: { firstTestDate: req.body.firstTestDate } });
         res.status(200).send('Sucess!');
     } catch (err) {
         res.json(err);
     }
 };
 
-requestController.updateRequestFirstTestResult = async (req, res) => {
+requestController.updateRequestTestInfo = async (req, res) => {
     //Verificamos se a estrutura é válida
-    const { error } = updateRequestFirstTestResultValidation(req.body);
+    const { error } = updateTestInfoValidation(req.body);
 
     if (error) {
         res.status(400).send(error.details[0].message);
     }
-    
+
     try {
         const request = await Request.findOne({ _id: req.params.requestId });
 
-        if(request.finalResult != null){
-            res.status(400).send('This test has already been handled!');
+        if (request.finalResult != null) {
+            res.status(400).send('This request has already been handled!');
+        } else {
+            if (request.firstTest.testDate != null && request.firstTest.result == null) {
+                await Request.updateOne({ _id: req.params.requestId }, { $set: { firstTest: { pdfFilePath: req.body.pdfFilePath, result: req.body.result } } });
+            } else {
+                if (request.secondTest.testDate != null && request.secondTest.result == null) {
+                    await Request.updateOne({ _id: req.params.requestId }, { $set: { secondTest: { pdfFilePath: req.body.pdfFilePath, result: req.body.result } } });
+                } else {
+                    res.status(400).send('You cant update the test info because the test probably doesnt have a defined date!');
+                }
+            }
         }
 
-        if(request.firstTestDate == null){
-            res.status(400).send('This test first date hasnt been defined yet! Define it first before adding the result!');
-        }
-
-        if(request.firstTestFilePath != null && request.firstResult != null){
-            res.status(400).send('The first test of this request has already been done!');
-        }
-
-        await Request.updateOne({ _id: req.params.requestId }, { $set: { firstTestFilePath: req.body.firstTestFilePath, firstResult: req.body.firstResult } });
         res.status(200).send('Sucess!');
 
-        if(req.body.firstResult){
-            await Request.updateOne({ _id: req.params.requestId }, { $set: { finalResultDate: Date(Date.now()) , finalResult: true } });
-            await User.updateOne({ username: request.requesterUsername }, { $set: { isInfected: request.finalResult } });
-        }
-
-    } catch (err) {
-        res.json(err);
-    }
-};
-
-requestController.updateRequestSecondTestDate = async (req, res) => {
-    //Verificamos se a estrutura é válida
-    const { error } = updateRequestSecondTestDateValidation(req.body);
-
-    if (error) {
-        res.status(400).send(error.details[0].message);
-    }
-    
-    try {
-        const request = await Request.findOne({ _id: req.params.requestId });
-
-        if(request.finalResult != null){
-            res.status(400).send('This test has already been handled!');
-        }
-
-        if(request.firstResult == null){
-            res.status(400).send('You cant make a second test without handling the first!');
-        }
-
-        if(request.secondTestDate != null){
-            res.status(400).send('This test second date has already been defined!');
-        }
-
-        await Request.updateOne({ _id: req.params.requestId }, { $set: { secondTestDate: req.body.secondTestDate } });
-        res.status(200).send('Sucess!');
-    } catch (err) {
-        res.json(err);
-    }
-};
-
-requestController.updateRequestSecondTestResult = async (req, res) => {
-    //Verificamos se a estrutura é válida
-    const { error } = updateRequestSecondTestResultValidation(req.body);
-
-    if (error) {
-        res.status(400).send(error.details[0].message);
-    }
-    
-    try {
-        const request = await Request.findOne({ _id: req.params.requestId });
-
-        if(request.finalResult != null){
-            res.status(400).send('This test has already been handled!');
-        }
-
-        if(request.secondTestDate == null){
-            res.status(400).send('This test second date hasnt been defined yet! Define it first before adding the result!');
-        }
-
-        if(request.secondTestFilePath != null && request.secondResult != null){
-            res.status(400).send('The second test of this request has already been done!');
-        }
-
-        await Request.updateOne({ _id: req.params.requestId }, { $set: { firstTestFilePath: req.body.firstTestFilePath, firstResult: req.body.firstResult } });
-        res.status(200).send('Sucess!');
-
-        if(req.body.secondResult){
-            await Request.updateOne({ _id: req.params.requestId }, { $set: { finalResultDate: Date(Date.now()) , finalResult: true } });
-            await User.updateOne({ username: request.requesterUsername }, { $set: { isInfected: request.finalResult } });
+        if (req.body.result) {
+            await Request.updateOne({ _id: req.params.requestId }, { $set: { resultDate: Date(Date.now()), isInfected: true } });
+            await User.updateOne({ username: request.requesterUsername }, { $set: { isInfected: true } });
         }
 
     } catch (err) {

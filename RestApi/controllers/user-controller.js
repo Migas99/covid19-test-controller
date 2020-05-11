@@ -75,6 +75,7 @@ userController.createUser = async (req, res) => {
         username: req.body.username,
         password: hashedPassword,
         fullName: req.body.fullName,
+        gender: req.body.gender,
         birthDate: req.body.birthDate,
         civilNumber: req.body.civilNumber,
         phoneNumber: req.body.phoneNumber,
@@ -82,7 +83,7 @@ userController.createUser = async (req, res) => {
         address: req.body.address,
         role: 'USER',
         registerDate: Date(Date.now()),
-        isInfected: false
+        state: 'Suspect'
     });
 
     try {
@@ -129,6 +130,7 @@ userController.createTechnician = async (req, res) => {
         username: req.body.username,
         password: hashedPassword,
         fullName: req.body.fullName,
+        gender: req.body.gender,
         birthDate: req.body.birthDate,
         civilNumber: req.body.civilNumber,
         phoneNumber: req.body.phoneNumber,

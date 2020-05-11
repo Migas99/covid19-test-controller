@@ -16,11 +16,12 @@ const registerValidation = data => {
     const schema = Joi.object({
         username: Joi.string().min(6).required(),
         password: Joi.string().min(6).required(),
-        fullName: Joi.string(),
+        fullName: Joi.string().required(),
+        gender: Joi.string().required(),
         birthDate: Joi.date(),
         civilNumber: Joi.string(),
         phoneNumber: Joi.number().required(),
-        email: Joi.string().min(4).required().email(),
+        email: Joi.string().required().email(),
         address: Joi.string().required()
     });
 

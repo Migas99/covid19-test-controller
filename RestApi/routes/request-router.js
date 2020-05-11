@@ -7,7 +7,7 @@ var { authorizeBasedOnRoles, authorizeBasedOnRolesAndUserId } = require('../midd
 router.get('/', authorizeBasedOnRoles(['TECHNICIAN', 'ADMIN']), requestController.getAllRequests);
 router.post('/', authorizeBasedOnRoles(['USER', 'TECHNICIAN', 'ADMIN']), requestController.createRequest);
 
-router.put('/:requestId', authorizeBasedOnRoles(['TECHNICIAN', 'ADMIN']), requestController.updateRequest);
+router.put('/:requestId', authorizeBasedOnRoles(['ADMIN']), requestController.updateRequest);
 router.put('/firstdate/:requestId', authorizeBasedOnRoles(['TECHNICIAN', 'ADMIN']), requestController.updateRequestFirstTestDate);
 router.put('/firstresult/:requestId', authorizeBasedOnRoles(['TECHNICIAN', 'ADMIN']), requestController.updateRequestFirstTestResult);
 router.put('/seconddate/:requestId', authorizeBasedOnRoles(['TECHNICIAN', 'ADMIN']), requestController.updateRequestSecondTestDate);
