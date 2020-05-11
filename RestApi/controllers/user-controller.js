@@ -2,7 +2,7 @@ var mongoose = require("mongoose");
 var User = require('../models/user');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const { loginValidation, registerValidation } = require('../validations/validations');
+const { loginValidation, registerValidation } = require('../validations/userValidations');
 
 var userController = {};
 
