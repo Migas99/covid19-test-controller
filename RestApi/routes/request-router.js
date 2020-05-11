@@ -8,10 +8,8 @@ router.get('/', authorizeBasedOnRoles(['TECHNICIAN', 'ADMIN']), requestControlle
 router.post('/', authorizeBasedOnRoles(['USER', 'TECHNICIAN', 'ADMIN']), requestController.createRequest);
 
 router.put('/:requestId', authorizeBasedOnRoles(['ADMIN']), requestController.updateRequest);
-router.put('/firstdate/:requestId', authorizeBasedOnRoles(['TECHNICIAN', 'ADMIN']), requestController.updateRequestFirstTestDate);
-router.put('/firstresult/:requestId', authorizeBasedOnRoles(['TECHNICIAN', 'ADMIN']), requestController.updateRequestFirstTestResult);
-router.put('/seconddate/:requestId', authorizeBasedOnRoles(['TECHNICIAN', 'ADMIN']), requestController.updateRequestSecondTestDate);
-router.put('/secondresult/:requestId', authorizeBasedOnRoles(['TECHNICIAN', 'ADMIN']), requestController.updateRequestSecondTestResult);
+router.put('/date/:requestId', authorizeBasedOnRoles(['TECHNICIAN', 'ADMIN']), requestController.updateRequestTestDate);
+router.put('/info/:requestId', authorizeBasedOnRoles(['TECHNICIAN', 'ADMIN']), requestController.updateRequestTestInfo);
 
 router.delete('/:requestId', authorizeBasedOnRoles(['ADMIN']), requestController.deleteRequest);
 
