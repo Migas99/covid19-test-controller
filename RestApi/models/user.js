@@ -5,6 +5,7 @@ const UserSchema = new Schema({
     username: { type: String, required: true },
     password: { type: String, required: true },
     fullName: { type: String, required: true },
+    gender:{ type:String, required:true },
     birthDate: { type: Date, required: true },
     civilNumber: { type: String, required: true },
     phoneNumber: { type: Number, required: true },
@@ -12,7 +13,7 @@ const UserSchema = new Schema({
     address: { type: String, required: true },
     role: { type: String, default: 'USER' },
     registerDate: { type: Date, default: Date.now() },
-    isInfected: { type: Boolean }
+    state: { type: String, default:"Suspected"}
 });
 
 module.exports = mongoose.model("User", UserSchema);
