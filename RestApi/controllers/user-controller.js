@@ -151,20 +151,36 @@ userController.createTechnician = async (req, res) => {
 //Atualizar um user
 userController.updateUser = async (req, res) => {
     try {
+        //Verificamos se o username encontra-se disponível
+        const usernameExist = await User.findOne({ username: req.body.username });
+        if (usernameExist) {
+            return res.status(400).send('Username is already in use!');
+        }
+        //Verificamos se o email encontra-se disponível
+        const emailExist = await User.findOne({ email: req.body.email });
+        if (emailExist) {
+            return res.status(400).send('Email is already in use!');
+        }
+        //Verificamos se o número civil encontra-se disponível
+        const civilExist = await User.findOne({ civilNumber: req.body.civilNumber });
+        if (civilExist) {
+            return res.status(400).send('That civil number is already in use!');
+        }
+        
         await User.updateOne({ _id: req.params.userId }, req.body);
         res.status(200).send('Sucess!');
     } catch (err) {
-        res.json(err);
+        res.status(400).json(err);
     }
 };
 
 //APAGAR UM UTILIZADOR
 userController.deleteUser = async (req, res) => {
     try {
-        await User.remove({ _id: req.params.UserId });
+        await User.remove({ _id: req.params.userId });
         res.status(200).send('Sucess!');
     } catch (err) {
-        res.json(err);
+        res.status(400).json(err);
     }
 };
 
@@ -180,7 +196,7 @@ userController.getAllUsers = async (req, res) => {
 
 userController.getAllInfectedUsers = async (req, res) => {
     try {
-        const users = await User.find({ role: 'USER', isInfected: true }, { username: 1, fullName: 1, birthDate: 1, civilNumber: 1, phoneNumber: 1, email: 1 });
+        const users = await User.find({ role: 'USER', state: "Infected" }, { username: 1, fullName: 1, birthDate: 1, civilNumber: 1, phoneNumber: 1, email: 1 });
         res.json(users);
     } catch (error) {
         res.json(err);
@@ -199,8 +215,8 @@ userController.getAllTechnicians = async (req, res) => {
 //RECEBER UTILIZADOR COM DETERMINADO ID
 userController.getByIdUser = async (req, res) => {
     try {
-        const user = await User.findById(req.params.requestId, { username: 1, fullName: 1, birthDate: 1, civilNumber: 1, phoneNumber: 1, email: 1 });
-        res.json(user);
+        const user = await User.findById(req.params.userId, { username: 1, fullName: 1, birthDate: 1, civilNumber: 1, phoneNumber: 1, email: 1 });
+        res.status(200).json(user);
     } catch (err) {
         res.json(err)
     }
