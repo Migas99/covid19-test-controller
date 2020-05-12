@@ -10,7 +10,11 @@ requestController.createRequest = async (req, res) => {
     if (req.auth.role != 'USER') {
         res.status(403).send('You are not an user, so you shouldnt be making requests to be tested!');
     }
-
+    const checkRequests = await Request.find({requesterUsername : req.auth.username, isInfected : null});
+    if(checkRequests){
+        res.status(400).send('You have an open request. Wich is being handled.');
+    }
+    
     //Verificamos se a estrutura é válida
     const { error } = createRequestValidation(req.body);
 
