@@ -15,7 +15,7 @@ const RequestSchema = new Schema({
     userState: { type: String, default: 'Suspect' },
     submitDate: { type: Date, default: Date(Date.now()) },
     firstTest: { type: TestSchema, default: null },
-    secondTest: { type: TestSchema, default: null },
+    secondTest: { type: TestSchema },
     resultDate: { type: Date, default: null },
     isInfected: { type: Boolean, default: null }
 });

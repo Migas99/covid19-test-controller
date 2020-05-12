@@ -15,6 +15,6 @@ router.delete('/:requestId', authorizeBasedOnRoles(['ADMIN']), requestController
 
 router.get('/:requestId', authorizeBasedOnRoles(['USER', 'TECHNICIAN', 'ADMIN']), requestController.getByIdRequest);
 
-router.get('/user/:userId', authorizeBasedOnRolesAndUserId(['TECHNICIAN', 'ADMIN']), requestController.getUserRequests);
+router.get('/user/:requesterUsername', authorizeBasedOnRolesAndUserId(['TECHNICIAN', 'ADMIN']), requestController.getUserRequests);
 
 module.exports = router;

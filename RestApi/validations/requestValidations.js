@@ -6,12 +6,14 @@ const createRequestValidation = data => {
         description: Joi.string().required(),
         priority: Joi.string().required()
     });
+    return schema.validate(data);
 };
 
 const updateTestDateValidation = data => {
     const schema = Joi.object({
         testDate: Joi.date().required()
     });
+    return schema.validate(data);
 };
 
 const updateTestInfoValidation = data => {
@@ -19,6 +21,7 @@ const updateTestInfoValidation = data => {
         pdfFilePath: Joi.string().required(),
         result: Joi.boolean().required()
     });
+    return schema.validate(data);
 };
 
 module.exports.createRequestValidation = createRequestValidation;

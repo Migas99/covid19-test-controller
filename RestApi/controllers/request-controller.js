@@ -40,8 +40,8 @@ requestController.updateRequest = async (req, res) => {
         res.status(200).send('Sucess!');
 
         const request = await Request.findOne({ _id: req.params.requestId });
-        if (request.result) {
-            await User.updateOne({ username: request.requesterUsername }, { $set: { isInfected: request.finalResult } });
+        if (request.isInfected) {
+            await User.updateOne({ username: request.requesterUsername }, { $set: { isInfected: "Infected" } });
         }
 
     } catch (err) {
@@ -60,20 +60,19 @@ requestController.updateRequestTestDate = async (req, res) => {
     try {
         const request = await Request.findOne({ _id: req.params.requestId });
 
-        if (request.isInfected != null) {
+        if (request.isInfected !== null) {
             res.status(400).send('This request has already been handled!');
         } else {
-            if (request.firstTest == null) {
+            if (request.firstTest === null) {
                 await Request.updateOne({ _id: req.params.requestId }, { $set: { firstTest: { testDate: req.body.testDate, responsibleTechnicianId: req.auth.id } } });
             } else {
-                if (request.secondTest == null) {
+                if (request.secondTest === null) {
                     await Request.updateOne({ _id: req.params.requestId }, { $set: { secondTest: { testDate: req.body.testDate, responsibleTechnicianId: req.auth.id } } });
                 } else {
                     res.status(400).send('This request hasnt been handled correctly!');
                 }
             }
         }
-
         res.status(200).send('Sucess!');
     } catch (err) {
         res.json(err);
@@ -91,34 +90,41 @@ requestController.updateRequestTestInfo = async (req, res) => {
     try {
         const request = await Request.findOne({ _id: req.params.requestId });
 
-        if (request.finalResult != null) {
+        if (request.isInfected !== null) {
             res.status(400).send('This request has already been handled!');
         } else {
-            if (request.firstTest.testDate != null && request.firstTest.result == null) {
-                await Request.updateOne({ _id: req.params.requestId }, { $set: { firstTest: { pdfFilePath: req.body.pdfFilePath, result: req.body.result } } });
-                
-                if (req.body.result) {
-                    await Request.updateOne({ _id: req.params.requestId }, { $set: { resultDate: Date(Date.now()), isInfected: true } });
-                    await User.updateOne({ username: request.requesterUsername }, { $set: { state: 'Infected' } });
+            if (request.firstTest != null) {
+                if (request.firstTest.result == null) {
+                    await Request.updateOne({ _id: req.params.requestId }, { $set: { 'firstTest.pdfFilePath': req.body.pdfFilePath, 'firstTest.result': req.body.result } });
+                    if (req.body.result) {
+                        await Request.updateOne({ _id: req.params.requestId }, { $set: { resultDate: Date(Date.now()), isInfected: true } });
+                        await User.updateOne({ username: request.requesterUsername }, { $set: { state: 'Infected' } });
+                    }
+                    res.status(200).send("Sucess!");
+                } else {
+                    if (request.secondTest != null) {
+                        if (request.secondTest.result == null) {
+                            await Request.updateOne({ _id: req.params.requestId }, { $set: { 'secondTest.pdfFilePath': req.body.pdfFilePath, 'secondTest.result': req.body.result, resultDate: Date(Date.now()), isInfected: req.body.result } });
+                            if (req.body.result) {
+                                await User.updateOne({ username: request.requesterUsername }, { $set: { state: 'Infected' } });
+                            } else {
+                                await User.updateOne({ username: request.requesterUsername }, { $set: { state: 'Safe' } });
+                            }
+                            res.status(200).send("Sucess!");
+                        }else{
+                            res.status(400).send("Contact admin because you are being hacked!");
+                        }
+                    } else {
+                        res.status(400).send('You cant update the test info because the test probably doesnt have a defined date!');
+                    }
                 }
             } else {
-                if (request.secondTest.testDate != null && request.secondTest.result == null) {
-                    await Request.updateOne({ _id: req.params.requestId }, { $set: { secondTest: { pdfFilePath: req.body.pdfFilePath, result: req.body.result }, resultDate: Date(Date.now()), isInfected: req.body.result } });
-        
-                    if (req.body.result) {
-                        await User.updateOne({ username: request.requesterUsername }, { $set: { state: 'Infected' } });
-                    } else {
-                        await User.updateOne({ username: request.requesterUsername }, { $set: { state: 'Safe' } });
-                    }
-                } else {
-                    res.status(400).send('You cant update the test info because the test probably doesnt have a defined date!');
-                }
+                res.status(400).send('You cant update the test info because the test probably doesnt have a defined date!');
             }
         }
-
-        res.status(200).send('Sucess!');
     } catch (err) {
-        res.json(err);
+        console.log(err);
+        res.status(400).send(err);
     }
 };
 
@@ -165,10 +171,10 @@ requestController.getByIdRequest = async (req, res) => {
 //RECEBER REQUESTS DE UM UTILIZADOR
 requestController.getUserRequests = async (req, res) => {
     try {
-        const requests = await Request.find({ requesterUsername: req.params.username });
-        res.json(requests);
+        const requests = await Request.find({ requesterUsername: req.params.requesterUsername });
+        res.status(200).json(requests);
     } catch (error) {
-        res.json(err);
+        res.status(400).json(err);
     }
 };
 

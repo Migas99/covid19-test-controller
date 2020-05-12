@@ -442,7 +442,7 @@
                 ]
             }
         },
-        "/requests/firstdate/{requestId}": {
+        "/requests/date/{requestId}": {
             "put": {
                 "summary": "Update request with the given ID",
                 "tags": [
@@ -457,11 +457,11 @@
                         "type": "string"
                     },
                     {
-                        "name": "request",
+                        "name": "testDate",
                         "in": "body",
-                        "description": "Request with new values of properties",
+                        "description": "Test Date",
                         "schema": {
-                            "$ref": "#/definitions/RequestUpdateFirstDate"
+                            "$ref": "#/definitions/RequestUpdateDate"
                         }
                     }
                 ],
@@ -481,7 +481,7 @@
                 ]
             }
         },
-        "/requests/firstresult/{requestId}": {
+        "/requests/info/{requestId}": {
             "put": {
                 "summary": "Update request with the given ID",
                 "tags": [
@@ -496,11 +496,11 @@
                         "type": "string"
                     },
                     {
-                        "name": "request",
+                        "name": "test",
                         "in": "body",
-                        "description": "Request with new values of properties",
+                        "description": "Test result",
                         "schema": {
-                            "$ref": "#/definitions/RequestUpdateFirstResult"
+                            "$ref": "#/definitions/RequestUpdateTestResult"
                         }
                     }
                 ],
@@ -520,91 +520,13 @@
                 ]
             }
         },
-        "/requests/seconddate/{requestId}": {
-            "put": {
-                "summary": "Update request with the given ID",
-                "tags": [
-                    "Requests"
-                ],
-                "parameters": [
-                    {
-                        "name": "requestId",
-                        "in": "path",
-                        "required": true,
-                        "description": "ID of the target request",
-                        "type": "string"
-                    },
-                    {
-                        "name": "request",
-                        "in": "body",
-                        "description": "Request with new values of properties",
-                        "schema": {
-                            "$ref": "#/definitions/RequestUpdateSecondDate"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "The request is updated!"
-                    },
-                    "400": {
-                        "description": "Bad request! Wrong parameters, probably."
-                    },
-                    "404": {
-                        "description": "Error! Problems with database connection or the request was not found!"
-                    }
-                },
-                "security": [
-                    "JWT"
-                ]
-            }
-        },
-        "/requests/secondresult/{requestId}": {
-            "put": {
-                "summary": "Update request with the given ID",
-                "tags": [
-                    "Requests"
-                ],
-                "parameters": [
-                    {
-                        "name": "requestId",
-                        "in": "path",
-                        "required": true,
-                        "description": "ID of the target request",
-                        "type": "string"
-                    },
-                    {
-                        "name": "request",
-                        "in": "body",
-                        "description": "Request with new values of properties",
-                        "schema": {
-                            "$ref": "#/definitions/RequestUpdateSecondResult"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "The request is updated!"
-                    },
-                    "400": {
-                        "description": "Bad request! Wrong parameters, probably."
-                    },
-                    "404": {
-                        "description": "Error! Problems with database connection or the request was not found!"
-                    }
-                },
-                "security": [
-                    "JWT"
-                ]
-            }
-        },
-        "/requests/user/{userId}": {
+        "/requests/user/{requesterUsername}": {
             "parameters": [
                 {
-                    "name": "userId",
+                    "name": "requesterUsername",
                     "in": "path",
                     "required": true,
-                    "description": "ID of the target user requests",
+                    "description": "Username of the target user requests",
                     "type": "string"
                 }
             ],
@@ -612,7 +534,7 @@
                 "tags": [
                     "Requests"
                 ],
-                "summary": "Get the requests with the given user ID",
+                "summary": "Get the requests with the given user Username",
                 "responses": {
                     "200": {
                         "description": "The request is found!",
@@ -722,58 +644,38 @@
         },
         "RequestRequest": {
             "required": [
-                "description"
+                "description",
+                "priority"
             ],
             "properties": {
                 "description": {
                     "type": "string"
+                },
+                "priority": {
+                    "type": "string"
                 }
             }
         },
-        "RequestUpdateFirstDate": {
+        "RequestUpdateDate": {
             "required": [
-                "firstTestDate"
+                "testDate"
             ],
             "properties": {
-                "firstTestDate": {
-                    "type": "date"
+                "testDate": {
+                    "type": "Date"
                 }
             }
         },
-        "RequestUpdateFirstResult": {
+        "RequestUpdateTestResult": {
             "required": [
-                "firstTestFilePath",
-                "firstResult"
+                "pdfFilePath",
+                "result"
             ],
             "properties": {
-                "firstTestFilePath": {
+                "pdfFilePath": {
                     "type": "string"
                 },
-                "firstResult": {
-                    "type": "boolean"
-                }
-            }
-        },
-        "RequestUpdateSecondDate": {
-            "required": [
-                "secondTestDate"
-            ],
-            "properties": {
-                "secondTestDate": {
-                    "type": "date"
-                }
-            }
-        },
-        "RequestUpdateSecondResult": {
-            "required": [
-                "secondTestFilePath",
-                "secondResult"
-            ],
-            "properties": {
-                "secondTestFilePath": {
-                    "type": "string"
-                },
-                "secondResult": {
+                "result": {
                     "type": "boolean"
                 }
             }
