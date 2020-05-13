@@ -33,9 +33,10 @@ requestController.createRequest = async (req, res) => {
         await request.save();
         res.status(200).send('Sucess!');
     } catch (err) {
-        res.json(err)
+        console.log(err);
+        res.status(400).send(err);
     }
-};
+}
 
 //ATUALIZAR UM REQUEST
 requestController.updateRequest = async (req, res) => {
@@ -49,9 +50,10 @@ requestController.updateRequest = async (req, res) => {
         }
 
     } catch (err) {
-        res.json(err);
+        console.log(err);
+        res.status(400).send(err);
     }
-};
+}
 
 requestController.updateRequestTestDate = async (req, res) => {
     //Verificamos se a estrutura é válida
@@ -69,19 +71,25 @@ requestController.updateRequestTestDate = async (req, res) => {
         } else {
             if (request.firstTest === null) {
                 await Request.updateOne({ _id: req.params.requestId }, { $set: { firstTest: { testDate: req.body.testDate, responsibleTechnicianId: req.auth.id } } });
+                res.status(200).send("Sucess!");
             } else {
-                if (request.secondTest === null) {
-                    await Request.updateOne({ _id: req.params.requestId }, { $set: { secondTest: { testDate: req.body.testDate, responsibleTechnicianId: req.auth.id } } });
+                if (!request.secondTest) {
+                    if((Math.abs(new Date(req.body.testDate) - request.firstTest.testDate)/3600000) > 48){
+                        await Request.updateOne({ _id: req.params.requestId }, { $set: { secondTest: { testDate: req.body.testDate, responsibleTechnicianId: req.auth.id } } });
+                        res.status(200).send("Sucess!");
+                    }else{
+                        res.status(400).send('The second test should be at least 48 hours later!');
+                    }
                 } else {
                     res.status(400).send('This request hasnt been handled correctly!');
                 }
             }
         }
-        res.status(200).send('Sucess!');
     } catch (err) {
-        res.json(err);
+        console.log(err);
+        res.status(400).send(err);
     }
-};
+}
 
 requestController.updateRequestTestInfo = async (req, res) => {
     //Verificamos se a estrutura é válida
@@ -130,7 +138,7 @@ requestController.updateRequestTestInfo = async (req, res) => {
         console.log(err);
         res.status(400).send(err);
     }
-};
+}
 
 //APAGAR UM REQUEST
 requestController.deleteRequest = async (req, res) => {
@@ -138,19 +146,21 @@ requestController.deleteRequest = async (req, res) => {
         await Request.remove({ _id: req.params.requestId });
         res.status(200).send('Sucess!');
     } catch (err) {
-        res.json(err);
+        console.log(err);
+        res.status(400).send(err);
     }
-};
+}
 
 //RECEBER TODOS OS REQUESTS
 requestController.getAllRequests = async (req, res) => {
     try {
         const requests = await Request.find();
-        res.json(requests);
+        res.status(200).json(requests);
     } catch (error) {
-        res.json(err);
+        console.log(err);
+        res.status(400).send(err);
     }
-};
+}
 
 //RECEBER REQUEST COM DETERMINADO ID
 requestController.getByIdRequest = async (req, res) => {
@@ -158,19 +168,20 @@ requestController.getByIdRequest = async (req, res) => {
         const request = await Request.findById(req.params.requestId);
 
         if (req.auth.role != 'USER') {
-            res.json(request);
+            res.status(200).json(request);
         } else {
             if (request.requesterUsername == req.auth.username) {
-                res.json(request)
+                res.status(200).json(request)
             } else {
                 res.status(403).send('You dont have permissions to acess other users information!');
             }
         }
 
     } catch (err) {
-        res.json(err)
+        console.log(err);
+        res.status(400).send(err);
     }
-};
+}
 
 //RECEBER REQUESTS DE UM UTILIZADOR
 requestController.getUserRequests = async (req, res) => {
@@ -178,8 +189,9 @@ requestController.getUserRequests = async (req, res) => {
         const requests = await Request.find({ requesterUsername: req.params.requesterUsername });
         res.status(200).json(requests);
     } catch (error) {
-        res.status(400).json(err);
+        console.log(err);
+        res.status(400).send(err);
     }
-};
+}
 
 module.exports = requestController;

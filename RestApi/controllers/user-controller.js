@@ -37,7 +37,7 @@ userController.login = async (req, res) => {
     const token = jwt.sign({ id: user.id, username: user.username, role: user.role }, process.env.TOKEN_SECRET);
     res.cookie('authToken', token, { expires: new Date(Date.now() + 60000), httpOnly: true });
     res.send({ AuthToken: token });
-};
+}
 
 //Registo de um user
 userController.createUser = async (req, res) => {
@@ -92,7 +92,7 @@ userController.createUser = async (req, res) => {
     } catch (err) {
         res.json(err)
     }
-};
+}
 
 //Registo de um técnico
 userController.createTechnician = async (req, res) => {
@@ -146,7 +146,7 @@ userController.createTechnician = async (req, res) => {
     } catch (err) {
         res.json(err)
     }
-};
+}
 
 //Atualizar um user
 userController.updateUser = async (req, res) => {
@@ -172,7 +172,7 @@ userController.updateUser = async (req, res) => {
     } catch (err) {
         res.status(400).json(err);
     }
-};
+}
 
 //APAGAR UM UTILIZADOR
 userController.deleteUser = async (req, res) => {
@@ -182,7 +182,7 @@ userController.deleteUser = async (req, res) => {
     } catch (err) {
         res.status(400).json(err);
     }
-};
+}
 
 //RECEBER TODOS OS UTILIZADORES
 userController.getAllUsers = async (req, res) => {
@@ -192,7 +192,7 @@ userController.getAllUsers = async (req, res) => {
     } catch (error) {
         res.json(err);
     }
-};
+}
 
 userController.getAllInfectedUsers = async (req, res) => {
     try {
@@ -201,7 +201,7 @@ userController.getAllInfectedUsers = async (req, res) => {
     } catch (error) {
         res.json(err);
     }
-};
+}
 
 userController.getAllTechnicians = async (req, res) => {
     try {
@@ -220,12 +220,12 @@ userController.getByIdUser = async (req, res) => {
     } catch (err) {
         res.json(err)
     }
-};
+}
 
 //Logout do user
 userController.logout = async (req, res) => {
     res.clearCookie('authToken');
     res.status(200).send('Sucess!');
-};
+}
 
 module.exports = userController;
