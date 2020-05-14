@@ -10,7 +10,7 @@
     "tags": [
         {
             "name": "Users",
-            "description": "Normal user and technicians"
+            "description": "Normal users and technicians"
         },
         {
             "name": "Requests",
@@ -56,16 +56,13 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Sucess!",
+                        "description": "Returns the authentication Token.",
                         "schema": {
                             "$ref": "#/definitions/UserLoginResponse"
                         }
                     },
                     "400": {
-                        "description": "Bad request! Wrong parameters, probably."
-                    },
-                    "404": {
-                        "description": "Error! Problems with database connection, probably."
+                        "description": "Bad Request! Invalid information."
                     }
                 }
             }
@@ -107,10 +104,7 @@
                         "description": "Sucess!"
                     },
                     "400": {
-                        "description": "Bad request! Wrong parameters, probably."
-                    },
-                    "404": {
-                        "description": "Error! Problems with database connection, probably."
+                        "description": "Bad request! Wrong parameters or invalid information."
                     }
                 }
             }
@@ -139,10 +133,7 @@
                         "description": "Sucess!"
                     },
                     "400": {
-                        "description": "Bad request! Wrong parameters, probably."
-                    },
-                    "404": {
-                        "description": "Error! Problems with database connection, probably."
+                        "description": "Bad request! Wrong parameters or invalid information.."
                     }
                 },
                 "security": [
@@ -155,16 +146,13 @@
                 "tags": [
                     "Users"
                 ],
-                "summary": "Gets the list of users in the database",
+                "summary": "Gets the list of users in the database.",
                 "responses": {
                     "200": {
-                        "description": "Sucess!",
+                        "description": "Returns a list of users.",
                         "schema": {
                             "$ref": "#definitions/UserResponse"
                         }
-                    },
-                    "404": {
-                        "description": "Error! Problems with database connection, probably."
                     }
                 },
                 "security": [
@@ -177,16 +165,13 @@
                 "tags": [
                     "Users"
                 ],
-                "summary": "Gets the list of infected users in the database",
+                "summary": "Gets the list of infected users in the database.",
                 "responses": {
                     "200": {
-                        "description": "Sucess!",
+                        "description": "Returns a list of users.",
                         "schema": {
                             "$ref": "#definitions/UserResponse"
                         }
-                    },
-                    "404": {
-                        "description": "Error! Problems with database connection, probably."
                     }
                 },
                 "security": [
@@ -199,16 +184,13 @@
                 "tags": [
                     "Users"
                 ],
-                "summary": "Gets the list of technicians in the database",
+                "summary": "Gets the list of technicians in the database.",
                 "responses": {
                     "200": {
-                        "description": "Sucess!",
+                        "description": "Returns a list of technicians.",
                         "schema": {
                             "$ref": "#definitions/UserResponse"
                         }
-                    },
-                    "404": {
-                        "description": "Error! Problems with database connection, probably."
                     }
                 },
                 "security": [
@@ -230,16 +212,16 @@
                 "tags": [
                     "Users"
                 ],
-                "summary": "Get the user with given ID",
+                "summary": "Get the user with given ID.",
                 "responses": {
                     "200": {
-                        "description": "The user was found!",
+                        "description": "Returns the user.",
                         "schema": {
                             "$ref": "#/definitions/UserResponse"
                         }
                     },
                     "404": {
-                        "description": "Error! Problems with database connection or the user was not found!"
+                        "description": "The user was not found!"
                     }
                 },
                 "security": [
@@ -247,7 +229,7 @@
                 ]
             },
             "put": {
-                "summary": "Update user with given ID",
+                "summary": "Update user with given ID.",
                 "tags": [
                     "Users"
                 ],
@@ -255,7 +237,7 @@
                     {
                         "name": "user",
                         "in": "body",
-                        "description": "User with new values of properties",
+                        "description": "New values",
                         "schema": {
                             "$ref": "#/definitions/UserResponse"
                         }
@@ -263,16 +245,16 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "The user is updated!",
+                        "description": "The user is updated.",
                         "schema": {
                             "$ref": "#/definitions/UserResponse"
                         }
                     },
                     "400": {
-                        "description": "Bad request! Wrong parameters, probably."
+                        "description": "Bad request! Wrong parameters."
                     },
                     "404": {
-                        "description": "Error! Problems with database connection or the user was not found!"
+                        "description": "The user was not found!"
                     }
                 },
                 "security": [
@@ -280,19 +262,19 @@
                 ]
             },
             "delete": {
-                "summary": "Delete the user with given ID",
+                "summary": "Delete the user with given ID.",
                 "tags": [
                     "Users"
                 ],
                 "responses": {
                     "200": {
-                        "description": "The user is deleted!",
+                        "description": "The user is deleted.",
                         "schema": {
                             "$ref": "#/definitions/UserResponse"
                         }
                     },
                     "404": {
-                        "description": "Error! Problems with database connection or the user was not found!"
+                        "description": "The user was not found."
                     }
                 },
                 "security": [
@@ -305,16 +287,13 @@
                 "tags": [
                     "Requests"
                 ],
-                "summary": "Get all the requests in the system",
+                "summary": "Get all the requests in the system.",
                 "responses": {
                     "200": {
-                        "description": "Sucess!",
+                        "description": "Returns a list of requests.",
                         "schema": {
                             "$ref": "#/definitions/RequestResponse"
                         }
-                    },
-                    "404": {
-                        "description": "Error! Problems with database connection, probably."
                     }
                 },
                 "security": [
@@ -325,7 +304,7 @@
                 "tags": [
                     "Requests"
                 ],
-                "description": "Create a new request in the system",
+                "description": "Create a new request in the system.",
                 "parameters": [
                     {
                         "name": "request",
@@ -341,16 +320,13 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "New request is created",
+                        "description": "Sucess!",
                         "schema": {
                             "$ref": "#/definitions/RequestResponse"
                         }
                     },
                     "400": {
-                        "description": "Bad request! Wrong parameters, probably."
-                    },
-                    "404": {
-                        "description": "Error! Problems with database connection, probably."
+                        "description": "Bad request! Wrong parameters or invalid information."
                     }
                 },
                 "security": [
@@ -372,7 +348,7 @@
                 "tags": [
                     "Requests"
                 ],
-                "summary": "Get the request with the given ID",
+                "summary": "Get the request with the given ID.",
                 "responses": {
                     "200": {
                         "description": "The request is found!",
@@ -381,7 +357,7 @@
                         }
                     },
                     "404": {
-                        "description": "Error! Problems with database connection or the request was not found!"
+                        "description": "The request was not found."
                     }
                 },
                 "security": [
@@ -389,7 +365,7 @@
                 ]
             },
             "put": {
-                "summary": "Update request with the given ID",
+                "summary": "Update request with the given ID.",
                 "tags": [
                     "Requests"
                 ],
@@ -397,7 +373,7 @@
                     {
                         "name": "request",
                         "in": "body",
-                        "description": "Request with new values of properties",
+                        "description": "New values",
                         "schema": {
                             "$ref": "#/definitions/RequestResponse"
                         }
@@ -405,16 +381,16 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "The request is updated!",
+                        "description": "The request is updated.",
                         "schema": {
                             "$ref": "#/definitions/RequestResponse"
                         }
                     },
                     "400": {
-                        "description": "Bad request! Wrong parameters, probably."
+                        "description": "Bad request! Wrong parameters."
                     },
                     "404": {
-                        "description": "Error! Problems with database connection or the request was not found!"
+                        "description": "The request was not found!"
                     }
                 },
                 "security": [
@@ -422,19 +398,19 @@
                 ]
             },
             "delete": {
-                "summary": "Delete the request with given ID",
+                "summary": "Delete the request with given ID.",
                 "tags": [
                     "Requests"
                 ],
                 "responses": {
                     "200": {
-                        "description": "The request is deleted!",
+                        "description": "The request is deleted.",
                         "schema": {
                             "$ref": "#/definitions/RequestResponse"
                         }
                     },
                     "404": {
-                        "description": "Error! Problems with database connection or the request was not found!"
+                        "description": "The request was not found!"
                     }
                 },
                 "security": [
@@ -444,7 +420,7 @@
         },
         "/requests/date/{requestId}": {
             "put": {
-                "summary": "Update request with the given ID",
+                "summary": "Update request with the given ID.",
                 "tags": [
                     "Requests"
                 ],
@@ -459,7 +435,8 @@
                     {
                         "name": "testDate",
                         "in": "body",
-                        "description": "Test Date",
+                        "required": true,
+                        "description": "Value for test date",
                         "schema": {
                             "$ref": "#/definitions/RequestUpdateDate"
                         }
@@ -467,13 +444,13 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "The request is updated!"
+                        "description": "Sucess!"
                     },
                     "400": {
-                        "description": "Bad request! Wrong parameters, probably."
+                        "description": "Bad request! Wrong parameters."
                     },
                     "404": {
-                        "description": "Error! Problems with database connection or the request was not found!"
+                        "description": "The request was not found!"
                     }
                 },
                 "security": [
@@ -483,7 +460,7 @@
         },
         "/requests/info/{requestId}": {
             "put": {
-                "summary": "Update request with the given ID",
+                "summary": "Update request with the given ID.",
                 "tags": [
                     "Requests"
                 ],
@@ -506,13 +483,13 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "The request is updated!"
+                        "description": "Sucess!"
                     },
                     "400": {
-                        "description": "Bad request! Wrong parameters, probably."
+                        "description": "Bad request! Wrong parameters."
                     },
                     "404": {
-                        "description": "Error! Problems with database connection or the request was not found!"
+                        "description": "The request was not found!"
                     }
                 },
                 "security": [
@@ -537,19 +514,54 @@
                 "summary": "Get the requests with the given user Username",
                 "responses": {
                     "200": {
-                        "description": "The request is found!",
+                        "description": "Sucess!",
                         "schema": {
                             "$ref": "#/definitions/RequestResponse"
                         }
                     },
                     "404": {
-                        "description": "Error! Problems with database connection or the request was not found!"
+                        "description": "The user was not found!"
                     }
                 },
                 "security": [
                     "JWT"
                 ]
             }
+        }
+    },
+    "/requests/date": {
+        "post": {
+            "tags": [
+                "Requests"
+            ],
+            "description": "Returns the number of tests done between the two given dates.",
+            "parameters": [
+                {
+                    "name": "Dates",
+                    "in": "body",
+                    "description": "Contains the begin and end date",
+                    "schema": {
+                        "$ref": "#/definitions/BetweenDatesRequest"
+                    }
+                }
+            ],
+            "produces": [
+                "application/json"
+            ],
+            "responses": {
+                "200": {
+                    "description": "Returns the number of tests.",
+                    "schema": {
+                        "$ref": "#/definitions/BetweenDatesResponse"
+                    }
+                },
+                "400": {
+                    "description": "Bad request! Wrong parameters or invalid information."
+                }
+            },
+            "security": [
+                "JWT"
+            ]
         }
     },
     "definitions": {
@@ -721,6 +733,27 @@
         "Requests": {
             "type": "array",
             "$ref": "#/definitions/RequestResponse"
+        },
+        "BetweenDatesRequest": {
+            "required": [
+                "beginDate",
+                "endDate"
+            ],
+            "properties": {
+                "beginDate": {
+                    "type": "Date"
+                },
+                "endDate": {
+                    "type": "Date"
+                }
+            }
+        },
+        "BetweenDatesResponse": {
+            "properties": {
+                "testCount": {
+                    "type": "number"
+                }
+            }
         }
     }
 }

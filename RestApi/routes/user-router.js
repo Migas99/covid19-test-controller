@@ -1,19 +1,36 @@
-var express = require('express');
-var router = express.Router();
-var userController = require("../controllers/user-controller");
-var { authorizeBasedOnRoles, authorizeBasedOnRolesAndUserId } = require('../middlewares/authorize');
+const express = require('express');
+const router = express.Router();
+const userController = require("../controllers/user-controller");
+const { authorizeBasedOnRoles, authorizeBasedOnRolesAndUserId } = require('../middlewares/authorize');
 
+/*Obter todos os users*/
+router.get('/', authorizeBasedOnRoles(['TECHNICIAN', 'ADMIN']), userController.getAllUsers);
+
+/*Obter a lista de users infetados*/
+router.get('/infected', authorizeBasedOnRoles(['TECHNICIAN', 'ADMIN']), userController.getAllInfectedUsers);
+
+/*Obter todos os técnicos*/
+router.get('/technicians', authorizeBasedOnRoles(['ADMIN']), userController.getAllTechnicians);
+
+/*Obter um user, usando o seu ID*/
+router.get('/:userId', authorizeBasedOnRolesAndUserId(['TECHNICIAN', 'ADMIN']), userController.getByIdUser);
+
+/*Realizar o Login*/
 router.post('/login', userController.login);
+
+/*Realizar o Logout*/
+router.post('/logout', userController.logout);
+
+/*Realizar o registo de um user normal*/
 router.post('/register', userController.createUser);
+
+/*Realizar o registo de um técnico*/
 router.post('/technician/register', authorizeBasedOnRoles(['ADMIN']), userController.createTechnician);
 
-router.get('/', authorizeBasedOnRoles(['TECHNICIAN', 'ADMIN']), userController.getAllUsers);
-router.get('/infected', authorizeBasedOnRoles(['TECHNICIAN', 'ADMIN']), userController.getAllInfectedUsers);
-router.get('/technicians', authorizeBasedOnRoles(['ADMIN']), userController.getAllTechnicians);
+/*Atualizar um user*/
 router.put('/:userId', authorizeBasedOnRolesAndUserId(['ADMIN']), userController.updateUser);
-router.delete('/:userId', authorizeBasedOnRolesAndUserId(['ADMIN']), userController.deleteUser);
 
-router.get('/:userId', authorizeBasedOnRolesAndUserId(['TECHNICIAN', 'ADMIN']), userController.getByIdUser);
-router.post('/logout', userController.logout);
+/*Eliminar um user*/
+router.delete('/:userId', authorizeBasedOnRolesAndUserId(['ADMIN']), userController.deleteUser);
 
 module.exports = router;
