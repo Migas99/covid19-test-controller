@@ -40,7 +40,8 @@
                 "tags": [
                     "Users"
                 ],
-                "description": "Login the user in the system",
+                "description": "Login the user in the system.",
+                "summary": "Validate the login and returns a token.",
                 "parameters": [
                     {
                         "name": "user",
@@ -72,7 +73,8 @@
                 "tags": [
                     "Users"
                 ],
-                "description": "Logout the user in the system",
+                "description": "Logout the user in the system.",
+                "summary": "Clears the authentication token.",
                 "responses": {
                     "200": {
                         "description": "Sucess!"
@@ -86,6 +88,7 @@
                     "Users"
                 ],
                 "description": "Create a new user in the system",
+                "summary": "Registers a new user in the system.",
                 "parameters": [
                     {
                         "name": "user",
@@ -115,6 +118,7 @@
                     "Users"
                 ],
                 "description": "Create a new technician in the system",
+                "summary": "Registers a new technician in the system",
                 "parameters": [
                     {
                         "name": "technician",
@@ -304,7 +308,8 @@
                 "tags": [
                     "Requests"
                 ],
-                "description": "Create a new request in the system.",
+                "description": "Creates a new request in the system.",
+                "summary": "Creates a new request in the system.",
                 "parameters": [
                     {
                         "name": "request",
@@ -527,41 +532,42 @@
                     "JWT"
                 ]
             }
-        }
-    },
-    "/requests/date": {
-        "post": {
-            "tags": [
-                "Requests"
-            ],
-            "description": "Returns the number of tests done between the two given dates.",
-            "parameters": [
-                {
-                    "name": "Dates",
-                    "in": "body",
-                    "description": "Contains the begin and end date",
-                    "schema": {
-                        "$ref": "#/definitions/BetweenDatesRequest"
+        },
+        "/requests/date": {
+            "post": {
+                "tags": [
+                    "Requests"
+                ],
+                "description": "Returns the number of tests done between the two given dates.",
+                "summary": "Returns the number of tests done between the two given dates.",
+                "parameters": [
+                    {
+                        "name": "Dates",
+                        "in": "body",
+                        "description": "Contains the begin and end date",
+                        "schema": {
+                            "$ref": "#/definitions/BetweenDatesRequest"
+                        }
                     }
-                }
-            ],
-            "produces": [
-                "application/json"
-            ],
-            "responses": {
-                "200": {
-                    "description": "Returns the number of tests.",
-                    "schema": {
-                        "$ref": "#/definitions/BetweenDatesResponse"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns the number of tests.",
+                        "schema": {
+                            "$ref": "#/definitions/BetweenDatesResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request! Wrong parameters or invalid information."
                     }
                 },
-                "400": {
-                    "description": "Bad request! Wrong parameters or invalid information."
-                }
-            },
-            "security": [
-                "JWT"
-            ]
+                "security": [
+                    "JWT"
+                ]
+            }
         }
     },
     "definitions": {
@@ -572,8 +578,7 @@
             ],
             "properties": {
                 "username": {
-                    "type": "string",
-                    "uniqueItems": true
+                    "type": "string"
                 },
                 "password": {
                     "type": "string"
