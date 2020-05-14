@@ -17,4 +17,6 @@ router.get('/:requestId', authorizeBasedOnRoles(['USER', 'TECHNICIAN', 'ADMIN'])
 
 router.get('/user/:requesterUsername', authorizeBasedOnRolesAndUserId(['TECHNICIAN', 'ADMIN']), requestController.getUserRequests);
 
+router.post("/dateInterval", authorizeBasedOnRoles(['TECHNICIAN', 'ADMIN']), requestController.getDateIntervalTests);
+
 module.exports = router;

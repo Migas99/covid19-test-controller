@@ -189,7 +189,7 @@ userController.getAllUsers = async (req, res) => {
     try {
         const users = await User.find({ role: 'USER' }, { username: 1, fullName: 1, birthDate: 1, civilNumber: 1, phoneNumber: 1, email: 1, isInfected: 1 });
         res.json(users);
-    } catch (error) {
+    } catch (err) {
         res.json(err);
     }
 }
@@ -198,7 +198,7 @@ userController.getAllInfectedUsers = async (req, res) => {
     try {
         const users = await User.find({ role: 'USER', state: "Infected" }, { username: 1, fullName: 1, birthDate: 1, civilNumber: 1, phoneNumber: 1, email: 1 });
         res.json(users);
-    } catch (error) {
+    } catch (err) {
         res.json(err);
     }
 }
@@ -207,7 +207,7 @@ userController.getAllTechnicians = async (req, res) => {
     try {
         const technicians = await User.find({ role: 'TECHNICIAN' }, { username: 1, fullName: 1, birthDate: 1, civilNumber: 1, phoneNumber: 1, email: 1 });
         res.json(technicians);
-    } catch (error) {
+    } catch (err) {
         res.json(err);
     }
 }

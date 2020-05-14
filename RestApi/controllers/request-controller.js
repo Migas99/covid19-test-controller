@@ -10,11 +10,11 @@ requestController.createRequest = async (req, res) => {
     if (req.auth.role != 'USER') {
         res.status(403).send('You are not an user, so you shouldnt be making requests to be tested!');
     }
-    const checkRequests = await Request.find({requesterUsername : req.auth.username, isInfected : null});
-    if(checkRequests){
+    const checkRequests = await Request.find({ requesterUsername: req.auth.username, isInfected: null });
+    if (checkRequests) {
         res.status(400).send('You have an open request. Wich is being handled.');
     }
-    
+
     //Verificamos se a estrutura é válida
     const { error } = createRequestValidation(req.body);
 
@@ -74,10 +74,10 @@ requestController.updateRequestTestDate = async (req, res) => {
                 res.status(200).send("Sucess!");
             } else {
                 if (!request.secondTest) {
-                    if((Math.abs(new Date(req.body.testDate) - request.firstTest.testDate)/3600000) > 48){
+                    if ((Math.abs(new Date(req.body.testDate) - request.firstTest.testDate) / 3600000) > 48) {
                         await Request.updateOne({ _id: req.params.requestId }, { $set: { secondTest: { testDate: req.body.testDate, responsibleTechnicianId: req.auth.id } } });
                         res.status(200).send("Sucess!");
-                    }else{
+                    } else {
                         res.status(400).send('The second test should be at least 48 hours later!');
                     }
                 } else {
@@ -123,7 +123,7 @@ requestController.updateRequestTestInfo = async (req, res) => {
                                 await User.updateOne({ username: request.requesterUsername }, { $set: { state: 'Safe' } });
                             }
                             res.status(200).send("Sucess!");
-                        }else{
+                        } else {
                             res.status(400).send("Contact admin because you are being hacked!");
                         }
                     } else {
@@ -156,7 +156,7 @@ requestController.getAllRequests = async (req, res) => {
     try {
         const requests = await Request.find();
         res.status(200).json(requests);
-    } catch (error) {
+    } catch (err) {
         console.log(err);
         res.status(400).send(err);
     }
@@ -188,7 +188,29 @@ requestController.getUserRequests = async (req, res) => {
     try {
         const requests = await Request.find({ requesterUsername: req.params.requesterUsername });
         res.status(200).json(requests);
-    } catch (error) {
+    } catch (err) {
+        console.log(err);
+        res.status(400).send(err);
+    }
+}
+
+//RECEVER REQUESTS DE UM INTERVALO DE TEMPO
+requestController.getDateIntervalTests = async (req, res) => {
+    try {
+        var testCount = await Request.countDocuments({
+            "firstTest.testDate": {
+                $gte: new Date(req.body.testDate1),
+                $lt: new Date(req.body.testDate2)
+            }
+        });
+        testCount = testCount + await Request.countDocuments({
+            "secondTest.testDate": {
+                $gte: new Date(req.body.testDate1),
+                $lt: new Date(req.body.testDate2)
+            }
+        });
+        res.status(200).json({"testCount" : testCount});
+    } catch (err) {
         console.log(err);
         res.status(400).send(err);
     }
