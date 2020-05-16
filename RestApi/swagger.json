@@ -145,25 +145,6 @@
                 ]
             }
         },
-        "/users/profile": {
-            "get": {
-                "tags": [
-                    "Users"
-                ],
-                "summary": "Gets the information of the authenticated user.",
-                "responses": {
-                    "200": {
-                        "description": "Returns the information of the authenticated user.",
-                        "schema": {
-                            "$ref": "#definitions/UserResponse"
-                        }
-                    }
-                },
-                "security": [
-                    "JWT"
-                ]
-            }
-        },
         "/users": {
             "get": {
                 "tags": [
@@ -175,6 +156,25 @@
                         "description": "Returns a list of users.",
                         "schema": {
                             "$ref": "#definitions/UserResponse"
+                        }
+                    }
+                },
+                "security": [
+                    "JWT"
+                ]
+            }
+        },
+        "/users/profile": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Gets the information of the authenticated user.",
+                "responses": {
+                    "200": {
+                        "description": "Returns the information of the authenticated user.",
+                        "schema": {
+                            "$ref": "#definitions/UserProfileResponse"
                         }
                     }
                 },
@@ -268,10 +268,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "The user is updated.",
-                        "schema": {
-                            "$ref": "#/definitions/UserResponse"
-                        }
+                        "description": "Sucess!"
                     },
                     "400": {
                         "description": "Bad request! Wrong parameters."
@@ -291,13 +288,13 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "The user is deleted.",
-                        "schema": {
-                            "$ref": "#/definitions/UserResponse"
-                        }
+                        "description": "Sucess!"
+                    },
+                    "400": {
+                        "description": "Bad request! Wrong parameters."
                     },
                     "404": {
-                        "description": "The user was not found."
+                        "description": "The user was not found!"
                     }
                 },
                 "security": [
@@ -405,10 +402,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "The request is updated.",
-                        "schema": {
-                            "$ref": "#/definitions/RequestResponse"
-                        }
+                        "description": "Sucess!"
                     },
                     "400": {
                         "description": "Bad request! Wrong parameters."
@@ -428,10 +422,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "The request is deleted.",
-                        "schema": {
-                            "$ref": "#/definitions/RequestResponse"
-                        }
+                        "description": "Sucess!"
                     },
                     "404": {
                         "description": "The request was not found!"
@@ -664,6 +655,9 @@
                 "fullName": {
                     "type": "string"
                 },
+                "gender": {
+                    "type": "string"
+                },
                 "birthDate": {
                     "type": "string"
                 },
@@ -674,6 +668,40 @@
                     "type": "number"
                 },
                 "email": {
+                    "type": "string"
+                },
+                "isInfected": {
+                    "type": "string"
+                }
+            }
+        },
+        "UserProfileResponse": {
+            "properties": {
+                "username": {
+                    "type": "string"
+                },
+                "fullName": {
+                    "type": "string"
+                },
+                "gender": {
+                    "type": "string"
+                },
+                "birthDate": {
+                    "type": "string"
+                },
+                "civilNumber": {
+                    "type": "string"
+                },
+                "phoneNumber": {
+                    "type": "number"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "string"
+                },
+                "isInfected": {
                     "type": "string"
                 }
             }
