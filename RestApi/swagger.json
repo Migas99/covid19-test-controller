@@ -20,14 +20,6 @@
     "schemes": [
         "http"
     ],
-    "securityDefinitions": {
-        "JWT": {
-            "type": "apiKey",
-            "name": "authToken",
-            "description": "JWT authorization of an API",
-            "in": "header"
-        }
-    },
     "consumes": [
         "application/json"
     ],
