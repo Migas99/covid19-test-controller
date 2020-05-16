@@ -22,7 +22,7 @@ router.get('/:userId', authorizeBasedOnRolesAndUserId(['TECHNICIAN', 'ADMIN']), 
 router.post('/login', userController.login);
 
 /*Realizar o Logout*/
-router.post('/logout', userController.logout);
+router.post('/logout', authorizeBasedOnRoles(['USER', 'TECHNICIAN', 'ADMIN']), userController.logout);
 
 /*Realizar o registo de um user normal*/
 router.post('/register', userController.createUser);
