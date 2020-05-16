@@ -254,7 +254,7 @@
                         "in": "body",
                         "description": "New values",
                         "schema": {
-                            "$ref": "#/definitions/UserResponse"
+                            "$ref": "#/definitions/UserUpdateRequest"
                         }
                     }
                 ],
@@ -626,6 +626,22 @@
                     "type": "string"
                 },
                 "civilNumber": {
+                    "type": "string"
+                },
+                "phoneNumber": {
+                    "type": "number"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "address": {
+                    "type": "string"
+                }
+            }
+        },
+        "UserUpdateRequest": {
+            "properties": {
+                "password": {
                     "type": "string"
                 },
                 "phoneNumber": {
