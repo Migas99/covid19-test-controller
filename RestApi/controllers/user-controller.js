@@ -205,9 +205,13 @@ userController.updateUser = async (req, res) => {
             return res.status(400).send('Email is already in use!');
         }
     }
-
+    
     try {
         await User.updateOne({ _id: req.params.userId }, req.body);
+        if(req.body.password){
+            const hashedPassword = await bcrypt.hash(req.body.password, 10);
+            await User.updateOne({ _id: req.params.userId }, {password: hashedPassword});
+        }
         return res.status(200).send('Sucess!');
     } catch (err) {
         console.log(err);
