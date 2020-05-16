@@ -2,14 +2,14 @@ const mongoose = require("mongoose");
 const User = require('../models/user');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const { loginValidation, registerValidation } = require('../validations/userValidations');
+const { loginValidation, registerValidation, updateValidation } = require('../validations/userValidations');
 const userController = {};
 
 /**
  * Método responsável por realizar o Login
  */
 userController.login = async (req, res) => {
-    
+
     /*Validamos a estrutura*/
     const { error } = loginValidation(req.body);
     if (error) {
@@ -36,8 +36,16 @@ userController.login = async (req, res) => {
 
     /*Criar e devolver o Token*/
     const token = jwt.sign({ id: user.id, username: user.username, role: user.role }, process.env.TOKEN_SECRET);
-    res.cookie('authToken', token, { expires: new Date(Date.now() + 60000), httpOnly: true });
-    res.send({ AuthToken: token });
+    return res.status(200).cookie('authToken', token, { expires: new Date(Date.now() + 60000), httpOnly: true }).send({ AuthToken: token });
+}
+
+userController.getMyProfile = async (req, res) => {
+    try {
+        const user = await User.findOne({ _id: req.auth.id }, { username: 1, fullName: 1, birthDate: 1, civilNumber: 1, phoneNumber: 1, email: 1, role: 1, isInfected: 1 });
+        return res.status(200).json(user);
+    } catch (err) {
+        return res.json(err);
+    }
 }
 
 /**
@@ -90,9 +98,9 @@ userController.createUser = async (req, res) => {
 
     try {
         await user.save();
-        res.status(200).send('Sucess!');
+        return res.status(200).send('Sucess!');
     } catch (err) {
-        res.json(err)
+        return res.json(err)
     }
 }
 
@@ -145,9 +153,9 @@ userController.createTechnician = async (req, res) => {
 
     try {
         await technician.save();
-        res.status(200).send('Sucess!');
+        return res.status(200).send('Sucess!');
     } catch (err) {
-        res.json(err)
+        return res.json(err)
     }
 }
 
@@ -155,29 +163,26 @@ userController.createTechnician = async (req, res) => {
  * Método responsável por atualizar um user
  */
 userController.updateUser = async (req, res) => {
-    try {
-        /*Verificamos se o username encontra-se disponível*/
-        const usernameExist = await User.findOne({ username: req.body.username });
-        if (usernameExist) {
-            return res.status(400).send('Username is already in use!');
-        }
 
-        /*Verificamos se o email encontra-se disponível*/
+    /*Validamos a estrutura do update*/
+    const { error } = updateValidation(req.body);
+    if (error) {
+        return res.status(400).send(error.details[0].message);
+    }
+
+    /*Verificamos se o email encontra-se disponível*/
+    if (req.body.email) {
         const emailExist = await User.findOne({ email: req.body.email });
         if (emailExist) {
             return res.status(400).send('Email is already in use!');
         }
+    }
 
-        /*Verificamos se o número civil encontra-se disponível*/
-        const civilExist = await User.findOne({ civilNumber: req.body.civilNumber });
-        if (civilExist) {
-            return res.status(400).send('That civil number is already in use!');
-        }
-        
+    try {
         await User.updateOne({ _id: req.params.userId }, req.body);
-        res.status(200).send('Sucess!');
+        return res.status(200).send('Sucess!');
     } catch (err) {
-        res.status(400).json(err);
+        return res.json(err);
     }
 }
 
@@ -187,9 +192,9 @@ userController.updateUser = async (req, res) => {
 userController.deleteUser = async (req, res) => {
     try {
         await User.remove({ _id: req.params.userId });
-        res.status(200).send('Sucess!');
+        return res.status(200).send('Sucess!');
     } catch (err) {
-        res.status(400).json(err);
+        return res.json(err);
     }
 }
 
@@ -199,9 +204,9 @@ userController.deleteUser = async (req, res) => {
 userController.getAllUsers = async (req, res) => {
     try {
         const users = await User.find({ role: 'USER' }, { username: 1, fullName: 1, birthDate: 1, civilNumber: 1, phoneNumber: 1, email: 1, isInfected: 1 });
-        res.status(200).json(users);
+        return res.status(200).json(users);
     } catch (err) {
-        res.json(err);
+        return res.json(err);
     }
 }
 
@@ -211,9 +216,9 @@ userController.getAllUsers = async (req, res) => {
 userController.getAllInfectedUsers = async (req, res) => {
     try {
         const users = await User.find({ role: 'USER', state: "Infected" }, { username: 1, fullName: 1, birthDate: 1, civilNumber: 1, phoneNumber: 1, email: 1 });
-        res.status(200).json(users);
+        return res.status(200).json(users);
     } catch (err) {
-        res.json(err);
+        return res.json(err);
     }
 }
 
@@ -223,9 +228,9 @@ userController.getAllInfectedUsers = async (req, res) => {
 userController.getAllTechnicians = async (req, res) => {
     try {
         const technicians = await User.find({ role: 'TECHNICIAN' }, { username: 1, fullName: 1, birthDate: 1, civilNumber: 1, phoneNumber: 1, email: 1 });
-        res.status(200).json(technicians);
+        return res.status(200).json(technicians);
     } catch (err) {
-        res.json(err);
+        return res.json(err);
     }
 }
 
@@ -234,10 +239,28 @@ userController.getAllTechnicians = async (req, res) => {
  */
 userController.getByIdUser = async (req, res) => {
     try {
-        const user = await User.findById(req.params.userId, { username: 1, fullName: 1, birthDate: 1, civilNumber: 1, phoneNumber: 1, email: 1 });
-        res.status(200).json(user);
+
+        /*Se for o ADMIN, devolvemos sempre a informação do user*/
+        if (req.auth.role == 'ADMIN') {
+            const user = await User.findById(req.params.userId, { username: 1, fullName: 1, birthDate: 1, civilNumber: 1, phoneNumber: 1, email: 1 });
+            return res.status(200).json(user);
+        } else {
+            /*Se não é um ADMIN, é um Technician*/
+            const checkUser = await User.findById(req.params.userId);
+
+            /*Se for informações de um User, ou do próprio técnico*/
+            if (checkUser.role == 'USER' || req.auth.id == checkUser._id) {
+                const user = await User.findById(req.params.userId, { username: 1, fullName: 1, birthDate: 1, civilNumber: 1, phoneNumber: 1, email: 1 });
+                return res.status(200).json(user);
+            } else {
+                /*Um technician não tem direito de ter informações relativas a outro technician*/
+                return res.status(403).send('You dont have permissions to see other technicians information!');
+            }
+
+        }
+
     } catch (err) {
-        res.json(err)
+        return res.json(err)
     }
 }
 
@@ -245,8 +268,7 @@ userController.getByIdUser = async (req, res) => {
  * Método responsável por realizar o logout
  */
 userController.logout = async (req, res) => {
-    res.clearCookie('authToken');
-    res.status(200).send('Sucess!');
+    return res.status(200).clearCookie('authToken').send('Sucess!');
 }
 
 module.exports = userController;

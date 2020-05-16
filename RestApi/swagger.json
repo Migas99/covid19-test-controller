@@ -145,6 +145,25 @@
                 ]
             }
         },
+        "/users/profile": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Gets the information of the authenticated user.",
+                "responses": {
+                    "200": {
+                        "description": "Returns the information of the authenticated user.",
+                        "schema": {
+                            "$ref": "#definitions/UserResponse"
+                        }
+                    }
+                },
+                "security": [
+                    "JWT"
+                ]
+            }
+        },
         "/users": {
             "get": {
                 "tags": [

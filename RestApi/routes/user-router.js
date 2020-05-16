@@ -15,6 +15,9 @@ router.get('/technicians', authorizeBasedOnRoles(['ADMIN']), userController.getA
 /*Obter um user, usando o seu ID*/
 router.get('/:userId', authorizeBasedOnRolesAndUserId(['TECHNICIAN', 'ADMIN']), userController.getByIdUser);
 
+/*Obter o perfil do user autenticado*/
+router.get('/profile', authorizeBasedOnRoles(['USER', 'TECHNICIAN', 'ADMIN']), userController.getMyProfile);
+
 /*Realizar o Login*/
 router.post('/login', userController.login);
 
