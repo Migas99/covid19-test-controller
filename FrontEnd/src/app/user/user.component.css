@@ -1,0 +1,41 @@
+.form {
+    background: rgba(19, 35, 47, 0.9);
+    padding: 40px;
+    max-width: 600px;
+    margin: 40px auto;
+    border-radius: 4px;
+    box-shadow: 0 4px 10px 4px rgba(19, 35, 47, 0.3);
+    font-family: 'Titillium Web', sans-serif;
+}
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0px 60px 0px;
+    text-align: center;
+}
+li{
+    display: inline;
+}
+a{
+    text-decoration: none;
+    padding: 15px 116px 15px 116px;
+    background: rgba(160, 179, 176, 0.25);
+    color: #a0b3b0;
+    font-size: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.5s ease;
+    text-decoration: none;
+    color: #1ab188;
+    transition: 0.5s ease;
+}
+
+a:hover {
+    background: #179b77;
+    color: #ffffff;
+}
+
+.active{
+    background: #1ab188;
+    color: #ffffff;
+}

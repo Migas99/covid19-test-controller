@@ -1,0 +1,11 @@
+<div class="field-wrap">
+    <input placeholder="Username" type="text"required autocomplete="off" [(ngModel)]="username"/>
+</div>
+  
+<div class="field-wrap">
+    <input placeholder="Password" type="password"required autocomplete="off" [(ngModel)]="password"/>
+
+
+<button class="button button-block" (click)="login()">Log In</button>
+
+<p id="resultado">{{resultado}}</p>
