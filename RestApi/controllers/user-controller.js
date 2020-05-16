@@ -36,7 +36,7 @@ userController.login = async (req, res) => {
 
     /*Criar e devolver o Token*/
     const token = jwt.sign({ id: user.id, username: user.username, role: user.role }, process.env.TOKEN_SECRET);
-    return res.status(200).cookie('authToken', token, { expires: new Date(Date.now() + 10*60000), httpOnly: true }).send({ AuthToken: token });
+    return res.status(200).cookie('authToken', token, { expires: new Date(Date.now() + 10 * 60000), httpOnly: true }).send({ AuthToken: token });
 }
 
 /**
@@ -88,7 +88,7 @@ userController.createUser = async (req, res) => {
     }
 
     /*Se não passar todas as verificações, é então inválido*/
-    if(!valid){
+    if (!valid) {
         return res.status(400).send(errors);
     }
 
@@ -113,7 +113,7 @@ userController.createUser = async (req, res) => {
 
     try {
         await user.save();
-        return res.status(200).send('Sucess!');
+        return res.status(200).send('Success!');
     } catch (err) {
         console.log(err);
         return res.json(err)
@@ -156,7 +156,7 @@ userController.createTechnician = async (req, res) => {
     }
 
     /*Se não passar todas as verificações, é então inválido*/
-    if(!valid){
+    if (!valid) {
         return res.status(400).send(errors);
     }
 
@@ -180,7 +180,7 @@ userController.createTechnician = async (req, res) => {
 
     try {
         await technician.save();
-        return res.status(200).send('Sucess!');
+        return res.status(200).send('Success!');
     } catch (err) {
         console.log(err);
         return res.json(err)
@@ -198,24 +198,31 @@ userController.updateUser = async (req, res) => {
         return res.status(400).send(error.details[0].message);
     }
 
-    /*Verificamos se o email encontra-se disponível*/
-    if (req.body.email) {
-        const emailExist = await User.findOne({ email: req.body.email });
-        if (emailExist) {
-            return res.status(400).send('Email is already in use!');
+    const targetUser = await User.findById(req.params.userId);
+
+    if (targetUser.role == "ADMIN" && targetUser._id != req.auth.id) {
+        return res.status(400).send("You can only change your ADMIN account");
+    } else {
+        /*Verificamos se o email encontra-se disponível*/
+        if (req.body.email) {
+            const emailExist = await User.findOne({ email: req.body.email });
+
+            if (emailExist) {
+                return res.status(400).send('Email is already in use!');
+            }
         }
-    }
-    
-    try {
-        await User.updateOne({ _id: req.params.userId }, req.body);
-        if(req.body.password){
-            const hashedPassword = await bcrypt.hash(req.body.password, 10);
-            await User.updateOne({ _id: req.params.userId }, {password: hashedPassword});
+
+        if (req.body.password && targetUser.role != "ADMIN") {
+            req.body.password = await bcrypt.hash(req.body.password, 10);
         }
-        return res.status(200).send('Sucess!');
-    } catch (err) {
-        console.log(err);
-        return res.json(err);
+
+        try {
+            await User.updateOne({ _id: req.params.userId }, req.body);
+            return res.status(200).send('Success!');
+        } catch (err) {
+            console.log(err);
+            return res.json(err);
+        }
     }
 }
 
