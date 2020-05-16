@@ -255,6 +255,7 @@ requestController.getUserRequests = async (req, res) => {
  */
 requestController.getTestsBetweenDates = async (req, res) => {
     try {
+        if(Math.abs(new Date(req.body.beginDate) - new Date(req.body.endDate)) >=0){
         var testCount = await Request.countDocuments({
             "firstTest.testDate": {
                 $gte: new Date(req.body.beginDate),
@@ -270,6 +271,9 @@ requestController.getTestsBetweenDates = async (req, res) => {
         });
 
         res.status(200).json({ "testCount": testCount });
+    }else{
+        res.status(400).send("The endDate must after the beginDate.");
+    }
     } catch (err) {
         console.log(err);
         res.status(400).send(err);

@@ -13,7 +13,7 @@ userController.login = async (req, res) => {
     /*Validamos a estrutura*/
     const { error } = loginValidation(req.body);
     if (error) {
-        res.status(400).send(error.details[0].message);
+        return res.status(400).send(error.details[0].message);
     }
 
     /*Verificamos se a conta com esse username existe*/
@@ -48,7 +48,7 @@ userController.createUser = async (req, res) => {
     /*Validamos a estrutura do registo*/
     const { error } = registerValidation(req.body);
     if (error) {
-        res.status(400).send(error.details[0].message);
+        return res.status(400).send(error.details[0].message);
     }
 
     /*Verificamos se o username encontra-se disponível*/
@@ -104,7 +104,7 @@ userController.createTechnician = async (req, res) => {
     /*Validamos a estrutura do registo*/
     const { error } = registerValidation(req.body);
     if (error) {
-        res.status(400).send(error.details[0].message);
+        return res.status(400).send(error.details[0].message);
     }
 
     /*Verificamos se o username encontra-se disponível*/
@@ -199,7 +199,7 @@ userController.deleteUser = async (req, res) => {
 userController.getAllUsers = async (req, res) => {
     try {
         const users = await User.find({ role: 'USER' }, { username: 1, fullName: 1, birthDate: 1, civilNumber: 1, phoneNumber: 1, email: 1, isInfected: 1 });
-        res.json(users);
+        res.status(200).json(users);
     } catch (err) {
         res.json(err);
     }
@@ -211,7 +211,7 @@ userController.getAllUsers = async (req, res) => {
 userController.getAllInfectedUsers = async (req, res) => {
     try {
         const users = await User.find({ role: 'USER', state: "Infected" }, { username: 1, fullName: 1, birthDate: 1, civilNumber: 1, phoneNumber: 1, email: 1 });
-        res.json(users);
+        res.status(200).json(users);
     } catch (err) {
         res.json(err);
     }
@@ -223,7 +223,7 @@ userController.getAllInfectedUsers = async (req, res) => {
 userController.getAllTechnicians = async (req, res) => {
     try {
         const technicians = await User.find({ role: 'TECHNICIAN' }, { username: 1, fullName: 1, birthDate: 1, civilNumber: 1, phoneNumber: 1, email: 1 });
-        res.json(technicians);
+        res.status(200).json(technicians);
     } catch (err) {
         res.json(err);
     }
