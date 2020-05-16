@@ -36,7 +36,7 @@ userController.login = async (req, res) => {
 
     /*Criar e devolver o Token*/
     const token = jwt.sign({ id: user.id, username: user.username, role: user.role }, process.env.TOKEN_SECRET);
-    return res.status(200).cookie('authToken', token, { expires: new Date(Date.now() + 60000), httpOnly: true }).send({ AuthToken: token });
+    return res.status(200).cookie('authToken', token, { expires: new Date(Date.now() + 10*60000), httpOnly: true }).send({ AuthToken: token });
 }
 
 /**
@@ -47,6 +47,7 @@ userController.getMyProfile = async (req, res) => {
         const user = await User.findOne({ _id: req.auth.id }, { username: 1, fullName: 1, birthDate: 1, civilNumber: 1, phoneNumber: 1, email: 1, role: 1, isInfected: 1 });
         return res.status(200).json(user);
     } catch (err) {
+        console.log(err);
         return res.json(err);
     }
 }
@@ -62,29 +63,40 @@ userController.createUser = async (req, res) => {
         return res.status(400).send(error.details[0].message);
     }
 
+    var valid = true;
+    const errors = [];
+
     /*Verificamos se o username encontra-se disponível*/
     const usernameExist = await User.findOne({ username: req.body.username });
     if (usernameExist) {
-        return res.status(400).send('Username is already in use!');
+        valid = false;
+        errors.push('Username is already in use!');
     }
 
     /*Verificamos se o email encontra-se disponível*/
     const emailExist = await User.findOne({ email: req.body.email });
     if (emailExist) {
-        return res.status(400).send('Email is already in use!');
+        valid = false;
+        errors.push('Email is already in use!');
     }
 
     /*Verificamos se o número civil encontra-se disponível*/
     const civilExist = await User.findOne({ civilNumber: req.body.civilNumber });
     if (civilExist) {
-        return res.status(400).send('That civil number is already in use!');
+        valid = false;
+        errors.push('Civil Number is already in use!');
+    }
+
+    /*Se não passar todas as verificações, é então inválido*/
+    if(!valid){
+        return res.status(400).send(errors);
     }
 
     /*Encriptamos a password*/
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(req.body.password, salt);
 
-    var user = new User({
+    const user = new User({
         username: req.body.username,
         password: hashedPassword,
         fullName: req.body.fullName,
@@ -103,6 +115,7 @@ userController.createUser = async (req, res) => {
         await user.save();
         return res.status(200).send('Sucess!');
     } catch (err) {
+        console.log(err);
         return res.json(err)
     }
 }
@@ -118,29 +131,40 @@ userController.createTechnician = async (req, res) => {
         return res.status(400).send(error.details[0].message);
     }
 
+    var valid = true;
+    const errors = [];
+
     /*Verificamos se o username encontra-se disponível*/
     const usernameExist = await User.findOne({ username: req.body.username });
     if (usernameExist) {
-        return res.status(400).send('Username is already in use!');
+        valid = false;
+        errors.push('Username is already in use!');
     }
 
     /*Verificamos se o email encontra-se disponível*/
     const emailExist = await User.findOne({ email: req.body.email });
     if (emailExist) {
-        return res.status(400).send('Email is already in use!');
+        valid = false;
+        errors.push('Email is already in use!');
     }
 
     /*Verificamos se o número civil encontra-se disponível*/
     const civilExist = await User.findOne({ civilNumber: req.body.civilNumber });
     if (civilExist) {
-        return res.status(400).send('That civil number is already in use!');
+        valid = false;
+        errors.push('Civil Number is already in use!');
+    }
+
+    /*Se não passar todas as verificações, é então inválido*/
+    if(!valid){
+        return res.status(400).send(errors);
     }
 
     /*Encriptamos a password*/
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(req.body.password, salt);
 
-    var technician = new User({
+    const technician = new User({
         username: req.body.username,
         password: hashedPassword,
         fullName: req.body.fullName,
@@ -158,6 +182,7 @@ userController.createTechnician = async (req, res) => {
         await technician.save();
         return res.status(200).send('Sucess!');
     } catch (err) {
+        console.log(err);
         return res.json(err)
     }
 }
@@ -185,6 +210,7 @@ userController.updateUser = async (req, res) => {
         await User.updateOne({ _id: req.params.userId }, req.body);
         return res.status(200).send('Sucess!');
     } catch (err) {
+        console.log(err);
         return res.json(err);
     }
 }
@@ -197,6 +223,7 @@ userController.deleteUser = async (req, res) => {
         await User.remove({ _id: req.params.userId });
         return res.status(200).send('Sucess!');
     } catch (err) {
+        console.log(err);
         return res.json(err);
     }
 }
@@ -209,6 +236,7 @@ userController.getAllUsers = async (req, res) => {
         const users = await User.find({ role: 'USER' }, { username: 1, fullName: 1, birthDate: 1, civilNumber: 1, phoneNumber: 1, email: 1, isInfected: 1 });
         return res.status(200).json(users);
     } catch (err) {
+        console.log(err);
         return res.json(err);
     }
 }
@@ -221,6 +249,7 @@ userController.getAllInfectedUsers = async (req, res) => {
         const users = await User.find({ role: 'USER', state: "Infected" }, { username: 1, fullName: 1, birthDate: 1, civilNumber: 1, phoneNumber: 1, email: 1 });
         return res.status(200).json(users);
     } catch (err) {
+        console.log(err);
         return res.json(err);
     }
 }
@@ -233,6 +262,7 @@ userController.getAllTechnicians = async (req, res) => {
         const technicians = await User.find({ role: 'TECHNICIAN' }, { username: 1, fullName: 1, birthDate: 1, civilNumber: 1, phoneNumber: 1, email: 1 });
         return res.status(200).json(technicians);
     } catch (err) {
+        console.log(err);
         return res.json(err);
     }
 }
@@ -263,6 +293,7 @@ userController.getByIdUser = async (req, res) => {
         }
 
     } catch (err) {
+        console.log(err);
         return res.json(err)
     }
 }
