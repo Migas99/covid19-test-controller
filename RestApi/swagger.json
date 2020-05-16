@@ -619,6 +619,7 @@
                 "username",
                 "password",
                 "fullName",
+                "gender",
                 "birthDate",
                 "civilNumber",
                 "phoneNumber",
@@ -633,6 +634,9 @@
                     "type": "string"
                 },
                 "fullName": {
+                    "type": "string"
+                },
+                "gender": {
                     "type": "string"
                 },
                 "birthDate": {

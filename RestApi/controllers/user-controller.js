@@ -39,6 +39,9 @@ userController.login = async (req, res) => {
     return res.status(200).cookie('authToken', token, { expires: new Date(Date.now() + 60000), httpOnly: true }).send({ AuthToken: token });
 }
 
+/**
+ * Responsável por retornar as informações do user autenticado
+ */
 userController.getMyProfile = async (req, res) => {
     try {
         const user = await User.findOne({ _id: req.auth.id }, { username: 1, fullName: 1, birthDate: 1, civilNumber: 1, phoneNumber: 1, email: 1, role: 1, isInfected: 1 });

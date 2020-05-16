@@ -14,7 +14,7 @@ const authorizeBasedOnRoles = (opts) => {
 			return res.status(403).send('Not authorized!');
 		}
 	}
-};
+}
 
 const authorizeBasedOnRolesAndUserId = (opts) => {
 	opts = opts || []
@@ -37,7 +37,7 @@ const authorizeBasedOnRolesAndUserId = (opts) => {
 			}
 		}
 	}
-};
+}
 
 module.exports.authorizeBasedOnRoles = authorizeBasedOnRoles;
 module.exports.authorizeBasedOnRolesAndUserId = authorizeBasedOnRolesAndUserId;

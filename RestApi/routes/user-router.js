@@ -12,11 +12,11 @@ router.get('/infected', authorizeBasedOnRoles(['TECHNICIAN', 'ADMIN']), userCont
 /*Obter todos os técnicos*/
 router.get('/technicians', authorizeBasedOnRoles(['ADMIN']), userController.getAllTechnicians);
 
-/*Obter um user, usando o seu ID*/
-router.get('/:userId', authorizeBasedOnRolesAndUserId(['TECHNICIAN', 'ADMIN']), userController.getByIdUser);
-
 /*Obter o perfil do user autenticado*/
 router.get('/profile', authorizeBasedOnRoles(['USER', 'TECHNICIAN', 'ADMIN']), userController.getMyProfile);
+
+/*Obter um user, usando o seu ID*/
+router.get('/:userId', authorizeBasedOnRolesAndUserId(['TECHNICIAN', 'ADMIN']), userController.getByIdUser);
 
 /*Realizar o Login*/
 router.post('/login', userController.login);
