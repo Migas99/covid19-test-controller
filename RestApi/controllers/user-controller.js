@@ -283,7 +283,7 @@ userController.getByIdUser = async (req, res) => {
 
             /*Se for informações de um User, ou do próprio técnico*/
             if (checkUser.role == 'USER' || req.auth.id == checkUser._id) {
-                const user = await User.findById(req.params.userId, { username: 1, fullName: 1, gender: 1, birthDate: 1, civilNumber: 1, phoneNumber: 1, email: 1 });
+                const user = await User.findById(req.params.userId, { username: 1, fullName: 1, gender: 1, birthDate: 1, civilNumber: 1, phoneNumber: 1, email: 1, isInfected: 1 });
                 return res.status(200).json(user);
             } else {
                 /*Um technician não tem direito de ter informações relativas a outro technician*/
