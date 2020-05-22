@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const Request = require("../models/request");
 const User = require('../models/user');
 const { createRequestValidation, updateTestDateValidation, updateTestInfoValidation } = require('../validations/requestValidations');
+const fs = require('fs');
 const requestController = {};
 
 /**
@@ -11,13 +12,13 @@ requestController.createRequest = async (req, res) => {
 
     /*Apenas users podem criar pedidos*/
     if (req.auth.role != 'USER') {
-        return res.status(403).send('You are not an user, so you shouldnt be making requests to be tested!');
+        return res.status(403).json({ 'Error': 'You are not an user, so you shouldnt be making requests to be tested!' });
     }
 
     /*Verificamos se já não existe um pedido feito por este user que ainda não foi totalmente concluído*/
     const checkRequests = await Request.find({ requesterUsername: req.auth.username, isInfected: null });
     if (checkRequests) {
-        return res.status(400).send('You have an open request wich is being handled. You cant make another request!');
+        return res.status(400).json({ 'Error': 'You already have an open request, wich is being handled. You cant make another request.' });
     }
 
     /*Validamos a estrutura do pedido*/
@@ -35,10 +36,10 @@ requestController.createRequest = async (req, res) => {
 
     try {
         await request.save();
-        return res.status(200).send('Sucess!');
+        return res.status(200).json({ 'Success': 'The request was created with success!' });
     } catch (err) {
         console.log(err);
-        return res.send(err);
+        return res.json(err);
     }
 }
 
@@ -59,10 +60,10 @@ requestController.updateRequest = async (req, res) => {
             await User.updateOne({ username: request.requesterUsername }, { $set: { isInfected: "Safe" } });
         }
 
-        return res.status(200).send('Sucess!');
+        return res.status(200).json({ 'Success': 'The request was updated with success!' });
     } catch (err) {
         console.log(err);
-        return res.send(err);
+        return res.json(err);
     }
 }
 
@@ -74,7 +75,7 @@ requestController.updateRequestTestDate = async (req, res) => {
     /*Validamos a estrutura*/
     const { error } = updateTestDateValidation(req.body);
     if (error) {
-        return res.status(400).send(error.details[0].message);
+        return res.status(400).json({ 'Error': error.details[0].message });
     }
 
     try {
@@ -82,13 +83,13 @@ requestController.updateRequestTestDate = async (req, res) => {
 
         /*Verificamos se o pedido já não foi tratado (ou seja, se tem um resultado)*/
         if (request.isInfected !== null) {
-            return res.status(400).send('This request has already been handled!');
+            return res.status(400).json({ 'Error': 'This request has already been handled!' });
         } else {
 
             /*Verificamos se estamos a definir a data para o primeiro ou segundo teste*/
             if (request.firstTest === null) {
                 await Request.updateOne({ _id: req.params.requestId }, { $set: { firstTest: { testDate: req.body.testDate, responsibleTechnicianId: req.auth.id } } });
-                return res.status(200).send("Sucess!");
+                return res.status(200).json({ 'Success': 'The request was updated with success!' });
             } else {
 
                 /*Verificamos se o segundo teste já não foi realizado*/
@@ -97,21 +98,21 @@ requestController.updateRequestTestDate = async (req, res) => {
                     /*Verificamos se a diferença de tempo entre os dois testes é de 48 horas*/
                     if ((Math.abs(new Date(req.body.testDate) - request.firstTest.testDate) / 3600000) > 48) {
                         await Request.updateOne({ _id: req.params.requestId }, { $set: { secondTest: { testDate: req.body.testDate, responsibleTechnicianId: req.auth.id } } });
-                        return res.status(200).send("Sucess!");
+                        return res.status(200).json({ 'Success': 'The request was updated with success!' });
                     } else {
-                        return res.status(400).send('The second test should be at least 48 hours later!');
+                        return res.status(400).json({ 'Error': 'The second test should be made at least 48 hours after the first test!' });
                     }
 
                 } else {
                     /*Nunca podemos chegar aqui*/
-                    return res.status(400).send('This request hasnt been handled correctly!');
+                    return res.status(400).json({ 'Error': 'This request hasnt been handled correctly!' });
                 }
             }
         }
 
     } catch (err) {
         console.log(err);
-        return res.send(err);
+        return res.json(err);
     }
 }
 
@@ -123,7 +124,7 @@ requestController.updateRequestTestInfo = async (req, res) => {
     /*Validamos a estrutura*/
     const { error } = updateTestInfoValidation(req.body);
     if (error) {
-        return res.status(400).send(error.details[0].message);
+        return res.status(400).json({ 'Error': error.details[0].message });
     }
 
     try {
@@ -131,7 +132,7 @@ requestController.updateRequestTestInfo = async (req, res) => {
 
         /*Verificamos se o pedido já não foi tratado (verificando se tem um resultado)*/
         if (request.isInfected !== null) {
-            return res.status(400).send('This request has already been handled!');
+            return res.status(400).json({ 'Error': 'This request has already been handled!' });
         } else {
 
             /*Verificamos se o primeiro teste tem uma data definida*/
@@ -139,6 +140,9 @@ requestController.updateRequestTestInfo = async (req, res) => {
 
                 /*Verificamos se o primeiro teste tem um resultado*/
                 if (request.firstTest.result == null) {
+
+                    /*Guardamos o ficheiro PDF*/
+                    await upload(req, res);
 
                     /*Se o estado atual do user for 'Safe' e o teste der negativo, podemos então definir o resultado final do pedido*/
                     if (request.userState == 'Safe' && !req.body.result) {
@@ -153,7 +157,7 @@ requestController.updateRequestTestInfo = async (req, res) => {
 
                     }
 
-                    return res.status(200).send("Sucess!");
+                    return res.status(200).json({ 'Success': 'The request was updated with success!' });
                 } else {
 
                     /*Verificamos se o segundo teste já tem data definida*/
@@ -161,6 +165,10 @@ requestController.updateRequestTestInfo = async (req, res) => {
 
                         /*Verificamos se o segundo teste já tem um resultado*/
                         if (request.secondTest.result == null) {
+
+                            /*Guardamos o ficheiro PDF*/
+                            await upload(req, res);
+
                             await Request.updateOne({ _id: req.params.requestId }, { $set: { 'secondTest.pdfFilePath': req.body.pdfFilePath, 'secondTest.result': req.body.result, resultDate: Date(Date.now()), isInfected: req.body.result } });
 
                             /*Dependendo do resultado, atualizamos o estado do user*/
@@ -170,25 +178,25 @@ requestController.updateRequestTestInfo = async (req, res) => {
                                 await User.updateOne({ username: request.requesterUsername }, { $set: { state: 'Safe' } });
                             }
 
-                            return res.status(200).send("Sucess!");
+                            return res.status(200).json({ 'Success': 'The request was updated with success!' });
                         } else {
                             /*We can never reach this point, otherwise something is wrong*/
-                            return res.status(400).send('This request hasnt been handled correctly!');
+                            return res.status(400).json({ 'Error': 'This request hasnt been handled correctly!' });
                         }
 
                     } else {
-                        return res.status(400).send('You cant update the test info because the test probably doesnt have a defined date!');
+                        return res.status(400).json({ 'Error': 'You cant update the test info because the test probably doesnt have a defined date!' });
                     }
                 }
 
             } else {
-                return res.status(400).send('You cant update the test info because the test probably doesnt have a defined date!');
+                return res.status(400).json({ 'Error': 'You cant update the test info because the test probably doesnt have a defined date!' });
             }
         }
 
     } catch (err) {
         console.log(err);
-        return res.send(err);
+        return res.json(err);
     }
 }
 
@@ -198,10 +206,10 @@ requestController.updateRequestTestInfo = async (req, res) => {
 requestController.deleteRequest = async (req, res) => {
     try {
         await Request.remove({ _id: req.params.requestId });
-        return res.status(200).send('Sucess!');
+        return res.status(200).json({ 'Success': 'The request was deleted with success!' });
     } catch (err) {
         console.log(err);
-        return res.send(err);
+        return res.json(err);
     }
 }
 
@@ -214,7 +222,7 @@ requestController.getAllRequests = async (req, res) => {
         return res.status(200).json(requests);
     } catch (err) {
         console.log(err);
-        return res.send(err);
+        return res.json(err);
     }
 }
 
@@ -231,13 +239,13 @@ requestController.getByIdRequest = async (req, res) => {
             if (request.requesterUsername == req.auth.username) {
                 return res.status(200).json(request)
             } else {
-                return res.status(403).send('You dont have permissions to acess other users information!');
+                return res.status(403).json({ 'Error': 'You dont have permissions to acess other users information!' });
             }
         }
 
     } catch (err) {
         console.log(err);
-        return res.send(err);
+        return res.json(err);
     }
 }
 
@@ -250,7 +258,7 @@ requestController.getUserRequests = async (req, res) => {
         return res.status(200).json(requests);
     } catch (err) {
         console.log(err);
-        return res.send(err);
+        return res.json(err);
     }
 }
 
@@ -274,15 +282,46 @@ requestController.getTestsBetweenDates = async (req, res) => {
                 }
             });
 
-            return res.status(200).json({ "testCount": testCount });
+            return res.status(200).json({ 'Success': testCount });
         } else {
-            return res.status(400).send("The endDate must after the beginDate.");
+            return res.status(400).json({ 'Error': 'The endDate must after the beginDate.' });
         }
 
     } catch (err) {
         console.log(err);
-        return res.send(err);
+        return res.json(err);
     }
+}
+
+upload = async (req, res, next) => {
+    const file = __dirname + "/" + req.file.name;
+
+    fs.readFile(req.file.path, function (err, data) {
+        if (err) {
+            console.log(err);
+            return res.json({ 'Error': err });
+        } else {
+
+            fs.writeFile(file, data, function (err) {
+                if (err) {
+                    console.log(err);
+                    return res.json({ 'Error': err })
+
+                } else {
+                    response = {
+                        message: 'File uploaded successfully!',
+                        filename: req.file.name,
+                        path: req.file.path
+                    };
+
+                    req.body.pdfFilePath = req.file.path;
+                    console.log(response);
+                    next();
+                }
+
+            });
+        }
+    });
 }
 
 module.exports = requestController;

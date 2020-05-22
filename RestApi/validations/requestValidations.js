@@ -18,7 +18,7 @@ const updateTestDateValidation = data => {
 
 const updateTestInfoValidation = data => {
     const schema = Joi.object({
-        pdfFilePath: Joi.string().required(),
+        file: Joi.any().required(),
         result: Joi.boolean().required()
     });
     return schema.validate(data);

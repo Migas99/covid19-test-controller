@@ -1,28 +1,40 @@
 //Dependencies
 require('dotenv/config');
-var express = require('express');
-var app = express();
-var mongoose = require('mongoose');
-var cors = require('cors');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var session = require('./middlewares/session');
-var swaggerUi = require('swagger-ui-express');
-var swaggerDocument = require('./swagger.json')
+const express = require('express');
+const app = express();
+const mongoose = require('mongoose');
+const cors = require('cors');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const session = require('./middlewares/session');
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger.json')
+const multer = require('multer');
+
+//Multer storage options
+const storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        cb(null, './tmp/uploads');
+    },
+    filename: function(req, file, cb) {
+        cb(null, file.originalname + '-' + Date.now() + path.extname(file.originalname));
+    }
+});
 
 //Middlewares
 app.use(cors());
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(session);
+app.use(multer({ storage: storage }).single('file'));
 
 //Import Routes
 const apiRouter = require('./routes');
 
 //Connect to MongoDB
-mongoose.connect(process.env.DB_CONNECTION, { useNewUrlParser: true , useUnifiedTopology: true })
-.then(() => console.log('Connection sucessful!'))
-.catch((err) => console.error(err));
+mongoose.connect(process.env.DB_CONNECTION, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log('Connection sucessful!'))
+    .catch((err) => console.error(err));
 
 //Routes
 app.use('/', apiRouter);

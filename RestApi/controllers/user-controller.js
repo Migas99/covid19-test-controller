@@ -13,30 +13,30 @@ userController.login = async (req, res) => {
     /*Validamos a estrutura*/
     const { error } = loginValidation(req.body);
     if (error) {
-        return res.status(400).send(error.details[0].message);
+        return res.status(400).json({ 'Error': error.details[0].message });
     }
 
     /*Verificamos se a conta com esse username existe*/
     const user = await User.findOne({ username: req.body.username });
     if (!user) {
-        return res.status(400).send('The username must be wrong!');
+        return res.status(400).json({ 'Error': 'Invalid username!' });
     }
 
     /*Comparamos passwords e validamos*/
     if (user.role != 'ADMIN') {
         const validPassword = await bcrypt.compare(req.body.password, user.password);
         if (!validPassword) {
-            return res.status(400).send('Invalid password!');
+            return res.status(400).json({ 'Error': 'Invalid password!' });
         }
     } else {
         if (req.body.password != user.password) {
-            return res.status(400).send('Invalid password!');
+            return res.status(400).json({ 'Error': 'Invalid password!' });
         }
     }
 
     /*Criar e devolver o Token*/
     const token = jwt.sign({ id: user.id, username: user.username, role: user.role }, process.env.TOKEN_SECRET);
-    return res.status(200).cookie('authToken', token, { expires: new Date(Date.now() + 10 * 60000), httpOnly: true }).send({ AuthToken: token });
+    return res.status(200).cookie('authToken', token, { expires: new Date(Date.now() + 10 * 60000), httpOnly: true }).json({ 'Success': 'The user was successfully logged in.' });
 }
 
 /**
@@ -60,7 +60,7 @@ userController.createUser = async (req, res) => {
     /*Validamos a estrutura do registo*/
     const { error } = registerValidation(req.body);
     if (error) {
-        return res.status(400).send(error.details[0].message);
+        return res.status(400).json({ 'Error': error.details[0].message });
     }
 
     var valid = true;
@@ -70,26 +70,26 @@ userController.createUser = async (req, res) => {
     const usernameExist = await User.findOne({ username: req.body.username });
     if (usernameExist) {
         valid = false;
-        errors.push('Username is already in use!');
+        errors.push('That username is already in use.');
     }
 
     /*Verificamos se o email encontra-se disponível*/
     const emailExist = await User.findOne({ email: req.body.email });
     if (emailExist) {
         valid = false;
-        errors.push('Email is already in use!');
+        errors.push('That email is already in use.');
     }
 
     /*Verificamos se o número civil encontra-se disponível*/
     const civilExist = await User.findOne({ civilNumber: req.body.civilNumber });
     if (civilExist) {
         valid = false;
-        errors.push('Civil Number is already in use!');
+        errors.push('That civil number is already in use.');
     }
 
     /*Se não passar todas as verificações, é então inválido*/
     if (!valid) {
-        return res.status(400).send(errors);
+        return res.status(400).json({ 'Error': errors });
     }
 
     /*Encriptamos a password*/
@@ -113,7 +113,7 @@ userController.createUser = async (req, res) => {
 
     try {
         await user.save();
-        return res.status(200).send('Success!');
+        return res.status(200).json({ 'Success': 'The user was created with success.' });
     } catch (err) {
         console.log(err);
         return res.json(err)
@@ -128,7 +128,7 @@ userController.createTechnician = async (req, res) => {
     /*Validamos a estrutura do registo*/
     const { error } = registerValidation(req.body);
     if (error) {
-        return res.status(400).send(error.details[0].message);
+        return res.status(400).json({ 'Error': error.details[0].message });
     }
 
     var valid = true;
@@ -138,26 +138,26 @@ userController.createTechnician = async (req, res) => {
     const usernameExist = await User.findOne({ username: req.body.username });
     if (usernameExist) {
         valid = false;
-        errors.push('Username is already in use!');
+        errors.push('That username is already in use.');
     }
 
     /*Verificamos se o email encontra-se disponível*/
     const emailExist = await User.findOne({ email: req.body.email });
     if (emailExist) {
         valid = false;
-        errors.push('Email is already in use!');
+        errors.push('That email is already in use.');
     }
 
     /*Verificamos se o número civil encontra-se disponível*/
     const civilExist = await User.findOne({ civilNumber: req.body.civilNumber });
     if (civilExist) {
         valid = false;
-        errors.push('Civil Number is already in use!');
+        errors.push('That civil number is already in use.');
     }
 
     /*Se não passar todas as verificações, é então inválido*/
     if (!valid) {
-        return res.status(400).send(errors);
+        return res.status(400).json({ 'Error': errors });
     }
 
     /*Encriptamos a password*/
@@ -180,7 +180,7 @@ userController.createTechnician = async (req, res) => {
 
     try {
         await technician.save();
-        return res.status(200).send('Success!');
+        return res.status(200).json({ 'Success': 'The technician was created with success.' });
     } catch (err) {
         console.log(err);
         return res.json(err)
@@ -195,30 +195,30 @@ userController.updateUser = async (req, res) => {
     /*Validamos a estrutura do update*/
     const { error } = updateValidation(req.body);
     if (error) {
-        return res.status(400).send(error.details[0].message);
+        return res.status(400).json({ 'Error': error.details[0].message });
     }
 
     const targetUser = await User.findById(req.params.userId);
 
-    if (targetUser.role == "ADMIN" && targetUser._id != req.auth.id) {
-        return res.status(400).send("You can only change your ADMIN account");
+    if (targetUser.role == 'ADMIN' && targetUser._id != req.auth.id) {
+        return res.status(400).json({ 'Error': 'You cant update other admins account.' });
     } else {
         /*Verificamos se o email encontra-se disponível*/
         if (req.body.email) {
             const emailExist = await User.findOne({ email: req.body.email });
 
             if (emailExist) {
-                return res.status(400).send('Email is already in use!');
+                return res.status(400).json({ 'Error': 'That email is already in use.' });
             }
         }
 
-        if (req.body.password && targetUser.role != "ADMIN") {
+        if (req.body.password && targetUser.role != 'ADMIN') {
             req.body.password = await bcrypt.hash(req.body.password, 10);
         }
 
         try {
             await User.updateOne({ _id: req.params.userId }, req.body);
-            return res.status(200).send('Success!');
+            return res.status(200).json({ 'Success': 'The user was updated with success.' });
         } catch (err) {
             console.log(err);
             return res.json(err);
@@ -232,7 +232,7 @@ userController.updateUser = async (req, res) => {
 userController.deleteUser = async (req, res) => {
     try {
         await User.remove({ _id: req.params.userId });
-        return res.status(200).send('Sucess!');
+        return res.status(200).json({ 'Success': 'The user was deleted with success.' });
     } catch (err) {
         console.log(err);
         return res.json(err);
@@ -298,7 +298,7 @@ userController.getByIdUser = async (req, res) => {
                 return res.status(200).json(user);
             } else {
                 /*Um technician não tem direito de ter informações relativas a outro technician*/
-                return res.status(403).send('You dont have permissions to see other technicians information!');
+                return res.status(403).json({ 'Error': 'You dont have permissions to see other technicians information.' });
             }
 
         }
@@ -313,7 +313,7 @@ userController.getByIdUser = async (req, res) => {
  * Método responsável por realizar o logout
  */
 userController.logout = async (req, res) => {
-    return res.status(200).clearCookie('authToken').send('Sucess!');
+    return res.status(200).clearCookie('authToken').json({ 'Success': 'The user was successfully logged out.' });
 }
 
 module.exports = userController;

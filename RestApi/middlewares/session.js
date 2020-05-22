@@ -19,4 +19,4 @@ const sessionMiddleware = (req, res, next) => {
 	next();
 }
 
-module.exports = sessionMiddleware
+module.exports = sessionMiddleware;
