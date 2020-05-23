@@ -9,24 +9,12 @@ const bodyParser = require('body-parser');
 const session = require('./middlewares/session');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json')
-const multer = require('multer');
-
-//Multer storage options
-const storage = multer.diskStorage({
-    destination: function(req, file, cb) {
-        cb(null, './tmp/uploads');
-    },
-    filename: function(req, file, cb) {
-        cb(null, file.originalname + '-' + Date.now() + path.extname(file.originalname));
-    }
-});
 
 //Middlewares
 app.use(cors());
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(session);
-app.use(multer({ storage: storage }).single('file'));
 
 //Import Routes
 const apiRouter = require('./routes');

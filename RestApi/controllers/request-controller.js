@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const Request = require("../models/request");
 const User = require('../models/user');
 const { createRequestValidation, updateTestDateValidation, updateTestInfoValidation } = require('../validations/requestValidations');
+const multer = require('multer');
 const fs = require('fs');
 const requestController = {};
 
@@ -16,7 +17,7 @@ requestController.createRequest = async (req, res) => {
     }
 
     /*Verificamos se já não existe um pedido feito por este user que ainda não foi totalmente concluído*/
-    const checkRequests = await Request.find({ requesterUsername: req.auth.username, isInfected: null });
+    const checkRequests = await Request.findOne({ requesterUsername: req.auth.username, isInfected: null });
     if (checkRequests) {
         return res.status(400).json({ 'Error': 'You already have an open request, wich is being handled. You cant make another request.' });
     }
@@ -131,7 +132,7 @@ requestController.updateRequestTestInfo = async (req, res) => {
         const request = await Request.findOne({ _id: req.params.requestId });
 
         /*Verificamos se o pedido já não foi tratado (verificando se tem um resultado)*/
-        if (request.isInfected !== null) {
+        if (request.isInfected != null) {
             return res.status(400).json({ 'Error': 'This request has already been handled!' });
         } else {
 
@@ -141,18 +142,24 @@ requestController.updateRequestTestInfo = async (req, res) => {
                 /*Verificamos se o primeiro teste tem um resultado*/
                 if (request.firstTest.result == null) {
 
+                    console.log('antes')
                     /*Guardamos o ficheiro PDF*/
                     await upload(req, res);
+                    console.log('depois')
 
                     /*Se o estado atual do user for 'Safe' e o teste der negativo, podemos então definir o resultado final do pedido*/
-                    if (request.userState == 'Safe' && !req.body.result) {
-                        await Request.updateOne({ _id: req.params.requestId }, { $set: { 'firstTest.pdfFilePath': req.body.pdfFilePath, 'firstTest.result': req.body.result, resultDate: Date(Date.now()), isInfected: false } });
+                    if (request.userState == 'Safe' && req.body.result == 'false') {
+                        await Request.updateOne({ _id: req.params.requestId }, { $set: { 'firstTest.pdfFilePath': req.body.pdfFilePath, 'firstTest.result': false, resultDate: Date(Date.now()), isInfected: false } });
                     } else {
 
+                        console.log(req.body.pdfFilePath)
                         /*Se o resultado for positivo*/
-                        if (req.body.result) {
-                            await Request.updateOne({ _id: req.params.requestId }, { $set: { 'firstTest.pdfFilePath': req.body.pdfFilePath, 'firstTest.result': req.body.result, resultDate: Date(Date.now()), isInfected: true } });
+                        if (req.body.result == 'true') {
+                            await Request.updateOne({ _id: req.params.requestId }, { $set: { 'firstTest.pdfFilePath': req.body.pdfFilePath, 'firstTest.result': true, resultDate: Date(Date.now()), isInfected: true } });
                             await User.updateOne({ username: request.requesterUsername }, { $set: { state: 'Infected' } });
+                        } else {
+                            /*Se o resultado der negativo e o estado atual do user for suspeito ou infetado*/
+                            //await Request.updateOne({ _id: req.params.requestId }, { $set: { 'firstTest.pdfFilePath': req.body.pdfFilePath, 'firstTest.result': false, resultDate: Date(Date.now()), isInfected: false } });
                         }
 
                     }
@@ -169,12 +176,12 @@ requestController.updateRequestTestInfo = async (req, res) => {
                             /*Guardamos o ficheiro PDF*/
                             await upload(req, res);
 
-                            await Request.updateOne({ _id: req.params.requestId }, { $set: { 'secondTest.pdfFilePath': req.body.pdfFilePath, 'secondTest.result': req.body.result, resultDate: Date(Date.now()), isInfected: req.body.result } });
-
                             /*Dependendo do resultado, atualizamos o estado do user*/
-                            if (req.body.result) {
+                            if (req.body.result == 'true') {
+                                await Request.updateOne({ _id: req.params.requestId }, { $set: { 'secondTest.pdfFilePath': req.body.pdfFilePath, 'secondTest.result': true, resultDate: Date(Date.now()), isInfected: req.body.result } });
                                 await User.updateOne({ username: request.requesterUsername }, { $set: { state: 'Infected' } });
                             } else {
+                                await Request.updateOne({ _id: req.params.requestId }, { $set: { 'secondTest.pdfFilePath': req.body.pdfFilePath, 'secondTest.result': false, resultDate: Date(Date.now()), isInfected: req.body.result } });
                                 await User.updateOne({ username: request.requesterUsername }, { $set: { state: 'Safe' } });
                             }
 
@@ -205,7 +212,7 @@ requestController.updateRequestTestInfo = async (req, res) => {
  */
 requestController.deleteRequest = async (req, res) => {
     try {
-        await Request.remove({ _id: req.params.requestId });
+        await Request.deleteOne({ _id: req.params.requestId });
         return res.status(200).json({ 'Success': 'The request was deleted with success!' });
     } catch (err) {
         console.log(err);
@@ -293,8 +300,8 @@ requestController.getTestsBetweenDates = async (req, res) => {
     }
 }
 
-upload = async (req, res, next) => {
-    const file = __dirname + "/" + req.file.name;
+upload = async (req, res) => {
+    const path = "./tmp/uploads/" + req.file.filename;
 
     fs.readFile(req.file.path, function (err, data) {
         if (err) {
@@ -302,7 +309,7 @@ upload = async (req, res, next) => {
             return res.json({ 'Error': err });
         } else {
 
-            fs.writeFile(file, data, function (err) {
+            fs.writeFile(path, data, function (err) {
                 if (err) {
                     console.log(err);
                     return res.json({ 'Error': err })
@@ -310,13 +317,12 @@ upload = async (req, res, next) => {
                 } else {
                     response = {
                         message: 'File uploaded successfully!',
-                        filename: req.file.name,
-                        path: req.file.path
+                        filename: req.file.filename,
+                        path: path
                     };
 
-                    req.body.pdfFilePath = req.file.path;
+                    req.body.pdfFilePath = path;
                     console.log(response);
-                    next();
                 }
 
             });

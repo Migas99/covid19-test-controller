@@ -10,6 +10,10 @@ const userController = {};
  */
 userController.login = async (req, res) => {
 
+    if (req.auth) {
+        return res.status(400).json({ 'Error': 'You are already authenticated.' });
+    }
+
     /*Validamos a estrutura*/
     const { error } = loginValidation(req.body);
     if (error) {
@@ -19,18 +23,18 @@ userController.login = async (req, res) => {
     /*Verificamos se a conta com esse username existe*/
     const user = await User.findOne({ username: req.body.username });
     if (!user) {
-        return res.status(400).json({ 'Error': 'Invalid username!' });
+        return res.status(400).json({ 'Error': 'Invalid username.' });
     }
 
     /*Comparamos passwords e validamos*/
     if (user.role != 'ADMIN') {
         const validPassword = await bcrypt.compare(req.body.password, user.password);
         if (!validPassword) {
-            return res.status(400).json({ 'Error': 'Invalid password!' });
+            return res.status(400).json({ 'Error': 'Invalid password.' });
         }
     } else {
         if (req.body.password != user.password) {
-            return res.status(400).json({ 'Error': 'Invalid password!' });
+            return res.status(400).json({ 'Error': 'Invalid password.' });
         }
     }
 
