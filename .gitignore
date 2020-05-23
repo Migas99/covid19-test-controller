@@ -1,2 +1,4 @@
 RestApi/node_modules/
+RestApi/files/database/
+RestApi/files/uploads/
 FrontEnd/node_modules/

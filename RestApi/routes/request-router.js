@@ -13,6 +13,9 @@ router.get('/:requestId', authorizeBasedOnRoles(['USER', 'TECHNICIAN', 'ADMIN'])
 /*Obter todos os pedidos feitos por um user*/
 router.get('/user/:userId', authorizeBasedOnRolesAndUserId(['TECHNICIAN', 'ADMIN']), requestController.getUserRequests);
 
+/*Downlaod de um ficheiro associado a um teste*/
+router.post('/download', authorizeBasedOnRoles(['USER', 'TECHNICIAN', 'ADMIN']), requestController.downloadFile);
+
 /*Criar um novo pedido*/
 router.post('/', authorizeBasedOnRoles(['USER', 'TECHNICIAN', 'ADMIN']), requestController.createRequest);
 

@@ -18,7 +18,7 @@ const updateTestDateValidation = data => {
 
 const updateTestInfoValidation = data => {
     const schema = Joi.object({
-        result: Joi.boolean().required()
+        result: Joi.any().required()
     });
     return schema.validate(data);
 };
