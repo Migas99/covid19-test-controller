@@ -350,13 +350,13 @@ requestController.downloadFile = async (req, res) => {
 
     if (req.auth.role == 'USER') {
         try {
-            const firstTest = Request.findOne({ 'firstTest.pdfFilePath': req.params.filePath });
+            const firstTest = await Request.findOne({ firstTest: { pdfFilePath: req.body.filePath } });
             if (firstTest) {
                 if (firstTest.requesterUsername != req.auth.username) {
                     return res.status(403).json({ 'Error': 'You are not allowed to download test results of other users.' });
                 }
             } else {
-                const secondTest = Request.findOne({ 'secondTest.pdfFilePath': req.params.filePath });
+                const secondTest = await Request.findOne({ secondTest: { pdfFilePath: req.body.filePath } });
                 if (secondTest) {
                     if (secondTest.requesterUsername != req.auth.username) {
                         return res.status(403).json({ 'Error': 'You are not allowed to download test results of other users.' });
@@ -365,6 +365,9 @@ requestController.downloadFile = async (req, res) => {
                     return res.status(404).json({ 'Error': 'The requested file was not found.' });
                 }
             }
+
+
+
         } catch (err) {
             console.log(err);
             return res.json({ 'Error': err });
