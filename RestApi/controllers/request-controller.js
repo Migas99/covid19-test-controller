@@ -158,7 +158,7 @@ requestController.updateRequestTestInfo = async (req, res, next) => {
 
                             /*Caso contrário, teremos apenas o resultado de um dos dois testes que este têm de realizar*/
                             if (request.userState == 'Suspect' || request.userState == 'Infected') {
-                                //await Request.updateOne({ _id: req.params.requestId }, { $set: { 'firstTest.pdfFilePath': req.body.pdfFilePath, 'firstTest.result': false, resultDate: Date(Date.now()), isInfected: false } });
+                                await Request.updateOne({ _id: req.params.requestId }, { $set: { 'firstTest.pdfFilePath': req.body.pdfFilePath, 'firstTest.result': false, resultDate: Date(Date.now()), isInfected: false } });
                             } else {
                                 /*Nunca podemos chegar neste ponto*/
                                 return res.status(400).json({ 'Error': 'This request hasnt been handled correctly!' });
@@ -226,6 +226,13 @@ requestController.updateRequestTestInfo = async (req, res, next) => {
     }
 }
 
+/**
+ * Função auxiliar para guardar os ficheiros
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
 const upload = async (req, res, next) => {
     const file = "./files/database/" + req.file.filename;
 
@@ -304,10 +311,23 @@ requestController.getByIdRequest = async (req, res) => {
 /**
  * Método responsável por obter todos os pedidos realizados por um dado userId
  */
-requestController.getUserRequests = async (req, res) => {
+requestController.getRequestsByUserId = async (req, res) => {
     try {
         const user = await User.findOne({ _id: req.params.userId });
         const requests = await Request.find({ requesterUsername: user.username });
+        return res.status(200).json(requests);
+    } catch (err) {
+        console.log(err);
+        return res.json(err);
+    }
+}
+
+/**
+ * Método responsável por obter todos os pedidos realizados pelo requesitante
+ */
+requestController.getRequestMadeByUser = async (req, res) => {
+    try {
+        const requests = await Request.find({ requesterUsername: req.auth.username });
         return res.status(200).json(requests);
     } catch (err) {
         console.log(err);
@@ -337,7 +357,7 @@ requestController.getTestsBetweenDates = async (req, res) => {
 
             return res.status(200).json({ 'Success': testCount });
         } else {
-            return res.status(400).json({ 'Error': 'The endDate must after the beginDate.' });
+            return res.status(400).json({ 'Error': 'The endDate must be after the beginDate.' });
         }
 
     } catch (err) {
@@ -346,10 +366,12 @@ requestController.getTestsBetweenDates = async (req, res) => {
     }
 }
 
+/**
+ * Método responsável por realizar o download de um ficheiro pdf específico
+ */
 requestController.downloadFile = async (req, res) => {
-
-    if (req.auth.role == 'USER') {
-        try {
+    try {
+        if (req.auth.role == 'USER') {
             const firstTest = await Request.findOne({ firstTest: { pdfFilePath: req.body.filePath } });
             if (firstTest) {
                 if (firstTest.requesterUsername != req.auth.username) {
@@ -365,20 +387,17 @@ requestController.downloadFile = async (req, res) => {
                     return res.status(404).json({ 'Error': 'The requested file was not found.' });
                 }
             }
-
-
-
-        } catch (err) {
-            console.log(err);
-            return res.json({ 'Error': err });
         }
+
+
+        const filePath = req.body.filePath;
+        const fileName = "TestResult.pdf";
+
+        return res.download(filePath, fileName);
+    } catch (err) {
+        console.log(err);
+        return res.json({ 'Error': err });
     }
-
-
-    const filePath = req.body.filePath;
-    const fileName = "TestResult.pdf";
-
-    return res.download(filePath, fileName);
 }
 
 module.exports = requestController;

@@ -9,6 +9,9 @@ router.get('/', authorizeBasedOnRoles(['TECHNICIAN', 'ADMIN']), userController.g
 /*Obter a lista de users infetados*/
 router.get('/infected', authorizeBasedOnRoles(['TECHNICIAN', 'ADMIN']), userController.getAllInfectedUsers);
 
+/*Obter o número de infetados*/
+router.get('/infected/count', authorizeBasedOnRoles(['USER', 'TECHNICIAN', 'ADMIN']), userController.getNumberOfInfectedUsers);
+
 /*Obter todos os técnicos*/
 router.get('/technicians', authorizeBasedOnRoles(['ADMIN']), userController.getAllTechnicians);
 

@@ -11,16 +11,19 @@ router.get('/', authorizeBasedOnRoles(['TECHNICIAN', 'ADMIN']), requestControlle
 router.get('/:requestId', authorizeBasedOnRoles(['USER', 'TECHNICIAN', 'ADMIN']), requestController.getByIdRequest);
 
 /*Obter todos os pedidos feitos por um user*/
-router.get('/user/:userId', authorizeBasedOnRolesAndUserId(['TECHNICIAN', 'ADMIN']), requestController.getUserRequests);
+router.get('/user/:userId', authorizeBasedOnRolesAndUserId(['TECHNICIAN', 'ADMIN']), requestController.getRequestsByUserId);
 
-/*Downlaod de um ficheiro associado a um teste*/
-router.post('/download', authorizeBasedOnRoles(['USER', 'TECHNICIAN', 'ADMIN']), requestController.downloadFile);
+/*Obter todos os pedidos feitos pelo user requesitante*/
+router.get('/myrequests', authorizeBasedOnRoles(['USER']), requestController.getRequestMadeByUser);
 
 /*Criar um novo pedido*/
 router.post('/', authorizeBasedOnRoles(['USER', 'TECHNICIAN', 'ADMIN']), requestController.createRequest);
 
 /*Obter o número de testes realizados, dado um intervalo de datas*/
-router.post("/date", authorizeBasedOnRoles(['TECHNICIAN', 'ADMIN']), requestController.getTestsBetweenDates);
+router.post('/date/count', authorizeBasedOnRoles(['TECHNICIAN', 'ADMIN']), requestController.getTestsBetweenDates);
+
+/*Downlaod de um ficheiro associado a um teste*/
+router.post('/download', authorizeBasedOnRoles(['USER', 'TECHNICIAN', 'ADMIN']), requestController.downloadFile);
 
 /*Atualizar qualquer informação de um pedido*/
 router.put('/:requestId', authorizeBasedOnRoles(['ADMIN']), requestController.updateRequest);

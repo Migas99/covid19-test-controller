@@ -48,7 +48,7 @@ userController.login = async (req, res) => {
  */
 userController.getMyProfile = async (req, res) => {
     try {
-        const user = await User.findOne({ _id: req.auth.id }, { username: 1, fullName: 1, gender: 1, birthDate: 1, civilNumber: 1, phoneNumber: 1, email: 1, role: 1, isInfected: 1 });
+        const user = await User.findOne({ _id: req.auth.id }, { _id: 1, username: 1, fullName: 1, gender: 1, birthDate: 1, civilNumber: 1, phoneNumber: 1, email: 1, role: 1, isInfected: 1 });
         return res.status(200).json(user);
     } catch (err) {
         console.log(err);
@@ -235,7 +235,7 @@ userController.updateUser = async (req, res) => {
  */
 userController.deleteUser = async (req, res) => {
     try {
-        await User.remove({ _id: req.params.userId });
+        await User.deleteOne({ _id: req.params.userId });
         return res.status(200).json({ 'Success': 'The user was deleted with success.' });
     } catch (err) {
         console.log(err);
@@ -248,7 +248,7 @@ userController.deleteUser = async (req, res) => {
  */
 userController.getAllUsers = async (req, res) => {
     try {
-        const users = await User.find({ role: 'USER' }, { username: 1, fullName: 1, gender: 1, birthDate: 1, civilNumber: 1, phoneNumber: 1, email: 1, isInfected: 1 });
+        const users = await User.find({ role: 'USER' }, { _id: 1, username: 1, fullName: 1, gender: 1, birthDate: 1, civilNumber: 1, phoneNumber: 1, email: 1, isInfected: 1 });
         return res.status(200).json(users);
     } catch (err) {
         console.log(err);
@@ -261,8 +261,18 @@ userController.getAllUsers = async (req, res) => {
  */
 userController.getAllInfectedUsers = async (req, res) => {
     try {
-        const users = await User.find({ role: 'USER', state: "Infected" }, { username: 1, fullName: 1, gender: 1, birthDate: 1, civilNumber: 1, phoneNumber: 1, email: 1 });
+        const users = await User.find({ role: 'USER', state: "Infected" }, { _id: 1, username: 1, fullName: 1, gender: 1, birthDate: 1, civilNumber: 1, phoneNumber: 1, email: 1 });
         return res.status(200).json(users);
+    } catch (err) {
+        console.log(err);
+        return res.json(err);
+    }
+}
+
+userController.getNumberOfInfectedUsers = async (req, res) => {
+    try {
+        const infectedCount = await User.countDocuments({ role: 'USER', state: "Infected" });
+        return res.status(200).json({ 'Success': infectedCount });
     } catch (err) {
         console.log(err);
         return res.json(err);
@@ -274,7 +284,7 @@ userController.getAllInfectedUsers = async (req, res) => {
  */
 userController.getAllTechnicians = async (req, res) => {
     try {
-        const technicians = await User.find({ role: 'TECHNICIAN' }, { username: 1, fullName: 1, gender: 1, birthDate: 1, civilNumber: 1, phoneNumber: 1, email: 1 });
+        const technicians = await User.find({ role: 'TECHNICIAN' }, { _id: 1, username: 1, fullName: 1, gender: 1, birthDate: 1, civilNumber: 1, phoneNumber: 1, email: 1 });
         return res.status(200).json(technicians);
     } catch (err) {
         console.log(err);
@@ -290,7 +300,7 @@ userController.getByIdUser = async (req, res) => {
 
         /*Se for o ADMIN, devolvemos sempre a informação do user*/
         if (req.auth.role == 'ADMIN') {
-            const user = await User.findById(req.params.userId, { username: 1, fullName: 1, gender: 1, birthDate: 1, civilNumber: 1, phoneNumber: 1, email: 1 });
+            const user = await User.findById(req.params.userId, { _id: 1, username: 1, fullName: 1, gender: 1, birthDate: 1, civilNumber: 1, phoneNumber: 1, email: 1 });
             return res.status(200).json(user);
         } else {
             /*Se não é um ADMIN, é um Technician*/
