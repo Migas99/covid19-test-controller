@@ -40,22 +40,27 @@
                         "in": "body",
                         "description": "Username and password of the user that wants to login",
                         "schema": {
-                            "$ref": "#/definitions/UserLoginRequest"
+                            "properties": {
+                                "username": {
+                                    "type": "string"
+                                },
+                                "password": {
+                                    "type": "string"
+                                }
+                            }
                         }
                     }
                 ],
-                "produces": [
-                    "application/json"
-                ],
                 "responses": {
                     "200": {
-                        "description": "Returns the authentication Token.",
+                        "description": "Success",
                         "schema": {
-                            "$ref": "#/definitions/UserLoginResponse"
+                            "properties": {
+                                "Success": {
+                                    "type": "string"
+                                }
+                            }
                         }
-                    },
-                    "400": {
-                        "description": "Bad Request! Invalid information."
                     }
                 }
             }
@@ -67,9 +72,19 @@
                 ],
                 "description": "Logout the user in the system.",
                 "summary": "Clears the authentication token.",
+                "security": [
+                    "JWT"
+                ],
                 "responses": {
                     "200": {
-                        "description": "Sucess!"
+                        "description": "Success",
+                        "schema": {
+                            "properties": {
+                                "Success": {
+                                    "type": "string"
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -87,19 +102,48 @@
                         "in": "body",
                         "description": "User that we want to create",
                         "schema": {
-                            "$ref": "#/definitions/UserRegister"
+                            "properties": {
+                                "username": {
+                                    "type": "string"
+                                },
+                                "password": {
+                                    "type": "string"
+                                },
+                                "fullName": {
+                                    "type": "string"
+                                },
+                                "gender": {
+                                    "type": "string"
+                                },
+                                "birthDate": {
+                                    "type": "string"
+                                },
+                                "civilNumber": {
+                                    "type": "string"
+                                },
+                                "phoneNumber": {
+                                    "type": "number"
+                                },
+                                "email": {
+                                    "type": "string"
+                                },
+                                "address": {
+                                    "type": "string"
+                                }
+                            }
                         }
                     }
                 ],
-                "produces": [
-                    "application/json"
-                ],
                 "responses": {
                     "200": {
-                        "description": "Sucess!"
-                    },
-                    "400": {
-                        "description": "Bad request! Wrong parameters or invalid information."
+                        "description": "Success",
+                        "schema": {
+                            "properties": {
+                                "Success": {
+                                    "type": "string"
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -117,24 +161,53 @@
                         "in": "body",
                         "description": "Technician that we want to create",
                         "schema": {
-                            "$ref": "#/definitions/UserRegister"
+                            "properties": {
+                                "username": {
+                                    "type": "string"
+                                },
+                                "password": {
+                                    "type": "string"
+                                },
+                                "fullName": {
+                                    "type": "string"
+                                },
+                                "gender": {
+                                    "type": "string"
+                                },
+                                "birthDate": {
+                                    "type": "string"
+                                },
+                                "civilNumber": {
+                                    "type": "string"
+                                },
+                                "phoneNumber": {
+                                    "type": "number"
+                                },
+                                "email": {
+                                    "type": "string"
+                                },
+                                "address": {
+                                    "type": "string"
+                                }
+                            }
                         }
                     }
                 ],
-                "produces": [
-                    "application/json"
+                "security": [
+                    "JWT"
                 ],
                 "responses": {
                     "200": {
-                        "description": "Sucess!"
-                    },
-                    "400": {
-                        "description": "Bad request! Wrong parameters or invalid information.."
+                        "description": "Success",
+                        "schema": {
+                            "properties": {
+                                "Success": {
+                                    "type": "string"
+                                }
+                            }
+                        }
                     }
-                },
-                "security": [
-                    "JWT"
-                ]
+                }
             }
         },
         "/users": {
@@ -143,17 +216,51 @@
                     "Users"
                 ],
                 "summary": "Gets the list of users in the database.",
-                "responses": {
-                    "200": {
-                        "description": "Returns a list of users.",
-                        "schema": {
-                            "$ref": "#definitions/UserResponse"
-                        }
-                    }
-                },
                 "security": [
                     "JWT"
-                ]
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "properties": {
+                                "_id": {
+                                    "type": "string"
+                                },
+                                "username": {
+                                    "type": "string"
+                                },
+                                "fullName": {
+                                    "type": "string"
+                                },
+                                "gender": {
+                                    "type": "string"
+                                },
+                                "birthDate": {
+                                    "type": "string"
+                                },
+                                "civilNumber": {
+                                    "type": "string"
+                                },
+                                "phoneNumber": {
+                                    "type": "number"
+                                },
+                                "email": {
+                                    "type": "string"
+                                },
+                                "address": {
+                                    "type": "string"
+                                },
+                                "role": {
+                                    "type": "string"
+                                },
+                                "isInfected": {
+                                    "type": "boolean"
+                                }
+                            }
+                        }
+                    }
+                }
             }
         },
         "/users/profile": {
@@ -162,17 +269,51 @@
                     "Users"
                 ],
                 "summary": "Gets the information of the authenticated user.",
-                "responses": {
-                    "200": {
-                        "description": "Returns the information of the authenticated user.",
-                        "schema": {
-                            "$ref": "#definitions/UserProfileResponse"
-                        }
-                    }
-                },
                 "security": [
                     "JWT"
-                ]
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "properties": {
+                                "_id": {
+                                    "type": "string"
+                                },
+                                "username": {
+                                    "type": "string"
+                                },
+                                "fullName": {
+                                    "type": "string"
+                                },
+                                "gender": {
+                                    "type": "string"
+                                },
+                                "birthDate": {
+                                    "type": "string"
+                                },
+                                "civilNumber": {
+                                    "type": "string"
+                                },
+                                "phoneNumber": {
+                                    "type": "number"
+                                },
+                                "email": {
+                                    "type": "string"
+                                },
+                                "address": {
+                                    "type": "string"
+                                },
+                                "role": {
+                                    "type": "string"
+                                },
+                                "isInfected": {
+                                    "type": "boolean"
+                                }
+                            }
+                        }
+                    }
+                }
             }
         },
         "/users/infected": {
@@ -181,17 +322,74 @@
                     "Users"
                 ],
                 "summary": "Gets the list of infected users in the database.",
-                "responses": {
-                    "200": {
-                        "description": "Returns a list of users.",
-                        "schema": {
-                            "$ref": "#definitions/UserResponse"
-                        }
-                    }
-                },
                 "security": [
                     "JWT"
-                ]
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "properties": {
+                                "_id": {
+                                    "type": "string"
+                                },
+                                "username": {
+                                    "type": "string"
+                                },
+                                "fullName": {
+                                    "type": "string"
+                                },
+                                "gender": {
+                                    "type": "string"
+                                },
+                                "birthDate": {
+                                    "type": "string"
+                                },
+                                "civilNumber": {
+                                    "type": "string"
+                                },
+                                "phoneNumber": {
+                                    "type": "number"
+                                },
+                                "email": {
+                                    "type": "string"
+                                },
+                                "address": {
+                                    "type": "string"
+                                },
+                                "role": {
+                                    "type": "string"
+                                },
+                                "isInfected": {
+                                    "type": "boolean"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users/infected/count": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Gets the number of infected users in the database.",
+                "security": [
+                    "JWT"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "properties": {
+                                "Success": {
+                                    "type": "number"
+                                }
+                            }
+                        }
+                    }
+                }
             }
         },
         "/users/technicians": {
@@ -200,17 +398,48 @@
                     "Users"
                 ],
                 "summary": "Gets the list of technicians in the database.",
-                "responses": {
-                    "200": {
-                        "description": "Returns a list of technicians.",
-                        "schema": {
-                            "$ref": "#definitions/UserResponse"
-                        }
-                    }
-                },
                 "security": [
                     "JWT"
-                ]
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "properties": {
+                                "_id": {
+                                    "type": "string"
+                                },
+                                "username": {
+                                    "type": "string"
+                                },
+                                "fullName": {
+                                    "type": "string"
+                                },
+                                "gender": {
+                                    "type": "string"
+                                },
+                                "birthDate": {
+                                    "type": "string"
+                                },
+                                "civilNumber": {
+                                    "type": "string"
+                                },
+                                "phoneNumber": {
+                                    "type": "number"
+                                },
+                                "email": {
+                                    "type": "string"
+                                },
+                                "address": {
+                                    "type": "string"
+                                },
+                                "role": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
             }
         },
         "/users/{userId}": {
@@ -228,20 +457,51 @@
                     "Users"
                 ],
                 "summary": "Get the user with given ID.",
-                "responses": {
-                    "200": {
-                        "description": "Returns the user.",
-                        "schema": {
-                            "$ref": "#/definitions/UserResponse"
-                        }
-                    },
-                    "404": {
-                        "description": "The user was not found!"
-                    }
-                },
                 "security": [
                     "JWT"
-                ]
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "properties": {
+                                "_id": {
+                                    "type": "string"
+                                },
+                                "username": {
+                                    "type": "string"
+                                },
+                                "fullName": {
+                                    "type": "string"
+                                },
+                                "gender": {
+                                    "type": "string"
+                                },
+                                "birthDate": {
+                                    "type": "string"
+                                },
+                                "civilNumber": {
+                                    "type": "string"
+                                },
+                                "phoneNumber": {
+                                    "type": "number"
+                                },
+                                "email": {
+                                    "type": "string"
+                                },
+                                "address": {
+                                    "type": "string"
+                                },
+                                "role": {
+                                    "type": "string"
+                                },
+                                "isInfected": {
+                                    "type": "boolean"
+                                }
+                            }
+                        }
+                    }
+                }
             },
             "put": {
                 "summary": "Update user with given ID.",
@@ -254,44 +514,59 @@
                         "in": "body",
                         "description": "New values",
                         "schema": {
-                            "$ref": "#/definitions/UserUpdateRequest"
+                            "properties": {
+                                "password": {
+                                    "type": "string"
+                                },
+                                "phoneNumber": {
+                                    "type": "number"
+                                },
+                                "email": {
+                                    "type": "string"
+                                },
+                                "address": {
+                                    "type": "string"
+                                }
+                            }
                         }
                     }
                 ],
-                "responses": {
-                    "200": {
-                        "description": "Sucess!"
-                    },
-                    "400": {
-                        "description": "Bad request! Wrong parameters."
-                    },
-                    "404": {
-                        "description": "The user was not found!"
-                    }
-                },
                 "security": [
                     "JWT"
-                ]
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "properties": {
+                                "Success": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
             },
             "delete": {
                 "summary": "Delete the user with given ID.",
                 "tags": [
                     "Users"
                 ],
-                "responses": {
-                    "200": {
-                        "description": "Sucess!"
-                    },
-                    "400": {
-                        "description": "Bad request! Wrong parameters."
-                    },
-                    "404": {
-                        "description": "The user was not found!"
-                    }
-                },
                 "security": [
                     "JWT"
-                ]
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "properties": {
+                                "Success": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
             }
         },
         "/requests": {
@@ -300,17 +575,74 @@
                     "Requests"
                 ],
                 "summary": "Get all the requests in the system.",
-                "responses": {
-                    "200": {
-                        "description": "Returns a list of requests.",
-                        "schema": {
-                            "$ref": "#/definitions/RequestResponse"
-                        }
-                    }
-                },
                 "security": [
                     "JWT"
-                ]
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "properties": {
+                                "_id": {
+                                    "type": "string"
+                                },
+                                "requesterUsername": {
+                                    "type": "string"
+                                },
+                                "description": {
+                                    "type": "string"
+                                },
+                                "priority": {
+                                    "type": "string"
+                                },
+                                "userState": {
+                                    "type": "string"
+                                },
+                                "submitDate": {
+                                    "type": "Date"
+                                },
+                                "firstTest": {
+                                    "properties": {
+                                        "testDate": {
+                                            "type": "Date"
+                                        },
+                                        "responsibleTechnicianId": {
+                                            "type": "string"
+                                        },
+                                        "pdfFilePath": {
+                                            "type": "string"
+                                        },
+                                        "result": {
+                                            "type": "boolean"
+                                        }
+                                    }
+                                },
+                                "secondTest": {
+                                    "properties": {
+                                        "testDate": {
+                                            "type": "Date"
+                                        },
+                                        "responsibleTechnicianId": {
+                                            "type": "string"
+                                        },
+                                        "pdfFilePath": {
+                                            "type": "string"
+                                        },
+                                        "result": {
+                                            "type": "boolean"
+                                        }
+                                    }
+                                },
+                                "resultDate": {
+                                    "type": "Date"
+                                },
+                                "isInfected": {
+                                    "type": "boolean"
+                                }
+                            }
+                        }
+                    }
+                }
             },
             "post": {
                 "tags": [
@@ -324,27 +656,108 @@
                         "in": "body",
                         "description": "Request we want to create",
                         "schema": {
-                            "$ref": "#/definitions/RequestRequest"
+                            "properties": {
+                                "description": {
+                                    "type": "string"
+                                },
+                                "priority": {
+                                    "type": "string"
+                                }
+                            }
                         }
                     }
                 ],
-                "produces": [
-                    "application/json"
+                "security": [
+                    "JWT"
                 ],
                 "responses": {
                     "200": {
-                        "description": "Sucess!",
+                        "description": "Success",
                         "schema": {
-                            "$ref": "#/definitions/RequestResponse"
+                            "properties": {
+                                "Success": {
+                                    "type": "string"
+                                }
+                            }
                         }
-                    },
-                    "400": {
-                        "description": "Bad request! Wrong parameters or invalid information."
                     }
-                },
+                }
+            }
+        },
+        "/requests/myrequests": {
+            "get": {
+                "tags": [
+                    "Requests"
+                ],
+                "summary": "Get all the requests made by the requester.",
                 "security": [
                     "JWT"
-                ]
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "properties": {
+                                "_id": {
+                                    "type": "string"
+                                },
+                                "requesterUsername": {
+                                    "type": "string"
+                                },
+                                "description": {
+                                    "type": "string"
+                                },
+                                "priority": {
+                                    "type": "string"
+                                },
+                                "userState": {
+                                    "type": "string"
+                                },
+                                "submitDate": {
+                                    "type": "Date"
+                                },
+                                "firstTest": {
+                                    "properties": {
+                                        "testDate": {
+                                            "type": "Date"
+                                        },
+                                        "responsibleTechnicianId": {
+                                            "type": "string"
+                                        },
+                                        "pdfFilePath": {
+                                            "type": "string"
+                                        },
+                                        "result": {
+                                            "type": "boolean"
+                                        }
+                                    }
+                                },
+                                "secondTest": {
+                                    "properties": {
+                                        "testDate": {
+                                            "type": "Date"
+                                        },
+                                        "responsibleTechnicianId": {
+                                            "type": "string"
+                                        },
+                                        "pdfFilePath": {
+                                            "type": "string"
+                                        },
+                                        "result": {
+                                            "type": "boolean"
+                                        }
+                                    }
+                                },
+                                "resultDate": {
+                                    "type": "Date"
+                                },
+                                "isInfected": {
+                                    "type": "boolean"
+                                }
+                            }
+                        }
+                    }
+                }
             }
         },
         "/requests/{requestId}": {
@@ -362,20 +775,74 @@
                     "Requests"
                 ],
                 "summary": "Get the request with the given ID.",
-                "responses": {
-                    "200": {
-                        "description": "The request is found!",
-                        "schema": {
-                            "$ref": "#/definitions/RequestResponse"
-                        }
-                    },
-                    "404": {
-                        "description": "The request was not found."
-                    }
-                },
                 "security": [
                     "JWT"
-                ]
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "properties": {
+                                "_id": {
+                                    "type": "string"
+                                },
+                                "requesterUsername": {
+                                    "type": "string"
+                                },
+                                "description": {
+                                    "type": "string"
+                                },
+                                "priority": {
+                                    "type": "string"
+                                },
+                                "userState": {
+                                    "type": "string"
+                                },
+                                "submitDate": {
+                                    "type": "Date"
+                                },
+                                "firstTest": {
+                                    "properties": {
+                                        "testDate": {
+                                            "type": "Date"
+                                        },
+                                        "responsibleTechnicianId": {
+                                            "type": "string"
+                                        },
+                                        "pdfFilePath": {
+                                            "type": "string"
+                                        },
+                                        "result": {
+                                            "type": "boolean"
+                                        }
+                                    }
+                                },
+                                "secondTest": {
+                                    "properties": {
+                                        "testDate": {
+                                            "type": "Date"
+                                        },
+                                        "responsibleTechnicianId": {
+                                            "type": "string"
+                                        },
+                                        "pdfFilePath": {
+                                            "type": "string"
+                                        },
+                                        "result": {
+                                            "type": "boolean"
+                                        }
+                                    }
+                                },
+                                "resultDate": {
+                                    "type": "Date"
+                                },
+                                "isInfected": {
+                                    "type": "boolean"
+                                }
+                            }
+                        }
+                    }
+                }
             },
             "put": {
                 "summary": "Update request with the given ID.",
@@ -392,37 +859,42 @@
                         }
                     }
                 ],
-                "responses": {
-                    "200": {
-                        "description": "Sucess!"
-                    },
-                    "400": {
-                        "description": "Bad request! Wrong parameters."
-                    },
-                    "404": {
-                        "description": "The request was not found!"
-                    }
-                },
                 "security": [
                     "JWT"
-                ]
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "properties": {
+                                "Success": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
             },
             "delete": {
                 "summary": "Delete the request with given ID.",
                 "tags": [
                     "Requests"
                 ],
-                "responses": {
-                    "200": {
-                        "description": "Sucess!"
-                    },
-                    "404": {
-                        "description": "The request was not found!"
-                    }
-                },
                 "security": [
                     "JWT"
-                ]
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "properties": {
+                                "Success": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
             }
         },
         "/requests/date/{requestId}": {
@@ -445,28 +917,36 @@
                         "required": true,
                         "description": "Value for test date",
                         "schema": {
-                            "$ref": "#/definitions/RequestUpdateDate"
+                            "properties": {
+                                "testDate": {
+                                    "type": "Date"
+                                }
+                            }
                         }
                     }
                 ],
-                "responses": {
-                    "200": {
-                        "description": "Sucess!"
-                    },
-                    "400": {
-                        "description": "Bad request! Wrong parameters."
-                    },
-                    "404": {
-                        "description": "The request was not found!"
-                    }
-                },
                 "security": [
                     "JWT"
-                ]
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "properties": {
+                                "Success": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
             }
         },
         "/requests/info/{requestId}": {
             "put": {
+                "consumes": [
+                    "multipart/form-data"
+                ],
                 "summary": "Update request with the given ID.",
                 "tags": [
                     "Requests"
@@ -484,33 +964,41 @@
                         "in": "body",
                         "description": "Test result",
                         "schema": {
-                            "$ref": "#/definitions/RequestUpdateTestResult"
+                            "properties": {
+                                "file": {
+                                    "type": "file"
+                                },
+                                "result": {
+                                    "type": "string"
+                                }
+                            }
                         }
                     }
                 ],
-                "responses": {
-                    "200": {
-                        "description": "Sucess!"
-                    },
-                    "400": {
-                        "description": "Bad request! Wrong parameters."
-                    },
-                    "404": {
-                        "description": "The request was not found!"
-                    }
-                },
                 "security": [
                     "JWT"
-                ]
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "properties": {
+                                "Success": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
             }
         },
-        "/requests/user/{requesterUsername}": {
+        "/requests/user/{userId}": {
             "parameters": [
                 {
-                    "name": "requesterUsername",
+                    "name": "userId",
                     "in": "path",
                     "required": true,
-                    "description": "Username of the target user requests",
+                    "description": "ID of the target user requests",
                     "type": "string"
                 }
             ],
@@ -518,24 +1006,78 @@
                 "tags": [
                     "Requests"
                 ],
-                "summary": "Get the requests with the given user Username",
-                "responses": {
-                    "200": {
-                        "description": "Sucess!",
-                        "schema": {
-                            "$ref": "#/definitions/RequestResponse"
-                        }
-                    },
-                    "404": {
-                        "description": "The user was not found!"
-                    }
-                },
+                "summary": "Get the requests with the given user ID",
                 "security": [
                     "JWT"
-                ]
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "properties": {
+                                "_id": {
+                                    "type": "string"
+                                },
+                                "requesterUsername": {
+                                    "type": "string"
+                                },
+                                "description": {
+                                    "type": "string"
+                                },
+                                "priority": {
+                                    "type": "string"
+                                },
+                                "userState": {
+                                    "type": "string"
+                                },
+                                "submitDate": {
+                                    "type": "Date"
+                                },
+                                "firstTest": {
+                                    "properties": {
+                                        "testDate": {
+                                            "type": "Date"
+                                        },
+                                        "responsibleTechnicianId": {
+                                            "type": "string"
+                                        },
+                                        "pdfFilePath": {
+                                            "type": "string"
+                                        },
+                                        "result": {
+                                            "type": "boolean"
+                                        }
+                                    }
+                                },
+                                "secondTest": {
+                                    "properties": {
+                                        "testDate": {
+                                            "type": "Date"
+                                        },
+                                        "responsibleTechnicianId": {
+                                            "type": "string"
+                                        },
+                                        "pdfFilePath": {
+                                            "type": "string"
+                                        },
+                                        "result": {
+                                            "type": "boolean"
+                                        }
+                                    }
+                                },
+                                "resultDate": {
+                                    "type": "Date"
+                                },
+                                "isInfected": {
+                                    "type": "boolean"
+                                }
+                            }
+                        }
+                    }
+                }
             }
         },
-        "/requests/date": {
+        "/requests/date/count": {
             "post": {
                 "tags": [
                     "Requests"
@@ -548,67 +1090,71 @@
                         "in": "body",
                         "description": "Contains the begin and end date",
                         "schema": {
-                            "$ref": "#/definitions/BetweenDatesRequest"
+                            "properties": {
+                                "beginDate": {
+                                    "type": "Date"
+                                },
+                                "endDate": {
+                                    "type": "Date"
+                                }
+                            }
                         }
                     }
                 ],
-                "produces": [
-                    "application/json"
+                "security": [
+                    "JWT"
                 ],
                 "responses": {
                     "200": {
-                        "description": "Returns the number of tests.",
+                        "description": "Success",
                         "schema": {
-                            "$ref": "#/definitions/BetweenDatesResponse"
+                            "properties": {
+                                "Success": {
+                                    "type": "number"
+                                }
+                            }
                         }
-                    },
-                    "400": {
-                        "description": "Bad request! Wrong parameters or invalid information."
                     }
-                },
+                }
+            }
+        },
+        "/requests/download": {
+            "post": {
+                "tags": [
+                    "Requests"
+                ],
+                "description": "Returns the requested file.",
+                "summary": "Returns the requested file.",
+                "parameters": [
+                    {
+                        "name": "filePath",
+                        "in": "body",
+                        "description": "The localization of the file.",
+                        "schema": {
+                            "properties": {
+                                "filePath": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
                 "security": [
                     "JWT"
-                ]
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "file"
+                        }
+                    }
+                }
             }
         }
     },
     "definitions": {
-        "UserLoginRequest": {
-            "required": [
-                "username",
-                "password"
-            ],
-            "properties": {
-                "username": {
-                    "type": "string"
-                },
-                "password": {
-                    "type": "string"
-                }
-            }
-        },
-        "UserLoginResponse": {
-            "required": [
-                "AuthToken"
-            ],
-            "properties": {
-                "AuthToken": {
-                    "type": "string"
-                }
-            }
-        },
-        "UserRegister": {
-            "required": [
-                "username",
-                "password",
-                "fullName",
-                "gender",
-                "birthDate",
-                "civilNumber",
-                "phoneNumber",
-                "email",
-                "address"
-            ],
+        "User": {
             "properties": {
                 "username": {
                     "type": "string"
@@ -639,183 +1185,79 @@
                 }
             }
         },
-        "UserUpdateRequest": {
+        "Request": {
             "properties": {
-                "password": {
+                "_id": {
                     "type": "string"
                 },
-                "phoneNumber": {
-                    "type": "number"
-                },
-                "email": {
-                    "type": "string"
-                },
-                "address": {
-                    "type": "string"
-                }
-            }
-        },
-        "UserResponse": {
-            "properties": {
-                "username": {
-                    "type": "string"
-                },
-                "fullName": {
-                    "type": "string"
-                },
-                "gender": {
-                    "type": "string"
-                },
-                "birthDate": {
-                    "type": "string"
-                },
-                "civilNumber": {
-                    "type": "string"
-                },
-                "phoneNumber": {
-                    "type": "number"
-                },
-                "email": {
-                    "type": "string"
-                },
-                "isInfected": {
-                    "type": "string"
-                }
-            }
-        },
-        "UserProfileResponse": {
-            "properties": {
-                "username": {
-                    "type": "string"
-                },
-                "fullName": {
-                    "type": "string"
-                },
-                "gender": {
-                    "type": "string"
-                },
-                "birthDate": {
-                    "type": "string"
-                },
-                "civilNumber": {
-                    "type": "string"
-                },
-                "phoneNumber": {
-                    "type": "number"
-                },
-                "email": {
-                    "type": "string"
-                },
-                "role": {
-                    "type": "string"
-                },
-                "isInfected": {
-                    "type": "string"
-                }
-            }
-        },
-        "Users": {
-            "type": "array",
-            "$ref": "#/definitions/UserResponse"
-        },
-        "RequestRequest": {
-            "required": [
-                "description",
-                "priority"
-            ],
-            "properties": {
-                "description": {
-                    "type": "string"
-                },
-                "priority": {
-                    "type": "string"
-                }
-            }
-        },
-        "RequestUpdateDate": {
-            "required": [
-                "testDate"
-            ],
-            "properties": {
-                "testDate": {
-                    "type": "Date"
-                }
-            }
-        },
-        "RequestUpdateTestResult": {
-            "required": [
-                "pdfFilePath",
-                "result"
-            ],
-            "properties": {
-                "pdfFilePath": {
-                    "type": "string"
-                },
-                "result": {
-                    "type": "boolean"
-                }
-            }
-        },
-        "RequestResponse": {
-            "required": [
-                "requesterUsername",
-                "description"
-            ],
-            "properties": {
                 "requesterUsername": {
                     "type": "string"
                 },
                 "description": {
                     "type": "string"
                 },
+                "priority": {
+                    "type": "string"
+                },
+                "userState": {
+                    "type": "string"
+                },
                 "submitDate": {
-                    "type": "string"
+                    "type": "Date"
                 },
-                "firstTestDate": {
-                    "type": "string"
+                "firstTest": {
+                    "properties": {
+                        "testDate": {
+                            "type": "Date"
+                        },
+                        "responsibleTechnicianId": {
+                            "type": "string"
+                        },
+                        "pdfFilePath": {
+                            "type": "string"
+                        },
+                        "result": {
+                            "type": "boolean"
+                        }
+                    }
                 },
-                "firstTestFilePath": {
-                    "type": "string"
+                "secondTest": {
+                    "properties": {
+                        "testDate": {
+                            "type": "Date"
+                        },
+                        "responsibleTechnicianId": {
+                            "type": "string"
+                        },
+                        "pdfFilePath": {
+                            "type": "string"
+                        },
+                        "result": {
+                            "type": "boolean"
+                        }
+                    }
                 },
-                "firstResult": {
-                    "type": "string"
+                "resultDate": {
+                    "type": "Date"
                 },
-                "secondTestDate": {
-                    "type": "string"
-                },
-                "secondTestFilePath": {
-                    "type": "string"
-                },
-                "secondResult": {
-                    "type": "string"
-                },
-                "finalResult": {
-                    "type": "string"
+                "isInfected": {
+                    "type": "boolean"
                 }
             }
         },
-        "Requests": {
-            "type": "array",
-            "$ref": "#/definitions/RequestResponse"
-        },
-        "BetweenDatesRequest": {
-            "required": [
-                "beginDate",
-                "endDate"
-            ],
+        "Test": {
             "properties": {
-                "beginDate": {
+                "testDate": {
                     "type": "Date"
                 },
-                "endDate": {
-                    "type": "Date"
-                }
-            }
-        },
-        "BetweenDatesResponse": {
-            "properties": {
-                "testCount": {
-                    "type": "number"
+                "responsibleTechnicianId": {
+                    "type": "string"
+                },
+                "pdfFilePath": {
+                    "type": "string"
+                },
+                "result": {
+                    "type": "boolean"
                 }
             }
         }
