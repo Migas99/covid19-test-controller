@@ -13,6 +13,8 @@ import { HomeComponent } from './home/home.component';
 import { appRoutes } from './routes';
 import { IMPLICIT_REFERENCE } from '@angular/compiler/src/render3/view/util';
 import { covid19APIService } from './services/covid19API.service';
+import { ToolbarComponent } from './toolbar/toolbar.component';
+import { ProfileComponent } from './profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +22,9 @@ import { covid19APIService } from './services/covid19API.service';
     UserComponent,
     LoginComponent,
     RegisterComponent,
-    HomeComponent
+    HomeComponent,
+    ToolbarComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,
