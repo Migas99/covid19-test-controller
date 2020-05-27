@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { covid19APIService } from 'src/app/services/covid19API.service';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-toolbar',
@@ -7,9 +10,20 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ToolbarComponent implements OnInit {
 
-  constructor() { }
+  constructor(private covid19APIService : covid19APIService, private router : Router) { }
 
   ngOnInit(): void {
   }
 
+  logout(){
+    this.covid19APIService.logout().subscribe(
+      (data : any)=>{
+        localStorage.removeItem('currentUser');
+        this.router.navigate(["/login"]);
+      },
+      (err : HttpErrorResponse) =>{
+        console.log(err);
+      }
+    )
+  }
 }

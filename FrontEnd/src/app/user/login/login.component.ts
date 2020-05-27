@@ -21,12 +21,15 @@ export class LoginComponent implements OnInit {
 
   login(){
     this.covid19APIService.login(this.username, this.password).subscribe(
-      (data : any)=>{
-        this.router.navigate(["/home"]);
+      (user : any)=>{
+        if(user && user.token){
+          localStorage.setItem('currentUser', JSON.stringify(user));
+          this.router.navigate(["/home"]);
+        }
       },
       (err : HttpErrorResponse) =>{
         console.log(err);
-        this.resultado = err.error;
+        this.resultado = err.error.Error;
       }
     )
   }

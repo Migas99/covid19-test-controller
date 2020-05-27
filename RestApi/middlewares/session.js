@@ -1,8 +1,9 @@
 const jwt = require('jsonwebtoken');
 
 const sessionMiddleware = (req, res, next) => {
-	const session = req.cookies.authToken;
-
+	
+	//check header or url parameters or post parametes for token
+	var session = req.headers['x-access-token'];
 	try {
 		
 		if (session) {
@@ -11,11 +12,9 @@ const sessionMiddleware = (req, res, next) => {
 		} else {
 			req.auth = null;
 		}
-
 	} catch (e) {
 		req.auth = null;
 	}
-
 	next();
 }
 
