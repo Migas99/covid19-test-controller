@@ -3,6 +3,7 @@ import { covid19APIService } from 'src/app/services/covid19API.service';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Users } from 'src/app/classes/users';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-register',
@@ -44,6 +45,7 @@ export class RegisterComponent implements OnInit {
         this.resultado = data;
       },
       (err : HttpErrorResponse) =>{
+        console.log(err);
         this.resultado = err.error;
       }
     )

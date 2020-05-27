@@ -40,7 +40,7 @@ userController.login = async (req, res) => {
 
     /*Criar e devolver o Token*/
     const token = jwt.sign({ id: user.id, username: user.username, role: user.role }, process.env.TOKEN_SECRET);
-    return res.status(200).cookie('authToken', token, { expires: new Date(Date.now() + 10 * 60000), httpOnly: true }).json({ 'Success': 'The user was successfully logged in.' });
+    return res.status(200).send({authenticated: true, token : token});
 }
 
 /**
@@ -327,7 +327,7 @@ userController.getByIdUser = async (req, res) => {
  * Método responsável por realizar o logout
  */
 userController.logout = async (req, res) => {
-    return res.status(200).clearCookie('authToken').json({ 'Success': 'The user was successfully logged out.' });
+    res.status(200).send({authenticated: false, token: null});
 }
 
 module.exports = userController;

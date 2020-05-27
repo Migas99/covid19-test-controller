@@ -1,4 +1,6 @@
 export class Users{
+
+    _id:String;
     username: String;
     password: String;
     fullName: String;
@@ -8,4 +10,6 @@ export class Users{
     phoneNumber: Number;
     email: String;
     address: String;
+    role:String;
+    isInfected:String;
 };
