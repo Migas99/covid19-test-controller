@@ -16,14 +16,20 @@ export class ToolbarComponent implements OnInit {
   }
 
   logout(){
-    this.covid19APIService.logout().subscribe(
-      (data : any)=>{
-        localStorage.removeItem('currentUser');
-        this.router.navigate(["/login"]);
-      },
-      (err : HttpErrorResponse) =>{
-        console.log(err);
-      }
-    )
+    try{
+      localStorage.removeItem('currentUser');
+      this.router.navigate(["/login"]);
+    }catch(err){
+      console.log(err);
+    }
+    // this.covid19APIService.logout().subscribe(
+    //   (data : any)=>{
+    //     localStorage.removeItem('currentUser');
+    //     this.router.navigate(["/login"]);
+    //   },
+    //   (err : HttpErrorResponse) =>{
+    //     console.log(err);
+    //   }
+    // )
   }
 }

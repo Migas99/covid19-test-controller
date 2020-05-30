@@ -25,7 +25,7 @@
     ],
     "produces": [
         "application/json"
-    ],
+    ], 
     "paths": {
         "/users/login": {
             "post": {
@@ -157,6 +157,12 @@
                 "summary": "Registers a new technician in the system",
                 "parameters": [
                     {
+                        "name":"x-access-token",
+                        "in":"header",
+                        "description":"Authorization token",
+                        "required":true
+                    },
+                    {
                         "name": "technician",
                         "in": "body",
                         "description": "Technician that we want to create",
@@ -269,6 +275,14 @@
                     "Users"
                 ],
                 "summary": "Gets the information of the authenticated user.",
+                "parameters": [
+                    {
+                        "name":"x-access-token",
+                        "in":"header",
+                        "description":"Authorization token",
+                        "required":true
+                    }
+                ],
                 "security": [
                     "JWT"
                 ],

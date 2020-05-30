@@ -13,6 +13,9 @@ export class LoginComponent implements OnInit {
   constructor(private covid19APIService : covid19APIService, private router : Router) { }
 
   ngOnInit(): void {
+    if(localStorage.getItem("currentUser")){
+      this.router.navigate(["/home"]);
+    }
   }
 
   username:String = "";
@@ -22,7 +25,7 @@ export class LoginComponent implements OnInit {
   login(){
     this.covid19APIService.login(this.username, this.password).subscribe(
       (user : any)=>{
-        if(user && user.token){
+        if(user){
           localStorage.setItem('currentUser', JSON.stringify(user));
           this.router.navigate(["/home"]);
         }

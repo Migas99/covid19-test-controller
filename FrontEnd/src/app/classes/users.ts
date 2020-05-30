@@ -11,5 +11,5 @@ export class Users{
     email: String;
     address: String;
     role:String;
-    isInfected:String;
+    state:String;
 };

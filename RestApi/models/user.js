@@ -13,7 +13,7 @@ const UserSchema = new Schema({
     address: { type: String, required: true },
     role: { type: String, required: true, default: 'USER' },
     registerDate: { type: Date, default: Date.now() },
-    state: { type: String, default: 'Suspect' }
+    state: { type: String,}
 });
 
 module.exports = mongoose.model("User", UserSchema);

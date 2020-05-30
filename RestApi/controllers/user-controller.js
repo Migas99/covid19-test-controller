@@ -40,7 +40,7 @@ userController.login = async (req, res) => {
 
     /*Criar e devolver o Token*/
     const token = jwt.sign({ id: user.id, username: user.username, role: user.role }, process.env.TOKEN_SECRET);
-    return res.status(200).send({authenticated: true, token : token});
+    return res.status(200).send({token : token});
 }
 
 /**
@@ -48,7 +48,7 @@ userController.login = async (req, res) => {
  */
 userController.getMyProfile = async (req, res) => {
     try {
-        const user = await User.findOne({ _id: req.auth.id }, { _id: 1, username: 1, fullName: 1, gender: 1, birthDate: 1, civilNumber: 1, phoneNumber: 1, email: 1, address: 1, role: 1, isInfected: 1 });
+        const user = await User.findOne({ _id: req.auth.id }, { _id: 1, username: 1, fullName: 1, gender: 1, birthDate: 1, civilNumber: 1, phoneNumber: 1, email: 1, address: 1, role: 1, state: 1 });
         return res.status(200).json(user);
     } catch (err) {
         console.log(err);
@@ -300,7 +300,7 @@ userController.getByIdUser = async (req, res) => {
 
         /*Se for o ADMIN, devolvemos sempre a informação do user*/
         if (req.auth.role == 'ADMIN') {
-            const user = await User.findById(req.params.userId, { _id: 1, username: 1, fullName: 1, gender: 1, birthDate: 1, civilNumber: 1, phoneNumber: 1, email: 1, address: 1, role: 1, isInfected: 1 });
+            const user = await User.findById(req.params.userId, { _id: 1, username: 1, fullName: 1, gender: 1, birthDate: 1, civilNumber: 1, phoneNumber: 1, email: 1, address: 1, role: 1, state: 1 });
             return res.status(200).json(user);
         } else {
             /*Se não é um ADMIN, é um Technician*/
@@ -308,7 +308,7 @@ userController.getByIdUser = async (req, res) => {
 
             /*Se for informações de um User, ou do próprio técnico*/
             if (checkUser.role == 'USER' || req.auth.id == checkUser._id) {
-                const user = await User.findById(req.params.userId, { _id: 1, username: 1, fullName: 1, gender: 1, birthDate: 1, civilNumber: 1, phoneNumber: 1, email: 1, address: 1, role: 1, isInfected: 1 });
+                const user = await User.findById(req.params.userId, { _id: 1, username: 1, fullName: 1, gender: 1, birthDate: 1, civilNumber: 1, phoneNumber: 1, email: 1, address: 1, role: 1, state: 1 });
                 return res.status(200).json(user);
             } else {
                 /*Um technician não tem direito de ter informações relativas a outro technician*/
@@ -323,11 +323,11 @@ userController.getByIdUser = async (req, res) => {
     }
 }
 
-/**
- * Método responsável por realizar o logout
- */
-userController.logout = async (req, res) => {
-    res.status(200).send({authenticated: false, token: null});
-}
+// /**
+//  * Método responsável por realizar o logout
+//  */
+// userController.logout = async (req, res) => {
+//     res.status(200).send({authenticated: false, token: null});
+// }
 
 module.exports = userController;

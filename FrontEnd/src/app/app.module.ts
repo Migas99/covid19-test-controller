@@ -13,7 +13,8 @@ import { HomeComponent } from './home/home.component';
 import { covid19APIService } from './services/covid19API.service';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { ProfileComponent } from './profile/profile.component';
-import { JwtInterceptorService} from './services/HTTPInterceptor.service'
+import { JwtInterceptorService} from './services/HTTPInterceptor.service';
+import { UsersListComponent } from './users-list/users-list.component'
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { JwtInterceptorService} from './services/HTTPInterceptor.service'
     RegisterComponent,
     HomeComponent,
     ToolbarComponent,
-    ProfileComponent
+    ProfileComponent,
+    UsersListComponent
   ],
   imports: [
     BrowserModule,
