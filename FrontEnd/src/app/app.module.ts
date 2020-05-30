@@ -14,7 +14,8 @@ import { covid19APIService } from './services/covid19API.service';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { ProfileComponent } from './profile/profile.component';
 import { JwtInterceptorService} from './services/HTTPInterceptor.service';
-import { UsersListComponent } from './users-list/users-list.component'
+import { UsersListComponent } from './users-list/users-list.component';
+import { UpdateUserComponent } from './update-user/update-user.component'
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { UsersListComponent } from './users-list/users-list.component'
     HomeComponent,
     ToolbarComponent,
     ProfileComponent,
-    UsersListComponent
+    UsersListComponent,
+    UpdateUserComponent
   ],
   imports: [
     BrowserModule,

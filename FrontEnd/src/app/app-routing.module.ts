@@ -8,10 +8,11 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
 import { ProfileComponent } from './profile/profile.component';
 import { AuthGuardService } from './services/AuthGuard.service';
 import { UsersListComponent} from './users-list/users-list.component'
+import { UpdateUserComponent} from './update-user/update-user.component'
 
 const routes: Routes = [
     {path: "home", component : ToolbarComponent,
-        children : [{path: "", component : HomeComponent}]},
+        children : [{path: "", component : HomeComponent}], canActivate: [AuthGuardService]},
 
     //Login
     {path : "login", component : UserComponent,
@@ -44,9 +45,16 @@ const routes: Routes = [
     //Lista de infetados
     {path:"users/infected", component : ToolbarComponent,
         children : [{path:"", component : UsersListComponent}], canActivate: [AuthGuardService]},
+
+    //Update User
+    {path:"users/update/:id", component : ToolbarComponent,
+        children : [{path:"", component : UpdateUserComponent}], canActivate: [AuthGuardService]},
     
     //Default
-    {path:"", redirectTo:"/login", pathMatch:"full"}
+    {path:"", redirectTo:"/login", pathMatch:"full"},
+
+    //404
+    //{path: '/*path', redirectTo: "/kuwabuga"}
 ];
 
 @NgModule({

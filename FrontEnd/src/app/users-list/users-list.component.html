@@ -1,1 +1,6 @@
-<p>{{usersList | json}}</p>
+<div *ngFor="let user of usersList">
+    <div class="user" (click)="userInfo(user._id)">
+        <p>Username: {{user.username}}</p>
+        <p>Full Name: {{user.fullName}}</p>
+    </div>
+</div>

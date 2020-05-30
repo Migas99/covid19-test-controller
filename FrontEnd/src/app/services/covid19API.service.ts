@@ -28,7 +28,7 @@ export class covid19APIService{
     // }
 
     //Perfil do utilizador com sessao iniciada
-    getProfile() : Observable<any>{
+    getProfile(){
         return this.httpclient.get("http://localhost:3000/users/profile");
     }
 
@@ -48,7 +48,17 @@ export class covid19APIService{
     }
 
     //utilizador dado id
-    getUser(id:String) :  Observable<any>{
+    getUser(id:String) : Observable<any>{
         return this.httpclient.get("http://localhost:3000/users/"+ id);
+    }
+
+    //atualizar utilizador
+    updateUser(obj:any, id:String) :  Observable<any>{
+        console.log(obj);
+        return this.httpclient.put("http://localhost:3000/users/" + id, obj);
+    }
+    //eliminar utilizador
+    deleteUser(id:String) :  Observable<any>{
+        return this.httpclient.delete("http://localhost:3000/users/" + id);
     }
 };

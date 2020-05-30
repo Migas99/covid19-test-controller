@@ -12,8 +12,8 @@ export class AuthGuardService implements CanActivate {
     if (localStorage.getItem('currentUser')){
         return true;
     }
-    this.router.navigate(['/login'], {queryParams: {returnUrl: state.url}});
-    alert("NÃO TEM SESSÃO INICIADA");
+    this.router.navigate(['/login']);
+    //alert("NÃO TEM SESSÃO INICIADA");
     return false;
     }
 }

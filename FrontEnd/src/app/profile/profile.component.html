@@ -1,1 +1,50 @@
-<p>{{userInfo | json}}</p>
+<h1>Informação do Utilizador</h1>
+
+<div *ngIf="userInfo.username">
+    <div class="tag first">Username</div>
+    <div class="content first">{{userInfo.username}}</div>
+</div>
+
+<div *ngIf="userInfo.fullName">
+    <div class="tag">Full Name</div>
+    <div class="content">{{userInfo.fullName}}</div>
+</div>
+
+<div *ngIf="userInfo.birthDate">
+    <div class="tag">Birth Date</div>
+    <div class="content">{{userInfo.birthDate}}</div>
+</div>
+
+<div *ngIf="userInfo.gender">
+    <div class="tag">Gender</div>
+    <div class="content">{{userInfo.gender}}</div>
+</div>
+
+<div *ngIf="userInfo.civilNumber">
+    <div class="tag">Civil Number</div>
+    <div class="content">{{userInfo.civilNumber}}</div>
+</div>
+
+<div *ngIf="userInfo.address">
+    <div class="tag">Address</div>
+    <div class="content">{{userInfo.address}}</div>
+</div>
+
+<div *ngIf="userInfo.email">
+    <div class="tag">Email</div>
+    <div class="content">{{userInfo.email}}</div>
+</div>
+
+<div *ngIf="userInfo.phoneNumber">
+    <div class="tag">Phone Number</div>
+    <div class="content">{{userInfo.phoneNumber}}</div>
+</div>
+
+<div *ngIf="userInfo.state">
+    <div class="tag">Estado</div>
+    <div class="content">{{userInfo.state}}</div>
+</div>
+
+<button [routerLink]="['/users', 'update', userInfo._id]">UPDATE</button>
+
+<button (click)="deleteUser()">DELETE</button>

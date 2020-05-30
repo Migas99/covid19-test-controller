@@ -61,4 +61,8 @@ export class UsersListComponent implements OnInit {
       );
     }
   }
+
+  userInfo(id:String){
+    this.router.navigate(['/' + this.router.url + '/' + id]);
+  }
 }

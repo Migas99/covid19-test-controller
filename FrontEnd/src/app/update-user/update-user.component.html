@@ -1,0 +1,24 @@
+<div>
+    <div>Password</div>
+    <input class="textInput" placeholder="Username" type="text" required autocomplete="off" [(ngModel)]="password" />
+</div>
+
+<div>
+    <div>Email</div>
+    <input class="textInput" placeholder="Email" type="email" required autocomplete="off" [(ngModel)]="email" />
+</div>
+
+<div>
+    <div>Address</div>
+    <input class="textInput" placeholder="Address" type="text" required autocomplete="off" [(ngModel)]="address" />
+</div>
+
+<div>
+    <div>Phone Number</div>
+    <input class="textInput" placeholder="Phone Number" type="number" required autocomplete="off" [(ngModel)]="phoneNumber" />
+</div>
+
+<h2>{{erro}}</h2>
+
+<button (click)="updateUser()">CONFIRMAR</button>
+<button (click)="cancelar()">CANCELAR</button>
