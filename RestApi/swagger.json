@@ -72,6 +72,12 @@
                 ],
                 "description": "Logout the user in the system.",
                 "summary": "Clears the authentication token.",
+                "parameters":[{
+                    "name":"x-access-token",
+                    "in":"header",
+                    "description":"Authorization token",
+                    "required":true
+                }],
                 "security": [
                     "JWT"
                 ],
@@ -222,6 +228,12 @@
                     "Users"
                 ],
                 "summary": "Gets the list of users in the database.",
+                "parameters":[{
+                    "name":"x-access-token",
+                    "in":"header",
+                    "description":"Authorization token",
+                    "required":true
+                }],
                 "security": [
                     "JWT"
                 ],
@@ -336,6 +348,12 @@
                     "Users"
                 ],
                 "summary": "Gets the list of infected users in the database.",
+                "parameters":[{
+                    "name":"x-access-token",
+                    "in":"header",
+                    "description":"Authorization token",
+                    "required":true
+                }],
                 "security": [
                     "JWT"
                 ],
@@ -389,6 +407,12 @@
                     "Users"
                 ],
                 "summary": "Gets the number of infected users in the database.",
+                "parameters":[{
+                    "name":"x-access-token",
+                    "in":"header",
+                    "description":"Authorization token",
+                    "required":true
+                }],
                 "security": [
                     "JWT"
                 ],
@@ -412,6 +436,12 @@
                     "Users"
                 ],
                 "summary": "Gets the list of technicians in the database.",
+                "parameters":[{
+                    "name":"x-access-token",
+                    "in":"header",
+                    "description":"Authorization token",
+                    "required":true
+                }],
                 "security": [
                     "JWT"
                 ],
@@ -471,6 +501,12 @@
                     "Users"
                 ],
                 "summary": "Get the user with given ID.",
+                "parameters":[{
+                    "name":"x-access-token",
+                    "in":"header",
+                    "description":"Authorization token",
+                    "required":true
+                }],
                 "security": [
                     "JWT"
                 ],
@@ -524,6 +560,12 @@
                 ],
                 "parameters": [
                     {
+                        "name":"x-access-token",
+                        "in":"header",
+                        "description":"Authorization token",
+                        "required":true
+                    },
+                    {
                         "name": "user",
                         "in": "body",
                         "description": "New values",
@@ -566,6 +608,12 @@
                 "tags": [
                     "Users"
                 ],
+                "parameters":[{
+                    "name":"x-access-token",
+                    "in":"header",
+                    "description":"Authorization token",
+                    "required":true
+                }],
                 "security": [
                     "JWT"
                 ],
@@ -589,6 +637,12 @@
                     "Requests"
                 ],
                 "summary": "Get all the requests in the system.",
+                "parameters":[{
+                    "name":"x-access-token",
+                    "in":"header",
+                    "description":"Authorization token",
+                    "required":true
+                }],
                 "security": [
                     "JWT"
                 ],
@@ -666,6 +720,12 @@
                 "summary": "Creates a new request in the system.",
                 "parameters": [
                     {
+                        "name":"x-access-token",
+                        "in":"header",
+                        "description":"Authorization token",
+                        "required":true
+                    },
+                    {
                         "name": "request",
                         "in": "body",
                         "description": "Request we want to create",
@@ -704,6 +764,12 @@
                     "Requests"
                 ],
                 "summary": "Get all the requests made by the requester.",
+                "parameters":[{
+                    "name":"x-access-token",
+                    "in":"header",
+                    "description":"Authorization token",
+                    "required":true
+                }],
                 "security": [
                     "JWT"
                 ],
@@ -776,6 +842,12 @@
         },
         "/requests/{requestId}": {
             "parameters": [
+                {
+                    "name":"x-access-token",
+                    "in":"header",
+                    "description":"Authorization token",
+                    "required":true
+                },
                 {
                     "name": "requestId",
                     "in": "path",
@@ -865,6 +937,12 @@
                 ],
                 "parameters": [
                     {
+                        "name":"x-access-token",
+                        "in":"header",
+                        "description":"Authorization token",
+                        "required":true
+                    },
+                    {
                         "name": "request",
                         "in": "body",
                         "description": "New values",
@@ -894,6 +972,12 @@
                 "tags": [
                     "Requests"
                 ],
+                "parameters":[{
+                    "name":"x-access-token",
+                    "in":"header",
+                    "description":"Authorization token",
+                    "required":true
+                }],
                 "security": [
                     "JWT"
                 ],
@@ -918,6 +1002,12 @@
                     "Requests"
                 ],
                 "parameters": [
+                    {
+                        "name":"x-access-token",
+                        "in":"header",
+                        "description":"Authorization token",
+                        "required":true
+                    },
                     {
                         "name": "requestId",
                         "in": "path",
@@ -967,6 +1057,12 @@
                 ],
                 "parameters": [
                     {
+                        "name":"x-access-token",
+                        "in":"header",
+                        "description":"Authorization token",
+                        "required":true
+                    },
+                    {
                         "name": "requestId",
                         "in": "path",
                         "required": true,
@@ -1008,6 +1104,12 @@
         },
         "/requests/user/{userId}": {
             "parameters": [
+                {
+                    "name":"x-access-token",
+                    "in":"header",
+                    "description":"Authorization token",
+                    "required":true
+                },
                 {
                     "name": "userId",
                     "in": "path",
@@ -1100,6 +1202,12 @@
                 "summary": "Returns the number of tests done between the two given dates.",
                 "parameters": [
                     {
+                        "name":"x-access-token",
+                        "in":"header",
+                        "description":"Authorization token",
+                        "required":true
+                    },
+                    {
                         "name": "Dates",
                         "in": "body",
                         "description": "Contains the begin and end date",
@@ -1140,6 +1248,12 @@
                 "description": "Returns the requested file.",
                 "summary": "Returns the requested file.",
                 "parameters": [
+                    {
+                        "name":"x-access-token",
+                        "in":"header",
+                        "description":"Authorization token",
+                        "required":true
+                    },
                     {
                         "name": "filePath",
                         "in": "body",

@@ -323,11 +323,4 @@ userController.getByIdUser = async (req, res) => {
     }
 }
 
-// /**
-//  * Método responsável por realizar o logout
-//  */
-// userController.logout = async (req, res) => {
-//     res.status(200).send({authenticated: false, token: null});
-// }
-
 module.exports = userController;
