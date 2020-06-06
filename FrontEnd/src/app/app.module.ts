@@ -15,7 +15,9 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
 import { ProfileComponent } from './profile/profile.component';
 import { JwtInterceptorService} from './services/HTTPInterceptor.service';
 import { UsersListComponent } from './users-list/users-list.component';
-import { UpdateUserComponent } from './update-user/update-user.component'
+import { UpdateUserComponent } from './update-user/update-user.component';
+import { ModalModule } from 'ngx-bootstrap/modal';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 @NgModule({
   declarations: [
@@ -27,13 +29,15 @@ import { UpdateUserComponent } from './update-user/update-user.component'
     ToolbarComponent,
     ProfileComponent,
     UsersListComponent,
-    UpdateUserComponent
+    UpdateUserComponent,
+    PageNotFoundComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    ModalModule.forRoot()
   ],
   providers: [covid19APIService, {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptorService, multi: true}],
   bootstrap: [AppComponent]

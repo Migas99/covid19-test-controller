@@ -1,50 +1,67 @@
 <h1>Informação do Utilizador</h1>
-
-<div *ngIf="userInfo.username">
-    <div class="tag first">Username</div>
-    <div class="content first">{{userInfo.username}}</div>
-</div>
-
-<div *ngIf="userInfo.fullName">
-    <div class="tag">Full Name</div>
-    <div class="content">{{userInfo.fullName}}</div>
-</div>
-
-<div *ngIf="userInfo.birthDate">
-    <div class="tag">Birth Date</div>
-    <div class="content">{{userInfo.birthDate}}</div>
-</div>
-
-<div *ngIf="userInfo.gender">
-    <div class="tag">Gender</div>
-    <div class="content">{{userInfo.gender}}</div>
-</div>
-
-<div *ngIf="userInfo.civilNumber">
-    <div class="tag">Civil Number</div>
-    <div class="content">{{userInfo.civilNumber}}</div>
-</div>
-
-<div *ngIf="userInfo.address">
-    <div class="tag">Address</div>
-    <div class="content">{{userInfo.address}}</div>
-</div>
-
-<div *ngIf="userInfo.email">
-    <div class="tag">Email</div>
-    <div class="content">{{userInfo.email}}</div>
-</div>
-
-<div *ngIf="userInfo.phoneNumber">
-    <div class="tag">Phone Number</div>
-    <div class="content">{{userInfo.phoneNumber}}</div>
-</div>
-
-<div *ngIf="userInfo.state">
-    <div class="tag">Estado</div>
-    <div class="content">{{userInfo.state}}</div>
+<div id="userInformacao">
+    <div *ngIf="userInfo.username">
+        <div class="tag first">Username</div>
+        <div class="content first">{{userInfo.username}}</div>
+    </div>
+    
+    <div *ngIf="userInfo.fullName">
+        <div class="tag">Full Name</div>
+        <div class="content">{{userInfo.fullName}}</div>
+    </div>
+    
+    <div *ngIf="userInfo.birthDate">
+        <div class="tag">Birth Date</div>
+        <div class="content">{{userInfo.birthDate}}</div>
+    </div>
+    
+    <div *ngIf="userInfo.gender">
+        <div class="tag">Gender</div>
+        <div class="content">{{userInfo.gender}}</div>
+    </div>
+    
+    <div *ngIf="userInfo.civilNumber">
+        <div class="tag">Civil Number</div>
+        <div class="content">{{userInfo.civilNumber}}</div>
+    </div>
+    
+    <div *ngIf="userInfo.address">
+        <div class="tag">Address</div>
+        <div class="content">{{userInfo.address}}</div>
+    </div>
+    
+    <div *ngIf="userInfo.email">
+        <div class="tag">Email</div>
+        <div class="content">{{userInfo.email}}</div>
+    </div>
+    
+    <div *ngIf="userInfo.phoneNumber">
+        <div class="tag">Phone Number</div>
+        <div class="content">{{userInfo.phoneNumber}}</div>
+    </div>
+    
+    <div *ngIf="userInfo.state">
+        <div class="tag">Estado</div>
+        <div class="content">{{userInfo.state}}</div>
+    </div>
 </div>
 
 <button [routerLink]="['/users', 'update', userInfo._id]">UPDATE</button>
 
-<button (click)="deleteUser()">DELETE</button>
+<button type="button" class="btn btn-primary" (click)="openModal(template)">DELETE</button>
+ 
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">DELETE</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>Para apagar o utilizador introduza o username do mesmo.</p>
+    <input type="text" aria-label="Username" [(ngModel)] = "username">
+    <button (click)="deleteUser()">Confirmar</button>
+    <button (click)="modalRef.hide()">Cancelar</button>
+    {{deleteErro}}
+  </div>
+</ng-template>

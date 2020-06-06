@@ -23,9 +23,10 @@ export class covid19APIService{
         return this.httpclient.post("http://localhost:3000/users/register", user, {responseType: 'text'});
     }
 
-    // logout() : Observable<any>{
-    //     return this.httpclient.post("http://localhost:3000/users/logout", {});
-    // }
+    //Registar funcionario
+    registerTechnician(user:Users) : Observable<any>{
+        return this.httpclient.post("http://localhost:3000/users/technician/register", user, {responseType: 'text'});
+    }
 
     //Perfil do utilizador com sessao iniciada
     getProfile(){

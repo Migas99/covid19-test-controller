@@ -1,56 +1,56 @@
-<p>Username</p>
-<div class="field-wrap">
-    <input class="textInput" placeholder="Username" type="text" required autocomplete="off"
-        [(ngModel)]="user.username" />
-</div>
-<p>Password</p>
-<div class="field-wrap">
-    <input class="textInput" placeholder="Password" type="password" required autocomplete="off"
-        [(ngModel)]="user.password" />
-</div>
-<p>Full Name</p>
-<div class="field-wrap">
-    <input class="textInput" placeholder="Full Name" type="text" required autocomplete="off"
-        [(ngModel)]="user.fullName" />
-</div>
-<p>Birth Date</p>
-<div class="field-wrap">
-    <input class="textInput" placeholder="Birth Date" type="date" required autocomplete="off"
-        [(ngModel)]="user.birthDate" />
-</div>
-<p>Civil Number</p>
-<div class="field-wrap">
-    <input class="textInput" placeholder="Civil Number" type="text" required autocomplete="off"
-        [(ngModel)]="user.civilNumber" />
-</div>
-<p>Phone Number</p>
-<div class="field-wrap">
-    <input class="textInput" placeholder="Phone Number" type="number" required autocomplete="off"
-        [(ngModel)]="user.phoneNumber" />
-</div>
-<p>Email</p>
-<div class="field-wrap">
-    <input class="textInput" placeholder="Email" type="email" required autocomplete="off" [(ngModel)]="user.email" />
-</div>
-<p>Address</p>
-<div class="field-wrap">
-    <input class="textInput" placeholder="Address" type="text" required autocomplete="off" [(ngModel)]="user.address" />
-</div>
-
-<script>
-    
-  </script>
-<div>
-    <div id="genderForm">
-        <input type="radio" id="male" name="gender" value="male" (click)="isSelected('male')">
-        <label class="gender" for="male">Male</label>
-        <input type="radio" id="female" name="gender" value="female" (click)="isSelected('female')">
-        <label class="gender" for="female">Female</label>
-        <input type="radio" id="other" name="gender" value="other" (click)="isSelected('other')">
-        <label class="gender" for="other">Other</label>
-        <input type="text" *ngIf="isChecked" [(ngModel)]="user.gender" placeholder="OTHER">
+<div id = "registerUsers">
+    <p>Username</p>
+    <div class="field-wrap">
+        <input class="textInput" placeholder="Username" type="text" required autocomplete="off"
+            [(ngModel)]="user.username" />
     </div>
-</div>
+    <p>Password</p>
+    <div class="field-wrap">
+        <input class="textInput" placeholder="Password" type="password" required autocomplete="off"
+            [(ngModel)]="user.password" />
+    </div>
+    <p>Full Name</p>
+    <div class="field-wrap">
+        <input class="textInput" placeholder="Full Name" type="text" required autocomplete="off"
+            [(ngModel)]="user.fullName" />
+    </div>
+    <p>Birth Date</p>
+    <div class="field-wrap">
+        <input class="textInput" placeholder="Birth Date" type="date" required autocomplete="off"
+            [(ngModel)]="user.birthDate" />
+    </div>
+    <p>Civil Number</p>
+    <div class="field-wrap">
+        <input class="textInput" placeholder="Civil Number" type="text" required autocomplete="off"
+            [(ngModel)]="user.civilNumber" />
+    </div>
+    <p>Phone Number</p>
+    <div class="field-wrap">
+        <input class="textInput" placeholder="Phone Number" type="number" required autocomplete="off"
+            [(ngModel)]="user.phoneNumber" />
+    </div>
+    <p>Email</p>
+    <div class="field-wrap">
+        <input class="textInput" placeholder="Email" type="email" required autocomplete="off" [(ngModel)]="user.email" />
+    </div>
+    <p>Address</p>
+    <div class="field-wrap">
+        <input class="textInput" placeholder="Address" type="text" required autocomplete="off" [(ngModel)]="user.address" />
+    </div>
+    
+    <div>
+        <div id="genderForm">
+            <input type="radio" id="male" name="gender" value="male" (click)="isSelected('male')">
+            <label class="gender" for="male">Male</label>
+            <input type="radio" id="female" name="gender" value="female" (click)="isSelected('female')">
+            <label class="gender" for="female">Female</label>
+            <input type="radio" id="other" name="gender" value="other" (click)="isSelected('other')">
+            <label class="gender" for="other">Other</label>
+            <input type="text" *ngIf="isChecked" [(ngModel)]="user.gender" placeholder="OTHER">
+        </div>
+    </div>
 
 <button class="button button-block" (click)="register()">Register</button>
+<button *ngIf = "router.url === '/technicians/register'" (click)="cancelar()">Cancelar</button>
 <p id="resultado">{{resultado}}</p>
+</div>

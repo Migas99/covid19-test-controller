@@ -3,7 +3,7 @@ import { covid19APIService } from 'src/app/services/covid19API.service';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Users } from 'src/app/classes/users';
-import { DatePipe } from '@angular/common';
+import {Location} from '@angular/common';
 
 @Component({
   selector: 'app-register',
@@ -12,9 +12,15 @@ import { DatePipe } from '@angular/common';
 })
 export class RegisterComponent implements OnInit {
 
-  constructor(private covid19APIService : covid19APIService, private router : Router) { }
+  constructor(private covid19APIService : covid19APIService, public router : Router, private _location: Location) { }
 
   ngOnInit(): void {
+    if(document.getElementById("registerTechnicians") && this.router.url == "/register"){
+      document.getElementById("registerTechnicians").id = "registerUsers";
+    }
+    if(document.getElementById("registerUsers") && this.router.url == "/technicians/register"){
+      document.getElementById("registerUsers").id = "registerTechnicians";
+    }
   }
   
   user = new Users();
@@ -40,14 +46,31 @@ export class RegisterComponent implements OnInit {
   }
 
   register(){
-    this.covid19APIService.register(this.user).subscribe(
-      (data : any)=>{
-        this.resultado = data;
-      },
-      (err : HttpErrorResponse) =>{
-        console.log(err);
-        this.resultado = err.error;
-      }
-    )
+    if(this.router.url === "/register"){
+      this.covid19APIService.register(this.user).subscribe(
+        (data : any)=>{
+          this.resultado = data;
+        },
+        (err : HttpErrorResponse) =>{
+          console.log(err);
+          this.resultado = err.error;
+        }
+      )
+    }
+    else{
+      this.covid19APIService.registerTechnician(this.user).subscribe(
+        (data : any)=>{
+          this.resultado = data;
+        },
+        (err : HttpErrorResponse) =>{
+          console.log(err);
+          this.resultado = err.error;
+        }
+      )
+    }
+  }
+
+  cancelar(){
+    this._location.back();
   }
 }

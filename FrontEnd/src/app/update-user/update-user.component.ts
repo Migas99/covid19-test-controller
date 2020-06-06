@@ -3,7 +3,6 @@ import { covid19APIService } from 'src/app/services/covid19API.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import {ActivatedRoute} from '@angular/router';
-import { Users } from '../classes/users';
 import {Location} from '@angular/common';
 
 @Component({

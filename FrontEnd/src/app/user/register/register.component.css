@@ -7,7 +7,7 @@
     background: none;
     background-image: none;
     border: 1px solid #a0b3b0;
-    color: #ffffff;
+
     border-radius: 0;
     transition: border-color 0.25s ease, box-shadow 0.25s ease;
 }
@@ -49,7 +49,7 @@ textarea {
 
 p{
     font-size: 20px;
-    color: #ffffff;
+
     font-weight: 300;
     margin: 20px 0px 0px 0px;
 }
@@ -61,6 +61,17 @@ p{
 .gender{
     margin-right: 15px;
     display: inline;
-    color: #ffffff;
+
     font-size: 22px;
+}
+
+#registerUsers{
+    width: 100%;
+    color:white;
+}
+
+#registerTechnicians{
+    width: 40%;
+    color:black;
+    margin: auto;
 }
