@@ -34,8 +34,6 @@ export class ProfileComponent implements OnInit {
     if(this.router.url === "/profile"){
       this.covid19APIService.getProfile().subscribe(
         (user : any)=>{
-
-          console.log(user);
           this.userInfo = user;
         },
         (err : HttpErrorResponse) =>{
@@ -50,7 +48,6 @@ export class ProfileComponent implements OnInit {
 
       this.covid19APIService.getUser(this.id).subscribe(
         (user : any)=>{
-          console.log(user);
           this.userInfo = user;
         },
         (err : HttpErrorResponse) =>{

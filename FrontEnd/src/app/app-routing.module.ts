@@ -10,6 +10,7 @@ import { AuthGuardService } from './services/AuthGuard.service';
 import { UsersListComponent } from './users-list/users-list.component';
 import { UpdateUserComponent } from './update-user/update-user.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { RequestsComponent} from './requests/requests.component';
 
 const routes: Routes = [
     {
@@ -32,7 +33,7 @@ const routes: Routes = [
     //Registar tecnico
     {
         path: "technicians/register", component: ToolbarComponent,
-        children: [{ path: "", component: RegisterComponent }]
+        children: [{ path: "", component: RegisterComponent }], canActivate: [AuthGuardService]
     },
 
     //Perfil do utilizador com sessao iniciada
@@ -49,7 +50,7 @@ const routes: Routes = [
 
     //Utilizador selecionado
     {
-        path: "users/:id", component: ToolbarComponent,
+        path: "user/:id", component: ToolbarComponent,
         children: [{ path: "", component: ProfileComponent }], canActivate: [AuthGuardService]
     },
 
@@ -61,7 +62,7 @@ const routes: Routes = [
 
     //Tecnico selecionado
     {
-        path: "technicians/:id", component: ToolbarComponent,
+        path: "technician/:id", component: ToolbarComponent,
         children: [{ path: "", component: ProfileComponent }], canActivate: [AuthGuardService]
     },
 
@@ -73,8 +74,20 @@ const routes: Routes = [
 
     //Update User
     {
-        path: "users/update/:id", component: ToolbarComponent,
+        path: "user/update/:id", component: ToolbarComponent,
         children: [{ path: "", component: UpdateUserComponent }], canActivate: [AuthGuardService]
+    },
+
+    //Todos os requests
+    {
+        path: "requests", component: ToolbarComponent,
+        children: [{path:"", component : RequestsComponent}], canActivate: [AuthGuardService]
+    },
+
+    //Requests do utilizador
+    {
+        path: "myRequests", component: ToolbarComponent,
+        children: [{path:"", component : RequestsComponent}], canActivate: [AuthGuardService]
     },
 
     //Default

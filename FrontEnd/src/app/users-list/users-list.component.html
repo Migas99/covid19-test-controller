@@ -4,4 +4,4 @@
         <p>Full Name: {{user.fullName}}</p>
     </div>
 </div>
-<button [routerLink]="'/technicians/register'">Registar technician</button>
+<button *ngIf="router.url === '/technicians'" [routerLink]="'/technicians/register'">Registar technician</button>

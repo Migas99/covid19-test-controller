@@ -49,11 +49,11 @@ export class RegisterComponent implements OnInit {
     if(this.router.url === "/register"){
       this.covid19APIService.register(this.user).subscribe(
         (data : any)=>{
-          this.resultado = data;
+          this.resultado = data.Success;
         },
         (err : HttpErrorResponse) =>{
           console.log(err);
-          this.resultado = err.error;
+          this.resultado = err.error.Error;
         }
       )
     }

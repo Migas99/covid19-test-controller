@@ -18,6 +18,7 @@ import { UsersListComponent } from './users-list/users-list.component';
 import { UpdateUserComponent } from './update-user/update-user.component';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { RequestsComponent } from './requests/requests.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
     ProfileComponent,
     UsersListComponent,
     UpdateUserComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    RequestsComponent
   ],
   imports: [
     BrowserModule,

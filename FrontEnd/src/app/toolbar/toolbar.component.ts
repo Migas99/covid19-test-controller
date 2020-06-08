@@ -12,7 +12,18 @@ export class ToolbarComponent implements OnInit {
 
   constructor(private covid19APIService : covid19APIService, private router : Router) { }
 
+  userRole:String;
+
   ngOnInit(): void {
+    this.covid19APIService.getProfile().subscribe(
+      (user : any)=>{
+        
+        this.userRole = user.role;
+      },
+      (err : HttpErrorResponse) =>{
+        console.log(err);
+      }
+    );
   }
 
   logout(){

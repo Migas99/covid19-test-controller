@@ -11,7 +11,7 @@ import { Users } from '../classes/users';
 })
 export class UsersListComponent implements OnInit {
 
-  constructor(private covid19APIService : covid19APIService, private router : Router) { }
+  constructor(private covid19APIService : covid19APIService, public router : Router) { }
 
   usersList:Users[];
 
@@ -63,6 +63,11 @@ export class UsersListComponent implements OnInit {
   }
 
   userInfo(id:String){
-    this.router.navigate(['/' + this.router.url + '/' + id]);
+    if(this.router.url === "/technicians"){
+      this.router.navigate(['/' + 'technician' + '/' + id]);
+    }
+    else{
+      this.router.navigate(['/' + 'user' + '/' + id]);
+    }
   }
 }

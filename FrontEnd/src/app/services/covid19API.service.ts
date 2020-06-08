@@ -20,12 +20,12 @@ export class covid19APIService{
 
     //Registo
     register(user:Users) : Observable<any>{
-        return this.httpclient.post("http://localhost:3000/users/register", user, {responseType: 'text'});
+        return this.httpclient.post("http://localhost:3000/users/register", user);
     }
 
     //Registar funcionario
     registerTechnician(user:Users) : Observable<any>{
-        return this.httpclient.post("http://localhost:3000/users/technician/register", user, {responseType: 'text'});
+        return this.httpclient.post("http://localhost:3000/users/technician/register", user);
     }
 
     //Perfil do utilizador com sessao iniciada
@@ -43,7 +43,7 @@ export class covid19APIService{
         return this.httpclient.get("http://localhost:3000/users/technicians");
     }
 
-    //lista de tecnicos
+    //lista de utilizadores infetados
     getInfectedUsers() : Observable<any>{
         return this.httpclient.get("http://localhost:3000/users/infected");
     }
