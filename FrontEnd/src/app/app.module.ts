@@ -19,6 +19,7 @@ import { UpdateUserComponent } from './update-user/update-user.component';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { RequestsComponent } from './requests/requests.component';
+import { ShareDataService } from './services/shareData.service';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,7 @@ import { RequestsComponent } from './requests/requests.component';
     HttpClientModule,
     ModalModule.forRoot()
   ],
-  providers: [covid19APIService, {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptorService, multi: true}],
+  providers: [covid19APIService, {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptorService, multi: true}, ShareDataService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

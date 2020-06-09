@@ -46,9 +46,9 @@
     </div>
 </div>
 
-<button type="button" class="button" [routerLink]="['/user', 'update', userInfo._id]">UPDATE</button>
+<button type="button" class="button" *ngIf="router.url === '/profile' || data.currentMessage === 'ADMIN'" [routerLink]="['/user', 'update', userInfo._id]">UPDATE</button>
 
-<button type="button" class="button" (click)="openModal(template)">DELETE</button>
+<button type="button" class="button" *ngIf="router.url === '/profile' || data.currentMessage === 'ADMIN'" (click)="openModal(template)">DELETE</button>
 
 <ng-template #template>
     <div class="modal-header">

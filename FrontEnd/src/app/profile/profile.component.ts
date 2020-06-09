@@ -6,6 +6,7 @@ import { Users } from '../classes/users';
 import {ActivatedRoute} from '@angular/router';
 import {Location} from '@angular/common';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
+import {  ShareDataService } from '../services/shareData.service';
 
 @Component({
   selector: 'app-profile',
@@ -14,8 +15,9 @@ import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 })
 export class ProfileComponent implements OnInit {
 
-  constructor(private covid19APIService : covid19APIService, private router : Router, private route:ActivatedRoute, private _location: Location, 
-    private modalService: BsModalService) { }
+  constructor(private covid19APIService : covid19APIService, public router : Router, private route:ActivatedRoute, private _location: Location, 
+    private modalService: BsModalService, public data: ShareDataService) { 
+    }
     
     modalRef: BsModalRef;
     config = {
