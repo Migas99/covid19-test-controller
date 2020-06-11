@@ -400,4 +400,131 @@ requestController.downloadFile = async (req, res) => {
     }
 }
 
+
+/**
+ * Método responsável por retornar a lista de testes ainda por tratar
+ */
+requestController.getTestsWithoutDates = async (req, res) => {
+
+    try {
+
+        const listOfRequests = await Request.find({}, { _id: 0 });
+        const answer = [];
+
+        for (i in listOfRequests) {
+            const request = listOfRequests[i];
+
+            if (request.isInfected == null) {
+
+                if (!request.firstTest) {
+
+                    answer.push(request);
+
+                } else {
+
+                    if (request.firstTest.result) {
+
+                        if (!request.secondTest) {
+
+                            answer.push(request);
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        return res.status(200).json(answer);
+
+    } catch (err) {
+        console.log(err);
+        return res.json({ 'Error': err });
+    }
+}
+
+/**
+ * Método responsável por retornar a lista de pedidos por colocar o resultado, realizados pelo técnico
+ */
+requestController.getTestsWithoutResults = async (req, res) => {
+
+    try {
+
+        const listOfRequests = await Request.find();
+        const answer = [];
+
+        for (i in listOfRequests) {
+            const request = listOfRequests[i];
+
+
+            if (request.isInfected == null) {
+
+                if (request.firstTest) {
+
+                    if (request.firstTest.responsibleTechnicianId == req.auth.id && request.firstTest.result == null) {
+
+                        answer.push(request);
+
+                    } else {
+
+                        if (request.secondTest) {
+
+                            if (request.secondTest.responsibleTechnicianId == req.auth.id && request.secondTest.result == null) {
+
+                                answer.push(request);
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        return res.status(200).json(answer);
+
+    } catch (err) {
+        console.log(err);
+        return res.json({ 'Error': err });
+    }
+
+}
+
+/**
+ * Método responsável por retornar uma lista contendo os testes completos
+ */
+requestController.getCompletedRequests = async (req, res) => {
+
+    try {
+
+        const listOfRequests = await Request.find({}, { _id: 0 });
+        const answer = [];
+
+        for (i in listOfRequests) {
+            const request = listOfRequests[i];
+
+            if (!request.isInfected == null) {
+
+                answer.push(request);
+
+            }
+
+        }
+
+        return res.status(200).json(answer);
+
+    } catch (err) {
+        console.log(err);
+        return res.json({ 'Error': err });
+    }
+
+}
+
 module.exports = requestController;
