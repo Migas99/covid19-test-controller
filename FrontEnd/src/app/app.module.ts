@@ -20,6 +20,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { RequestsComponent } from './requests/requests.component';
 import { ShareDataService } from './services/shareData.service';
+import { RequestsListComponent } from './requests-list/requests-list.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { ShareDataService } from './services/shareData.service';
     UsersListComponent,
     UpdateUserComponent,
     PageNotFoundComponent,
-    RequestsComponent
+    RequestsComponent,
+    RequestsListComponent
   ],
   imports: [
     BrowserModule,

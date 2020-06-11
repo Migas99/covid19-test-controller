@@ -10,7 +10,8 @@ import { AuthGuardService } from './services/AuthGuard.service';
 import { UsersListComponent } from './users-list/users-list.component';
 import { UpdateUserComponent } from './update-user/update-user.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
-import { RequestsComponent} from './requests/requests.component';
+import { RequestsComponent } from './requests/requests.component';
+import { RequestsListComponent } from './requests-list/requests-list.component';
 
 const routes: Routes = [
     {
@@ -78,23 +79,41 @@ const routes: Routes = [
         children: [{ path: "", component: UpdateUserComponent }], canActivate: [AuthGuardService]
     },
 
-    //Todos os requests
+    //Todos os requests ja terminados
     {
-        path: "requests", component: ToolbarComponent,
-        children: [{path:"", component : RequestsComponent}], canActivate: [AuthGuardService]
+        path: "handledRequests", component: ToolbarComponent,
+        children: [{ path: "", component: RequestsListComponent }], canActivate: [AuthGuardService]
+    },
+
+    //Todos os requests por agendar
+    {
+        path: "unhandledRequests", component: ToolbarComponent,
+        children: [{ path: "", component: RequestsListComponent }], canActivate: [AuthGuardService]
     },
 
     //Requests do utilizador
     {
         path: "myRequests", component: ToolbarComponent,
-        children: [{path:"", component : RequestsComponent}], canActivate: [AuthGuardService]
+        children: [{ path: "", component: RequestsListComponent }], canActivate: [AuthGuardService]
+    },
+
+    //Requests que o tecnico esta a lidar
+    {
+        path: "technicianRequests", component: ToolbarComponent,
+        children: [{ path: "", component: RequestsListComponent }], canActivate: [AuthGuardService]
+    },
+
+    //Info de um request
+    {
+        path: "request/:id", component: ToolbarComponent,
+        children: [{ path: "", component: RequestsComponent }], canActivate: [AuthGuardService]
     },
 
     //Default
     { path: "", redirectTo: "/login", pathMatch: "full" },
 
     //404
-    {path : "**", component : PageNotFoundComponent}
+    { path: "**", component: PageNotFoundComponent }
 ];
 
 @NgModule({

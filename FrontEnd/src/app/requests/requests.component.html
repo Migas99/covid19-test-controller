@@ -1,1 +1,7 @@
-<p>requests works!</p>
+<p>Username: {{request.requesterUsername}}</p>
+<div>
+    <button *ngIf="request.firstTest.pdfFilePath" (click)="download(request.firstTest.pdfFilePath)">Download Test 1</button>
+    <button *ngIf="request.firstTest.pdfFilePath" (click)="download(request.secondTest.pdfFilePath)">Download Test 2</button>
+    <button>Schedule Test</button>
+    <button>Add Test Result</button>
+</div>

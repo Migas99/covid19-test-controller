@@ -146,7 +146,7 @@ requestController.updateRequestTestInfo = async (req, res, next) => {
                 if (request.firstTest.result == null) {
 
                     /*Guardamos o ficheiro PDF*/
-                    await upload(req, res, next);
+                    await upload(req, res);
 
                     /*Se o estado atual do user for 'Safe' e o teste der negativo, podemos então definir o resultado final do pedido*/
                     if (req.body.result == 'false') {
@@ -158,7 +158,7 @@ requestController.updateRequestTestInfo = async (req, res, next) => {
 
                             /*Caso contrário, teremos apenas o resultado de um dos dois testes que este têm de realizar*/
                             if (request.userState == 'Suspect' || request.userState == 'Infected') {
-                                await Request.updateOne({ _id: req.params.requestId }, { $set: { 'firstTest.pdfFilePath': req.body.pdfFilePath, 'firstTest.result': false, resultDate: Date(Date.now()), isInfected: false } });
+                                await Request.updateOne({ _id: req.params.requestId }, { $set: { 'firstTest.pdfFilePath': req.body.pdfFilePath, 'firstTest.result': false} });
                             } else {
                                 /*Nunca podemos chegar neste ponto*/
                                 return res.status(400).json({ 'Error': 'This request hasnt been handled correctly!' });
@@ -177,7 +177,6 @@ requestController.updateRequestTestInfo = async (req, res, next) => {
                         }
 
                     }
-
                     return res.status(200).json({ 'Success': 'The request was updated with success!' });
                 } else {
 
@@ -188,7 +187,7 @@ requestController.updateRequestTestInfo = async (req, res, next) => {
                         if (request.secondTest.result == null) {
 
                             /*Guardamos o ficheiro PDF*/
-                            await upload(req, res, next);
+                            await upload(req, res);
 
                             /*Dependendo do resultado, atualizamos o estado do user*/
                             if (req.body.result == 'true') {
@@ -233,7 +232,7 @@ requestController.updateRequestTestInfo = async (req, res, next) => {
  * @param {*} res 
  * @param {*} next 
  */
-const upload = async (req, res, next) => {
+const upload = async (req, res) => {
     const file = "./files/database/" + req.file.filename;
 
     try {
@@ -250,8 +249,7 @@ const upload = async (req, res, next) => {
         console.log(response);
 
         await fs.unlink(req.file.path);
-
-        next();
+        return;
 
     } catch (err) {
         console.log(err);
@@ -371,24 +369,9 @@ requestController.getTestsBetweenDates = async (req, res) => {
  */
 requestController.downloadFile = async (req, res) => {
     try {
-        if (req.auth.role == 'USER') {
-            const firstTest = await Request.findOne({ firstTest: { pdfFilePath: req.body.filePath } });
-            if (firstTest) {
-                if (firstTest.requesterUsername != req.auth.username) {
-                    return res.status(403).json({ 'Error': 'You are not allowed to download test results of other users.' });
-                }
-            } else {
-                const secondTest = await Request.findOne({ secondTest: { pdfFilePath: req.body.filePath } });
-                if (secondTest) {
-                    if (secondTest.requesterUsername != req.auth.username) {
-                        return res.status(403).json({ 'Error': 'You are not allowed to download test results of other users.' });
-                    }
-                } else {
-                    return res.status(404).json({ 'Error': 'The requested file was not found.' });
-                }
-            }
-        }
+        console.log(req.body.filePath);
 
+        console.log(req.body.filePath);
 
         const filePath = req.body.filePath;
         const fileName = "TestResult.pdf";
@@ -408,7 +391,7 @@ requestController.getTestsWithoutDates = async (req, res) => {
 
     try {
 
-        const listOfRequests = await Request.find({}, { _id: 0 });
+        const listOfRequests = await Request.find();
         const answer = [];
 
         for (i in listOfRequests) {
@@ -504,13 +487,13 @@ requestController.getCompletedRequests = async (req, res) => {
 
     try {
 
-        const listOfRequests = await Request.find({}, { _id: 0 });
+        const listOfRequests = await Request.find();
         const answer = [];
 
         for (i in listOfRequests) {
             const request = listOfRequests[i];
-
-            if (!request.isInfected == null) {
+            
+            if (request.isInfected != null) {
 
                 answer.push(request);
 

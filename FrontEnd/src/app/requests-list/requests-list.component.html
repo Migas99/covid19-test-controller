@@ -1,0 +1,9 @@
+<div *ngFor="let request of requestsList">
+    <div class="request" (click)="requestInfo(request._id)">
+        <p>Requester Username: {{request.requesterUsername}}</p>
+        <p>Priority: {{request.priority}}</p>
+        <p>SubmitDate: {{request.submitDate}}</p>
+        <p *ngIf="router.url === '/handledRequests'">Is Infected: {{request.isInfected}}</p>
+        <p>User State: {{request.userState}}</p>
+    </div>
+</div>

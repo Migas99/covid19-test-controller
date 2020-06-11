@@ -54,8 +54,8 @@ export class ProfileComponent implements OnInit {
         },
         (err : HttpErrorResponse) =>{
           if(err.error === "Not authorized!"){
-            this.router.navigate(['/home']);
             alert("NÃO TEM PERMISSÃO PARA ACEDER A ESSA FUNCIONALIDADE");
+            this.router.navigate(['/home']);
           };
           console.log(err);
         }

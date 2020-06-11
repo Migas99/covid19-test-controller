@@ -35,8 +35,13 @@
   display: block;
 }
 
+#backButton{
+  cursor: pointer;
+}
+
 #menu-nav {
   width: 100%;
+  min-width: fit-content;
   background-color: #ecf0f1;
   overflow: visible;
 }
@@ -49,7 +54,7 @@
 }
 #navigation-bar li {
   height: 100%;
-  width: 12%;
+  width: 10%;
   display: flex;
 }
 #navigation-bar li:hover a::before {
@@ -60,7 +65,7 @@
 #navigation-bar a {
   width: 100%;
   color: #848484;
-  font-size: 1.5vw;
+  font-size: 20px;
   text-decoration: none;
   text-align: center;
   padding: 10px 0px;

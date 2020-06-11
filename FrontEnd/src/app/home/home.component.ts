@@ -12,8 +12,6 @@ export class HomeComponent implements OnInit {
 
   constructor(private covid19APIService : covid19APIService, public data: ShareDataService) { }
 
-  userRole: String;
-
   ngOnInit(): void {
     
   }

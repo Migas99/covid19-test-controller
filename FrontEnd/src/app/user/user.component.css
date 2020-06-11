@@ -18,7 +18,10 @@ li{
 }
 a{
     text-decoration: none;
-    padding: 15px 95px 15px 95px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-left: 15%;
+    padding-right: 15%;
     background: rgba(160, 179, 176, 0.25);
     color: #a0b3b0;
     font-size: 20px;

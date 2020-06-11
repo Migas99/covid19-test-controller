@@ -17,13 +17,13 @@ router.get('/user/:userId', authorizeBasedOnRolesAndUserId(['TECHNICIAN', 'ADMIN
 router.get('/myrequests', authorizeBasedOnRoles(['USER']), requestController.getRequestMadeByUser);
 
 /*Método responsável por retornar a lista de testes ainda por tratar*/
-router.get('/getIncompletedRequests/date', authorizeBasedOnRoles(['TECHNICIAN']), requestController.getTestsWithoutDates);
+router.get('/getIncompletedRequests/date', authorizeBasedOnRoles(['TECHNICIAN', 'ADMIN']), requestController.getTestsWithoutDates);
 
 /*Método responsável por retornar a lista de pedidos por colocar o resultado, realizados pelo técnico*/
 router.get('/getIncompletedRequests/result', authorizeBasedOnRoles(['TECHNICIAN']), requestController.getTestsWithoutResults);
 
 /*Método responsável por retornar uma lista contendo os testes completos*/
-router.get('/getCompletedRequests', authorizeBasedOnRoles(['TECHNICIAN']), requestController.getCompletedRequests);
+router.get('/getCompletedRequests', authorizeBasedOnRoles(['TECHNICIAN', 'ADMIN']), requestController.getCompletedRequests);
 
 /*Criar um novo pedido*/
 router.post('/', authorizeBasedOnRoles(['USER', 'TECHNICIAN', 'ADMIN']), requestController.createRequest);

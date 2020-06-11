@@ -3,11 +3,8 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class ShareDataService {
 
-  currentMessage:String = "";
+  currentROLE:String = "";
+  currentID:String = "";
 
   constructor() { }
-
-  changeMessage(message: String) {
-    this.currentMessage = message;
-  }
 }

@@ -12,17 +12,20 @@ import {Location} from '@angular/common';
 })
 export class RegisterComponent implements OnInit {
 
-  constructor(private covid19APIService : covid19APIService, public router : Router, private _location: Location) { }
+  constructor(private covid19APIService : covid19APIService, public router : Router, private _location: Location) { 
+    this.elementID = "registerUsers";
+   }
 
   ngOnInit(): void {
-    if(document.getElementById("registerTechnicians") && this.router.url == "/register"){
-      document.getElementById("registerTechnicians").id = "registerUsers";
+    if(this.elementID === "registerTechnicians" && this.router.url == "/register"){
+      this.elementID = "registerUsers";
     }
-    if(document.getElementById("registerUsers") && this.router.url == "/technicians/register"){
-      document.getElementById("registerUsers").id = "registerTechnicians";
+    if(this.elementID === "registerUsers" && this.router.url == "/technicians/register"){
+      this.elementID = "registerTechnicians";
     }
   }
-  
+
+  elementID: String;
   user = new Users();
 
   resultado;
