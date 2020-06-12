@@ -13,6 +13,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { RequestsComponent } from './requests/requests.component';
 import { RequestsListComponent } from './requests-list/requests-list.component';
 import { CreateRequestComponent } from './create-request/create-request.component';
+import { RequestInfoComponent} from './request-info/request-info.component';
 
 const routes: Routes = [
     {
@@ -114,6 +115,12 @@ const routes: Routes = [
     {
         path: "createRequest", component: ToolbarComponent,
         children: [{ path: "", component: CreateRequestComponent }], canActivate: [AuthGuardService]
+    },
+
+    //Info de um request
+    {
+        path: "requestsInfo", component: ToolbarComponent,
+        children: [{ path: "", component: RequestInfoComponent }], canActivate: [AuthGuardService]
     },
 
     //Default

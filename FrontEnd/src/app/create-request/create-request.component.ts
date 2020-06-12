@@ -24,6 +24,7 @@ export class CreateRequestComponent implements OnInit {
   createRequest() {
     this.covid19APIService.createRequest(this.description, this.priority).subscribe(
       (user: any) => {
+        this.httpError = "";
         alert("REQUEST CRIADO COM SUCESSO");
         this.router.navigate(['/myRequests']);
       },

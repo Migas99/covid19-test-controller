@@ -1,0 +1,40 @@
+<div>
+    <input type="date" [(ngModel)]="beginDate">
+    <input type="date" [(ngModel)]="endDate">
+    <button (click)="getInfo()">Calculate Results</button>
+    {{httpError}}
+</div>
+
+<div class="resultadosInfo">
+    <div *ngIf="show">
+        <div class="tag first">Total Tests</div>
+        <div class="content first">{{result.totalTests}}</div>
+    </div>
+
+    <div *ngIf="show">
+        <div class="tag">Completed Tests</div>
+        <div class="content">{{result.completedTests}}</div>
+    </div>
+
+    <div *ngIf="show">
+        <div class="tag">Infected Tests</div>
+        <div class="content">{{result.infectedRequests}}</div>
+    </div>
+
+    <div *ngIf="show">
+        <div class="tag">Total Requests</div>
+        <div class="content">{{result.totalRequests}}</div>
+    </div>
+
+    <div *ngIf="show">
+        <div class="tag">Completed Requests</div>
+        <div class="content">{{result.completedRequests}}</div>
+    </div>
+</div>
+<div class="observacoes" *ngIf="show">
+    <p>Observações:</p>
+    <p>Para os Total Requests é considerado a data de submissão</p>
+    <p>Para os Completed Requests é considerado a data em que o request ficou completo</p>
+</div>
+
+

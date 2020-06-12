@@ -127,6 +127,7 @@ export class RequestsComponent implements OnInit {
       (answer: any) => {
         this.getRequest();
         this.modalRef.hide();
+        this.requestError = "";
       },
       (err: HttpErrorResponse) => {
         if (err.error === "Not authorized!") {

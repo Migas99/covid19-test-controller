@@ -340,7 +340,9 @@ requestController.getRequestMadeByUser = async (req, res) => {
  */
 requestController.getTestsBetweenDates = async (req, res) => {
     try {
-        if (Math.abs(new Date(req.body.beginDate) - new Date(req.body.endDate)) >= 0) {
+        console.log(new Date (req.body.beginDate));
+        console.log(new Date (req.body.endDate));
+        if (new Date(req.body.beginDate) <= new Date(req.body.endDate)) {
             const requests = await Request.find();
             var totalTests = 0;
             var completedTests = 0;
@@ -350,14 +352,13 @@ requestController.getTestsBetweenDates = async (req, res) => {
 
             for (i in requests) {
                 const request = requests[i];
-                totalRequests += 1;
-
-                if(request.isInfected != null){
-                    completedRequests += 1;
+                if(new Date(request.submitDate) >= new Date(req.body.beginDate) && new Date(request.submitDate) <= new Date(req.body.endDate)){
+                    totalRequests += 1;
                 }
-
-                if(request.isInfected){
-                    infectedRequests += 1;
+                if(new Date(request.resultDate) >= new Date(req.body.beginDate) && new Date(request.resultDate) <= new Date(req.body.endDate)){
+                    if(request.isInfected != null){
+                        completedRequests += 1;
+                    }
                 }
 
                 if (request.firstTest != null) {
@@ -367,6 +368,9 @@ requestController.getTestsBetweenDates = async (req, res) => {
                         totalTests += 1;
                         if(request.firstTest.result != null){
                             completedTests += 1;
+                        }
+                        if(request.firstTest.result == true){
+                            infectedRequests += 1;
                         }
                     }
                 }
@@ -379,13 +383,16 @@ requestController.getTestsBetweenDates = async (req, res) => {
                         if(request.secondTest.result != null){
                             completedTests += 1;
                         }
+                        if(request.secondTest.result == true){
+                            infectedRequests += 1;
+                        }
                     }
                 }
             }
-            
+
             return res.status(200).json({
-                'TotalTests': totalTests,
-                'CompletedTests' : completedTests,
+                'totalTests': totalTests,
+                'completedTests' : completedTests,
                 'totalRequests': totalRequests,
                 'completedRequests' : completedRequests,
                 'infectedRequests' : infectedRequests

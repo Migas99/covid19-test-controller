@@ -70,6 +70,7 @@ export class ProfileComponent implements OnInit {
           this.modalRef.hide();
           this._location.back();
           alert("REMOVIDO COM SUCESSO");
+          this.deleteErro = "";
         },
         (err : HttpErrorResponse) =>{
           if(err.error === "Not authorized!"){
@@ -80,7 +81,7 @@ export class ProfileComponent implements OnInit {
       );
     }
     else{
-      this.deleteErro = "NANAO";
+      this.deleteErro = "Introduziu o username errado";
     }
   }
 }

@@ -23,6 +23,7 @@ import { ShareDataService } from './services/shareData.service';
 import { RequestsListComponent } from './requests-list/requests-list.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CreateRequestComponent } from './create-request/create-request.component';
+import { RequestInfoComponent } from './request-info/request-info.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { CreateRequestComponent } from './create-request/create-request.componen
     PageNotFoundComponent,
     RequestsComponent,
     RequestsListComponent,
-    CreateRequestComponent
+    CreateRequestComponent,
+    RequestInfoComponent
   ],
   imports: [
     BrowserModule,

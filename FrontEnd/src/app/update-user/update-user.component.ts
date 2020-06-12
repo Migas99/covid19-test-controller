@@ -35,6 +35,7 @@ export class UpdateUserComponent implements OnInit {
     
     this.covid19APIService.updateUser(this.obj, this.id).subscribe(
       (user : any)=>{
+        this.erro = "";
         this._location.back();
         alert("ATUALIZADO COM SUCESSO");
       },

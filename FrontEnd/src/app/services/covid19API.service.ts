@@ -114,4 +114,9 @@ export class covid19APIService {
     createRequest(description:String, priority:String){
         return this.httpclient.post(this.url + "requests/", {description : description, priority :  priority});
     }
+
+    //Info about Requests
+    requestsInfo(beginDate:Date, endDate:Date){
+        return this.httpclient.post(this.url + "requests/date/count/", {beginDate : beginDate, endDate :  endDate});
+    }
 };
