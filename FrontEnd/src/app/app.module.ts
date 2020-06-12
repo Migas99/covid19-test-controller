@@ -21,6 +21,8 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { RequestsComponent } from './requests/requests.component';
 import { ShareDataService } from './services/shareData.service';
 import { RequestsListComponent } from './requests-list/requests-list.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { CreateRequestComponent } from './create-request/create-request.component';
 
 @NgModule({
   declarations: [
@@ -35,13 +37,15 @@ import { RequestsListComponent } from './requests-list/requests-list.component';
     UpdateUserComponent,
     PageNotFoundComponent,
     RequestsComponent,
-    RequestsListComponent
+    RequestsListComponent,
+    CreateRequestComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
+    ReactiveFormsModule,
     ModalModule.forRoot()
   ],
   providers: [covid19APIService, {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptorService, multi: true}, ShareDataService],

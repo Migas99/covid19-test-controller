@@ -12,6 +12,7 @@ import { UpdateUserComponent } from './update-user/update-user.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { RequestsComponent } from './requests/requests.component';
 import { RequestsListComponent } from './requests-list/requests-list.component';
+import { CreateRequestComponent } from './create-request/create-request.component';
 
 const routes: Routes = [
     {
@@ -107,6 +108,12 @@ const routes: Routes = [
     {
         path: "request/:id", component: ToolbarComponent,
         children: [{ path: "", component: RequestsComponent }], canActivate: [AuthGuardService]
+    },
+
+    //Info de um request
+    {
+        path: "createRequest", component: ToolbarComponent,
+        children: [{ path: "", component: CreateRequestComponent }], canActivate: [AuthGuardService]
     },
 
     //Default

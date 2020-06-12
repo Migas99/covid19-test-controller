@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { covid19APIService } from 'src/app/services/covid19API.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
@@ -6,6 +6,8 @@ import { Request } from '../classes/requests';
 import { ActivatedRoute } from '@angular/router';
 import * as fileSaver from 'file-saver/';
 import { ShareDataService } from '../services/shareData.service';
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
+import { FormBuilder, FormGroup } from "@angular/forms";
 
 @Component({
   selector: 'app-requests',
@@ -14,23 +16,45 @@ import { ShareDataService } from '../services/shareData.service';
 })
 export class RequestsComponent implements OnInit {
 
-  constructor(private covid19APIService: covid19APIService, public router: Router, private route: ActivatedRoute, public data: ShareDataService) { }
+  form: FormGroup;
+
+  constructor(private covid19APIService: covid19APIService, public router: Router, private route: ActivatedRoute, public data: ShareDataService,
+    private modalService: BsModalService, public fb: FormBuilder) {
+    this.form = this.fb.group({
+      name: [''],
+      file: [null]
+    })
+  }
 
   requestInfo: Request = null;
   id: String;
-  addTestResult: boolean = false;
+  canTestResult: boolean = false;
   canDownloadFirst: boolean = false;
   canDownloadSecond: boolean = false;
+  canSchedule: boolean = true;
+  scheduleDate: Date;
+  requestError: String = "";
+
+  modalRef: BsModalRef;
+  config = {
+    animated: true
+  };
+  openModal(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(template, this.config);
+  }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
       this.id = params.get('id');
     });
 
+    this.getRequest();
+  }
+
+  getRequest() {
     this.covid19APIService.getRequest(this.id).subscribe(
       (request: any) => {
         this.requestInfo = request;
-        console.log(this.requestInfo);
         this.canAddTestResult();
         this.canDownloadTest();
       },
@@ -57,20 +81,24 @@ export class RequestsComponent implements OnInit {
   }
 
   canAddTestResult() {
-    if (this.requestInfo.firstTest != null) {
-      if (this.requestInfo.firstTest.result == null && this.requestInfo.firstTest.testDate != null) {
-        console.log("sadfsdafasdf     " + this.requestInfo.firstTest.responsibleTechnicianId);
-        console.log(this.data.currentID);
-        if (this.requestInfo.firstTest.responsibleTechnicianId === this.data.currentID) {
-          this.addTestResult = true;
+    if(this.requestInfo.isInfected == null){
+      if (this.requestInfo.firstTest != null) {
+        if (this.requestInfo.firstTest.result == null && this.requestInfo.firstTest.testDate != null) {
+          if (this.requestInfo.firstTest.responsibleTechnicianId === this.data.currentID) {
+            this.canTestResult = true;
+            this.canSchedule =false;
+          }
+        }
+      } else if (this.requestInfo.secondTest) {
+        if (!this.requestInfo.secondTest.result && this.requestInfo.secondTest.testDate) {
+          if (this.requestInfo.secondTest.responsibleTechnicianId === this.data.currentID) {
+            this.canTestResult = true;
+            this.canSchedule =false;
+          }
         }
       }
-    } else if (this.requestInfo.secondTest) {
-      if (!this.requestInfo.secondTest.result && this.requestInfo.secondTest.testDate) {
-        if (this.requestInfo.secondTest.responsibleTechnicianId === this.data.currentID) {
-          this.addTestResult = true;
-        }
-      }
+    }else{
+      this.canSchedule =false;
     }
   }
 
@@ -85,5 +113,53 @@ export class RequestsComponent implements OnInit {
         this.canDownloadSecond = true;
       }
     }
+  }
+
+  addTestResult() {
+    var formData: any = new FormData();
+    formData.append("result", this.form.get('name').value);
+    formData.append("file", this.form.get('file').value);
+    console.log(this.form.get('name').value);
+    this.covid19APIService.addTestResult(formData, this.requestInfo._id).subscribe(
+      (answer: any) => {
+        this.getRequest();
+        this.modalRef.hide();
+      },
+      (err: HttpErrorResponse) => {
+        if (err.error === "Not authorized!") {
+          this.modalRef.hide();
+          alert("NÃO TEM PERMISSÃO PARA ACEDER A ESSA FUNCIONALIDADE");
+          this.router.navigate(['/home']);
+        };
+        console.log(err.error.Error);
+        this.requestError = err.error.Error;
+      }
+    );
+  }
+
+  scheduleTest(date: Date) {
+    this.covid19APIService.scheduleTest(date, this.requestInfo._id).subscribe(
+      (answer: any) => {
+        this.getRequest();
+        this.modalRef.hide();
+      },
+      (err: HttpErrorResponse) => {
+        if (err.error === "Not authorized!") {
+          this.modalRef.hide();
+          alert("NÃO TEM PERMISSÃO PARA ACEDER A ESSA FUNCIONALIDADE");
+          this.router.navigate(['/home']);
+        };
+        console.log(err.error.Error);
+        this.requestError = err.error.Error;
+      }
+    );
+  }
+
+  uploadFile(event) {
+    const file = (event.target as HTMLInputElement).files[0];
+    this.form.patchValue({
+      file: file
+    });
+    this.form.get('file').updateValueAndValidity()
   }
 }

@@ -4,12 +4,65 @@
         <button *ngIf="canDownloadFirst" (click)="download(requestInfo.firstTest.pdfFilePath)">Download Test 1</button>
     </div>
     <div>
-        <button *ngIf="canDownloadSecond"(click)="download(requestInfo.secondTest.pdfFilePath)">Download Test 2</button>
+        <button *ngIf="canDownloadSecond" (click)="download(requestInfo.secondTest.pdfFilePath)">Download Test
+            2</button>
     </div>
-    <div *ngIf="!addTestResult">
+    <div *ngIf="canSchedule" (click)="openModal(testScheduleModal)">
         <button>Schedule Test</button>
     </div>
-    <div *ngIf="addTestResult">
+    <div *ngIf="canTestResult" (click)="openModal(testResultModal)">
         <button>Add Test Result</button>
     </div>
+
+    <ng-template #testScheduleModal class="modal">
+        <div class="modal-header">
+            <h4 class="modal-title pull-left">SCHEDULE TEST</h4>
+            <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <p>Introduzir data para a qual pretende agendar</p>
+            <input type="date" aria-label="Username" [(ngModel)]="scheduleDate">
+            <button (click)="scheduleTest(scheduleDate)">Confirmar</button>
+            <button (click)="modalRef.hide()">Cancelar</button>
+            <p>{{requestError}}</p>
+        </div>
+    </ng-template>
+
+    <ng-template #testResultModal class="modal">
+        <div class="modal-header">
+            <h4 class="modal-title pull-left">ADD TEST RESULT</h4>
+            <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <p>Upload do ficheiro e resultado do teste</p>
+            <div class="container">
+                <form [formGroup]="form" (ngSubmit)="addTestResult()">
+                    <div class="form-group">
+                        <input type="file" (change)="uploadFile($event)">
+                    </div>
+                    <p>Selecionar resultado</p>
+                    <div>
+                        <div class = "resultInput">
+                            <input type="radio" id="positive" name="name" value="true" formControlName="name" >
+                            <label class="result" for="positive">Positive Result</label>
+                        </div>
+                        <div class = "resultInput">
+                            <input type="radio" id="negative" name="name" value="false" formControlName="name">
+                            <label class="result" for="negative">Negative Result</label>
+                        </div>
+                    </div>
+            
+                    <div class="form-group">
+                        <button class="btn btn-danger btn-block btn-lg">Create</button>
+                    </div>
+                </form>
+            </div>
+            <button (click)="modalRef.hide()">Cancelar</button>
+            <p>{{requestError}}</p>
+        </div>
+    </ng-template>
 </div>

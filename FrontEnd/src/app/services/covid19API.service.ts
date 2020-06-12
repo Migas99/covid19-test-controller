@@ -99,4 +99,14 @@ export class covid19APIService {
             }
         });
     }
+
+    //schedule Test
+    scheduleTest(date:Date, id:String){
+        return this.httpclient.put(this.url + "requests/date/" + id, {testDate: date});
+    }
+
+    //add test Result
+    addTestResult(formData: FormData, id:String){
+        return this.httpclient.put(this.url + "requests/info/" + id, formData);
+    }
 };
