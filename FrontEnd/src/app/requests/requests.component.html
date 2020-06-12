@@ -1,4 +1,82 @@
-{{requestInfo | json}}
+<div id="requestInformacao">
+    <div *ngIf="requestInfo._id != null">
+        <div class="tag first">Request ID:</div>
+        <div class="content first">{{requestInfo._id}}</div>
+    </div>
+    <div *ngIf="requestInfo.requesterUsername != null">
+        <div class="tag">Requester Username:</div>
+        <div class="content">{{requestInfo.requesterUsername}}</div>
+    </div>
+    <div *ngIf="requestInfo.description != null">
+        <div class="tag">Description:</div>
+        <div class="content">{{requestInfo.description}}</div>
+    </div>
+    <div *ngIf="requestInfo.priority != null">
+        <div class="tag">Priority:</div>
+        <div class="content">{{requestInfo.priority}}</div>
+    </div>
+    <div *ngIf="requestInfo.submitDate != null">
+        <div class="tag">Submit Date:</div>
+        <div class="content">{{requestInfo.submitDate}}</div>
+    </div>
+    <div *ngIf="requestInfo.userState != null">
+        <div class="tag">User State:</div>
+        <div class="content">{{requestInfo.userState}}</div>
+    </div>
+    <div class="test" *ngIf="requestInfo.firstTest != null">
+        <div *ngIf="requestInfo.firstTest.testDate != null">
+            <h2>Test 1</h2>
+            <div>
+                <div class="tag">Test Date:</div>
+                <div class="content">{{requestInfo.firstTest.testDate}}</div>
+            </div>
+            <div>
+                <div class="tag">Responsible Technician:</div>
+                <div class="content">{{requestInfo.firstTest.responsibleTechnicianId}}</div>
+            </div>
+        </div>
+        <div *ngIf="requestInfo.firstTest.result != null">
+            <div>
+                <div class="tag">Test Result:</div>
+                <div class="content">{{requestInfo.firstTest.result}}</div>
+            </div>
+        </div>
+        <div>
+
+        </div>
+    </div>
+    <div class="test" *ngIf="requestInfo.secondTest != null">
+        
+        <div *ngIf="requestInfo.secondTest.testDate != null">
+            <h2>Test 2</h2>
+            <div>
+                <div class="tag">Test Date:</div>
+                <div class="content">{{requestInfo.secondTest.testDate}}</div>
+            </div>
+            <div>
+                <div class="tag">Responsible Technician:</div>
+                <div class="content">{{requestInfo.secondTest.responsibleTechnicianId}}</div>
+            </div>
+        </div>
+        <div *ngIf="requestInfo.secondTest.result != null">
+            <div>
+                <div class="tag">Test Result:</div>
+                <div class="content">{{requestInfo.secondTest.result}}</div>
+            </div>
+        </div>
+        <div>
+
+        </div>
+    </div>
+    <div *ngIf="requestInfo.resultDate != null">
+        <div class="tag">Result Date:</div>
+        <div class="content">{{requestInfo.resultDate}}</div>
+    </div>
+    <div *ngIf="requestInfo.isInfected != null">
+        <div class="tag">Is Infected:</div>
+        <div class="content">{{requestInfo.isInfected}}</div>
+    </div>
+</div>
 <div>
     <div>
         <button *ngIf="canDownloadFirst" (click)="download(requestInfo.firstTest.pdfFilePath)">Download Test 1</button>
@@ -18,7 +96,7 @@
         <div class="modal-header">
             <h4 class="modal-title pull-left">SCHEDULE TEST</h4>
             <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
-                <span aria-hidden="true">&times;</span>
+                <h2 aria-hidden="true">&times;</h2>
             </button>
         </div>
         <div class="modal-body">
@@ -34,7 +112,7 @@
         <div class="modal-header">
             <h4 class="modal-title pull-left">ADD TEST RESULT</h4>
             <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
-                <span aria-hidden="true">&times;</span>
+                <h2 aria-hidden="true">&times;</h2>
             </button>
         </div>
         <div class="modal-body">
@@ -46,16 +124,16 @@
                     </div>
                     <p>Selecionar resultado</p>
                     <div>
-                        <div class = "resultInput">
-                            <input type="radio" id="positive" name="name" value="true" formControlName="name" >
+                        <div class="resultInput">
+                            <input type="radio" id="positive" name="name" value="true" formControlName="name">
                             <label class="result" for="positive">Positive Result</label>
                         </div>
-                        <div class = "resultInput">
+                        <div class="resultInput">
                             <input type="radio" id="negative" name="name" value="false" formControlName="name">
                             <label class="result" for="negative">Negative Result</label>
                         </div>
                     </div>
-            
+
                     <div class="form-group">
                         <button class="btn btn-danger btn-block btn-lg">Create</button>
                     </div>

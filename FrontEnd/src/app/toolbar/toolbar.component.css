@@ -37,7 +37,3 @@
 #backButton{
   cursor: pointer;
 }
-
-ul:last-child{
-  margin-left: 100px;
-}

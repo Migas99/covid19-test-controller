@@ -2,3 +2,44 @@
     display: inline;
     padding-left: 15px;
 }
+
+.requestInformacao{
+    width: 100%;
+    margin-bottom: 50px;
+}
+
+.content{
+    float: left;
+    width: 60%;
+    margin-bottom: 20px;
+}
+
+.tag{
+    margin-left: 40px;
+    float: left;
+    font-weight: bold;
+    width: 30%;
+    
+}
+
+.test{
+    margin-top: 50px;
+}
+
+.first{
+    margin-top: 50px;
+}
+
+.test{
+    margin-left: 30px;
+}
+
+h2{
+    padding-right: 200px;
+    width: 100%;
+}
+
+button{
+    padding-left: 5%;
+    padding-right: 5%;
+}
