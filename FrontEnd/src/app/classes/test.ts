@@ -1,7 +1,7 @@
 export class Test {
 
     testDate: Date;
-    responsibleTechnicianID: String;
+    responsibleTechnicianId: String;
     pdfFilePath: String;
     result: boolean;
 };

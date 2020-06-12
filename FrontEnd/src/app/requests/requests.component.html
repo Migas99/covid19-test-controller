@@ -1,7 +1,15 @@
-<p>Username: {{request.requesterUsername}}</p>
+{{requestInfo | json}}
 <div>
-    <button *ngIf="request.firstTest.pdfFilePath" (click)="download(request.firstTest.pdfFilePath)">Download Test 1</button>
-    <button *ngIf="request.firstTest.pdfFilePath" (click)="download(request.secondTest.pdfFilePath)">Download Test 2</button>
-    <button>Schedule Test</button>
-    <button>Add Test Result</button>
+    <div>
+        <button *ngIf="canDownloadFirst" (click)="download(requestInfo.firstTest.pdfFilePath)">Download Test 1</button>
+    </div>
+    <div>
+        <button *ngIf="canDownloadSecond"(click)="download(requestInfo.secondTest.pdfFilePath)">Download Test 2</button>
+    </div>
+    <div *ngIf="!addTestResult">
+        <button>Schedule Test</button>
+    </div>
+    <div *ngIf="addTestResult">
+        <button>Add Test Result</button>
+    </div>
 </div>
