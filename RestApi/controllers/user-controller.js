@@ -40,7 +40,7 @@ userController.login = async (req, res) => {
 
     /*Criar e devolver o Token*/
     const token = jwt.sign({ id: user.id, username: user.username, role: user.role }, process.env.TOKEN_SECRET);
-    return res.status(200).send({token : token});
+    return res.status(200).send({ token: token });
 }
 
 /**
@@ -269,10 +269,15 @@ userController.getAllInfectedUsers = async (req, res) => {
     }
 }
 
-userController.getNumberOfInfectedUsers = async (req, res) => {
+/**
+ * Método responsável por obter numero de users infetados e total de users
+ */
+
+userController.getUsersInfo = async (req, res) => {
     try {
         const infectedCount = await User.countDocuments({ role: 'USER', state: "Infected" });
-        return res.status(200).json({ 'Success': infectedCount });
+        const usersCount = await User.countDocuments({ role: 'USER' });
+        return res.status(200).json({ 'infectedUsers': infectedCount, 'totalUsers': usersCount });
     } catch (err) {
         console.log(err);
         return res.json(err);

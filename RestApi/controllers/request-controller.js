@@ -3,6 +3,8 @@ const Request = require("../models/request");
 const User = require('../models/user');
 const fs = require('fs').promises;
 const { createRequestValidation, updateTestDateValidation, updateTestInfoValidation } = require('../validations/requestValidations');
+const { find } = require("../models/request");
+const { request } = require("http");
 const requestController = {};
 
 /**
@@ -158,7 +160,7 @@ requestController.updateRequestTestInfo = async (req, res, next) => {
 
                             /*Caso contrário, teremos apenas o resultado de um dos dois testes que este têm de realizar*/
                             if (request.userState == 'Suspect' || request.userState == 'Infected') {
-                                await Request.updateOne({ _id: req.params.requestId }, { $set: { 'firstTest.pdfFilePath': req.body.pdfFilePath, 'firstTest.result': false} });
+                                await Request.updateOne({ _id: req.params.requestId }, { $set: { 'firstTest.pdfFilePath': req.body.pdfFilePath, 'firstTest.result': false } });
                             } else {
                                 /*Nunca podemos chegar neste ponto*/
                                 return res.status(400).json({ 'Error': 'This request hasnt been handled correctly!' });
@@ -339,21 +341,55 @@ requestController.getRequestMadeByUser = async (req, res) => {
 requestController.getTestsBetweenDates = async (req, res) => {
     try {
         if (Math.abs(new Date(req.body.beginDate) - new Date(req.body.endDate)) >= 0) {
-            var testCount = await Request.countDocuments({
-                "firstTest.testDate": {
-                    $gte: new Date(req.body.beginDate),
-                    $lt: new Date(req.body.endDate)
-                }
-            });
+            const requests = await Request.find();
+            var totalTests = 0;
+            var completedTests = 0;
+            var totalRequests = 0;
+            var completedRequests = 0;
+            var infectedRequests = 0;
 
-            testCount = testCount + await Request.countDocuments({
-                "secondTest.testDate": {
-                    $gte: new Date(req.body.beginDate),
-                    $lt: new Date(req.body.endDate)
-                }
-            });
+            for (i in requests) {
+                const request = requests[i];
+                totalRequests += 1;
 
-            return res.status(200).json({ 'Success': testCount });
+                if(request.isInfected != null){
+                    completedRequests += 1;
+                }
+
+                if(request.isInfected){
+                    infectedRequests += 1;
+                }
+
+                if (request.firstTest != null) {
+                    const testDate = new Date(request.firstTest.testDate);
+
+                    if (testDate >= new Date(req.body.beginDate) && testDate <= new Date(req.body.endDate)) {
+                        totalTests += 1;
+                        if(request.firstTest.result != null){
+                            completedTests += 1;
+                        }
+                    }
+                }
+
+                if (request.secondTest != null) {
+                    const testDate = new Date(request.secondTest.testDate);
+
+                    if (testDate >= new Date(req.body.beginDate) && testDate <= new Date(req.body.endDate)) {
+                        totalTests += 1;
+                        if(request.secondTest.result != null){
+                            completedTests += 1;
+                        }
+                    }
+                }
+            }
+            
+            return res.status(200).json({
+                'TotalTests': totalTests,
+                'CompletedTests' : completedTests,
+                'totalRequests': totalRequests,
+                'completedRequests' : completedRequests,
+                'infectedRequests' : infectedRequests
+            });
         } else {
             return res.status(400).json({ 'Error': 'The endDate must be after the beginDate.' });
         }
@@ -405,7 +441,7 @@ requestController.getTestsWithoutDates = async (req, res) => {
 
                 } else {
 
-                    if (typeof request.firstTest.result !== 'undefined') {
+                    if (request.firstTest.result != null) {
 
                         if (!request.secondTest) {
 
@@ -492,7 +528,7 @@ requestController.getCompletedRequests = async (req, res) => {
 
         for (i in listOfRequests) {
             const request = listOfRequests[i];
-            
+
             if (request.isInfected != null) {
 
                 answer.push(request);
