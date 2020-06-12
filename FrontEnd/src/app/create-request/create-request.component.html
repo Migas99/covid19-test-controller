@@ -1,1 +1,38 @@
-<p>create-request works!</p>
+<h1>CREATE REQUEST</h1>
+<div>
+    <h2>Description</h2>
+    <textarea [(ngModel)]="description" class="form-control" id="exampleFormControlTextarea1" rows="3">></textarea>
+</div>
+<div>
+    <h2>Priority</h2>
+    <div id="priorityForm">
+        <ul>
+            <li>
+                <div>
+                    <input type="radio" id="saude24" name="priority" [(ngModel)]="priority" value="saude24">
+                    <label class="priority" for="saude24">Reencaminhado Saude 24</label>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <input type="radio" id="trabalhadorRisco" name="priority" [(ngModel)]="priority" value="trabalhadorRisco">
+                    <label class="priority" for="trabalhadorRisco">Trabalhador Risco</label>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <input type="radio" id="grupoDeRisco" name="priority" [(ngModel)]="priority" value="grupoDeRisco">
+                    <label class="priority" for="grupoDeRisco">Grupo de Risco</label>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <input type="radio" id="nenhum" name="priority" [(ngModel)]="priority" value="nenhum">
+                    <label class="priority" for="nenhum">Nenhum</label>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <button (click)="createRequest()">CREATE REQUEST</button>
+    {{httpError}}
+</div>

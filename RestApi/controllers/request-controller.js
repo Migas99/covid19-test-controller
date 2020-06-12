@@ -405,7 +405,7 @@ requestController.getTestsWithoutDates = async (req, res) => {
 
                 } else {
 
-                    if (request.firstTest.result) {
+                    if (typeof request.firstTest.result !== 'undefined') {
 
                         if (!request.secondTest) {
 

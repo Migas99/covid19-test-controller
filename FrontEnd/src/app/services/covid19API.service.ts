@@ -109,4 +109,9 @@ export class covid19APIService {
     addTestResult(formData: FormData, id:String){
         return this.httpclient.put(this.url + "requests/info/" + id, formData);
     }
+
+    //create request
+    createRequest(description:String, priority:String){
+        return this.httpclient.post(this.url + "requests/", {description : description, priority :  priority});
+    }
 };

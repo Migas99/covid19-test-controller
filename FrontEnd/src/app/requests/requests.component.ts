@@ -81,24 +81,27 @@ export class RequestsComponent implements OnInit {
   }
 
   canAddTestResult() {
-    if(this.requestInfo.isInfected == null){
+    if (this.requestInfo.isInfected == null) {
       if (this.requestInfo.firstTest != null) {
         if (this.requestInfo.firstTest.result == null && this.requestInfo.firstTest.testDate != null) {
           if (this.requestInfo.firstTest.responsibleTechnicianId === this.data.currentID) {
             this.canTestResult = true;
-            this.canSchedule =false;
+            this.canSchedule = false;
           }
         }
-      } else if (this.requestInfo.secondTest) {
-        if (!this.requestInfo.secondTest.result && this.requestInfo.secondTest.testDate) {
+        console.log(this.requestInfo.secondTest);
+      }
+      if (this.requestInfo.secondTest != null) {
+        if (this.requestInfo.secondTest.result == null && this.requestInfo.secondTest.testDate) {
           if (this.requestInfo.secondTest.responsibleTechnicianId === this.data.currentID) {
             this.canTestResult = true;
-            this.canSchedule =false;
+            this.canSchedule = false;
           }
         }
       }
-    }else{
-      this.canSchedule =false;
+    } else {
+      this.canTestResult = false;
+      this.canSchedule = false;
     }
   }
 
