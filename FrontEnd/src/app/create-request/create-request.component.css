@@ -6,3 +6,7 @@ ul{
     width: 50%;
 }
 
+textarea{
+    max-width: 50%;
+}
+
